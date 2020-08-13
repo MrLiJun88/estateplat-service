@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcYgMapper">
+
+    <select id="getBdcYgByProid" parameterType="String" resultType="String">
+   SELECT DISTINCT y.mc ygdjzlmc FROM bdc_yg t
+   LEFT JOIN BDC_ZD_YGDJLX y ON y.dm=t.ygdjzl
+        WHERE t.proid=#{proid}
+    </select>
+
+    <select id="getBdcYgList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcYg">
+        SELECT t.*
+        FROM bdc_yg t
+        LEFT JOIN BDC_BDCDY y ON y.bdcdyid=t.bdcdyid
+        <where>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND y.bdcdyh = #{bdcdyh}
+            </if>
+            <if test="bdcdyid != null and bdcdyid !=''">
+                AND y.bdcdyid = #{bdcdyid}
+            </if>
+            <if test="qszt != null and qszt !=''">
+                AND nvl(t.qszt,'1') = #{qszt}
+            </if>
+            <if test="proid != null and proid !=''">
+                AND t.proid = #{proid}
+            </if>
+            <if test="ygdjzl != null and ygdjzl !=''">
+                AND t.ygdjzl = #{ygdjzl}
+            </if>
+            <if test="ygdjzls != null and ygdjzls !=''">
+                AND
+                <foreach collection="ygdjzls" item="item" open="(" separator=" or " close=")">
+                    t.ygdjzl = #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <insert id="saveBdcYg" parameterType="cn.gtmap.estateplat.model.server.core.BdcYg" >
+        INSERT INTO bdc_yg(qlid,bdcdyid,ygdjzl,tdqlr,fwxz,szc,zcs,jzmj,qdjg,ywh,qllx,proid,gyqk,djsj,dbr,fj,qszt)
+        VALUES(#{qlid,jdbcType=VARCHAR},#{bdcdyid,jdbcType=VARCHAR},#{ygdjzl,jdbcType=VARCHAR},#{tdqlr,jdbcType=VARCHAR}
+        ,#{fwxz,jdbcType=VARCHAR},#{szc,jdbcType=INTEGER},#{zcs,jdbcType=INTEGER}
+        ,#{jzmj,jdbcType=DOUBLE},#{qdjg,jdbcType=DOUBLE},#{ywh,jdbcType=VARCHAR}
+        ,#{qllx,jdbcType=VARCHAR},#{proid,jdbcType=VARCHAR},#{gyqk,jdbcType=VARCHAR},#{djsj,jdbcType=DATE}
+        ,#{dbr,jdbcType=VARCHAR},#{fj,jdbcType=VARCHAR},#{qszt,jdbcType=INTEGER})
+    </insert>
+</mapper>

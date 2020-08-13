@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//海域调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcHyMapper">
+
+     <select id="selectBdcHy" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcHy">
+          SELECT * FROM bdc_hy  WHERE zdzhh = #{zdzhh}
+     </select>
+
+</mapper>

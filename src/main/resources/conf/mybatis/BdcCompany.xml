@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        <!--//企业表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcCompanyMapper">
+	
+	<select id="getCompanyListByPage" resultType="map">
+		SELECT t.QYID,t.QYMC,t.ZJLX,t.ZJBH,t.BZ FROM BDC_XT_QY t
+	</select>
+
+</mapper>

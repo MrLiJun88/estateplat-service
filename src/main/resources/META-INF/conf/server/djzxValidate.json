@@ -1,0 +1,15 @@
+[{
+  "sqlx": "212",
+  "djzx": "1515",
+  "jyzt": "已备案,已租赁",
+  "checkModel":"alert",
+  "checkMsg":"警告信息"
+
+},
+{
+  "sqlx": "212",
+  "djzx": "1525",
+  "jyzt": "已备案,已租赁",
+  "checkModel":"comfirm",
+  "checkMsg":"提示信息"
+}]

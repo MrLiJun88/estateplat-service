@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.DjsjFwMapper">
+    <select id="getDjsjFwXmxx" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.DjsjFwXmxx">
+        SELECT fw_xmxx_index, lszd, dytdmj, fttdmj, jyjg, cqly, bdcdyh, gyqk, bz, zl,fwlx,fwxz,xmmc
+        FROM djsj_fw_xmxx t
+        WHERE 1=1
+        <if test="fw_xmxx_index != null and fw_xmxx_index !=''">
+            AND t.fw_xmxx_index = #{fw_xmxx_index}
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND t.bdcdyh = #{bdcdyh}
+        </if>
+    </select>
+
+    <select id="getDjsjFwLjz" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.DjsjFwLjz">
+        SELECT fw_xmxx_index, bdcdyfwlx, bdcdyh, fw_dcb_index, lszd, dh, fwmc, zldz, fwjg, fwcs, bz, fwyt,
+        jgrq, zrzh, ycjzmj, ycdxmj, ycqtmj, scjzmj, scdxmj, scqtmj, xmmc, zts
+        FROM djsj_fw_ljz t
+        WHERE 1=1
+        <if test="fw_xmxx_index != null and fw_xmxx_index !=''">
+            AND t.fw_xmxx_index = #{fw_xmxx_index}
+        </if>
+        <if test="fw_dcb_index != null and fw_dcb_index !=''">
+            AND t.fw_dcb_index = #{fw_dcb_index}
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND t.bdcdyh = #{bdcdyh}
+        </if>
+        <if test="bdcdyfwlx != null and bdcdyfwlx !=''">
+            AND t.bdcdyfwlx = #{bdcdyfwlx}
+        </if>
+        <if test="lszd != null and lszd !=''">
+            AND t.lszd = #{lszd}
+        </if>
+        <if test="orderByStr != null and orderByStr !=''">
+            ORDER BY ${orderByStr}
+        </if>
+    </select>
+
+    <select id="getDjsjFwHs" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.DjsjFwHs">
+        SELECT fw_hs_index, bdcdyh, lszd, zl, jyjg, fttdmj, dytdmj, cqly, gyqk, fwlx, fwxz, ghyt, dycs,
+        fw_dcb_index, scjzmj, sctnjzmj, scftjzmj, ycjzmj, yctnjzmj, ycftjzmj, fjh, dyh, wlcs, sxh,
+        hbfx, hbhs,fcdah,fwbm,qlzt,fwlx,ghyt,cg,tdyt,qsrq,zzrq,isfsss,scglmj,scdxsmj,tdsyqlx
+        FROM djsj_fwhs t
+        WHERE 1=1
+        <if test="fw_hs_index != null and fw_hs_index !=''">
+            AND t.fw_hs_index = #{fw_hs_index}
+        </if>
+        <if test="fw_hs_indexs != null and fw_hs_indexs !=''">
+            AND
+            <foreach collection="fw_hs_indexs" item="item" open="(" separator=" or " close=")">
+                t.fw_hs_index = #{item}
+            </foreach>
+        </if>
+        <if test="fw_dcb_index != null and fw_dcb_index !=''">
+            AND t.fw_dcb_index = #{fw_dcb_index}
+        </if>
+        <if test="fw_dcb_indexs != null and fw_dcb_indexs !=''">
+            AND
+            <foreach collection="fw_dcb_indexs" item="item" open="(" separator=" or " close=")">
+                t.fw_dcb_index = #{item}
+            </foreach>
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND t.bdcdyh = #{bdcdyh}
+        </if>
+        <if test="wlcs != null and wlcs !=''">
+            AND t.wlcs = #{wlcs}
+        </if>
+        <if test="dyh != null and dyh !=''">
+            AND t.dyh = #{dyh}
+        </if>
+        <if test="fcdah != null and fcdah !=''">
+            AND t.fcdah = #{fcdah}
+        </if>
+        <if test="notWlcs != null and notWlcs !=''">
+            AND t.wlcs is not null
+        </if>
+        <if test="fwbm != null and fwbm !=''">
+            AND t.fwbm = #{fwbm}
+        </if>
+        <if test="orderStr != null and orderStr !=''">
+            ${orderStr}
+        </if>
+    </select>
+
+    <select id="getDjsjFwHsByMap" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT fw_hs_index, bdcdyh, lszd, zl, jyjg, fttdmj, dytdmj, cqly, gyqk, fwlx, fwxz, ghyt, dycs,
+        fw_dcb_index, scjzmj, sctnjzmj, scftjzmj, ycjzmj, yctnjzmj, ycftjzmj, fjh, dyh, wlcs, sxh,
+        hbfx, hbhs,fcdah,qlzt,fwlx,ghyt,cg,isfsss
+        FROM djsj_fwhs t
+        WHERE 1=1
+        <if test="fw_hs_index != null and fw_hs_index !=''">
+            AND t.fw_hs_index = #{fw_hs_index}
+        </if>
+        <if test="fw_dcb_index != null and fw_dcb_index !=''">
+            AND t.fw_dcb_index = #{fw_dcb_index}
+        </if>
+        <if test="fw_dcb_indexs != null and fw_dcb_indexs !=''">
+            AND
+            <foreach collection="fw_dcb_indexs" item="item" open="(" separator=" or " close=")">
+                t.fw_dcb_index = #{item}
+            </foreach>
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND t.bdcdyh = #{bdcdyh}
+        </if>
+        <if test="wlcs != null and wlcs !=''">
+            AND t.wlcs = #{wlcs}
+        </if>
+        <if test="dyh != null and dyh !=''">
+            AND t.dyh = #{dyh}
+        </if>
+        <if test="fcdah != null and fcdah !=''">
+            AND t.fcdah = #{fcdah}
+        </if>
+        <if test="notWlcs != null and notWlcs !=''">
+            AND t.wlcs is not null
+        </if>
+        <if test="isfsss != null and isfsss !=''">
+            AND t.isfsss=#{isfsss}
+        </if>
+        <if test="orderStr != null and orderStr !=''">
+            ${orderStr}
+        </if>
+    </select>
+
+    <select id="getDjsjFwYcHs" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.DjsjFwHs">
+        SELECT fw_hs_index, bdcdyh, lszd, zl, jyjg, fttdmj, dytdmj, cqly, gyqk, fwlx, fwxz, ghyt, dycs,
+        fw_dcb_index, scjzmj, sctnjzmj, scftjzmj, ycjzmj, yctnjzmj, ycftjzmj, fjh, dyh, wlcs, sxh,
+        hbfx, hbhs,fcdah,qlzt,fwlx,ghyt,xzzt
+        FROM djsj_fwychs t
+        WHERE 1=1
+        <if test="fw_hs_index != null and fw_hs_index !=''">
+            AND t.fw_hs_index = #{fw_hs_index}
+        </if>
+        <if test="fw_hs_indexs != null and fw_hs_indexs !=''">
+            AND
+            <foreach collection="fw_hs_indexs" item="item" open="(" separator=" or " close=")">
+                t.fw_hs_index = #{item}
+            </foreach>
+        </if>
+        <if test="fw_dcb_indexs != null and fw_dcb_indexs !=''">
+            AND
+            <foreach collection="fw_dcb_indexs" item="item" open="(" separator=" or " close=")">
+                t.fw_dcb_index = #{item}
+            </foreach>
+        </if>
+        <if test="fw_dcb_index != null and fw_dcb_index !=''">
+            AND t.fw_dcb_index = #{fw_dcb_index}
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND t.bdcdyh = #{bdcdyh}
+        </if>
+        <if test="wlcs != null and wlcs !=''">
+            AND t.wlcs = #{wlcs}
+        </if>
+        <if test="dyh != null and dyh !=''">
+            AND t.dyh = #{dyh}
+        </if>
+        <if test="fcdah != null and fcdah !=''">
+            AND t.fcdah = #{fcdah}
+        </if>
+        <if test="orderStr != null and orderStr !=''">
+            ${orderStr}
+        </if>
+    </select>
+
+    <select id="getDjsjFwHsSumMj" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.DjsjFwHs">
+        SELECT bdcdyh,fw_dcb_index,SUM(scjzmj) scjzmj,SUM(sctnjzmj) tnjzmj,SUM(scftjzmj) ftjzmj,SUM(dytdmj)
+        dytdmj,SUM(fttdmj) fttdmj, SUM(jyjg) jyjg
+        FROM djsj_fwhs
+        WHERE 1=1
+        <if test="fw_dcb_index != null and fw_dcb_index !=''">
+            AND fw_dcb_index = #{fw_dcb_index}
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND bdcdyh = #{bdcdyh}
+        </if>
+        GROUP BY bdcdyh,fw_dcb_index
+    </select>
+
+    <select id="getDjsjQlrByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.id,t.qlr,t.qlrzjh, nvl(z.mc,t.qlrzjlx) qlrsfzjzl FROM djsj_fwqlr t
+        LEFT JOIN BDC_ZD_ZJLX z ON t.qlrzjlx=z.dm
+        WHERE 1=1
+        <if test="id != null and id !=''">
+            AND t.id = #{id}
+        </if>
+    </select>
+
+    <select id="getBdcfwlxByBdcdyh" parameterType="String" resultType="String">
+        SELECT t.bdcdyfwlx
+        FROM djsj_bdcdy_tdfw t
+        WHERE t.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="getBdcfwlxById" parameterType="String" resultType="String">
+        SELECT t.bdcdyfwlx
+        FROM djsj_bdcdy_tdfw t
+        WHERE t.id=#{id}
+    </select>
+    <select id="getDjidByBdcdyh" parameterType="String" resultType="String">
+        SELECT DISTINCT t.id
+        FROM djsj_bdcdy_tdfw t
+        WHERE t.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="getDjsjYcFwHsForZjgcdy" parameterType="java.util.Map" resultType="map">
+        SELECT t.fw_hs_index,t.bdcdyh,t.bdczt,t.lszd,t.zl,t.jyjg,t.fttdmj,t.dytdmj,t.cqly,t.gyqk,t.fwlx,t.fwxz,t.ghyt,t.dycs,t.fw_dcb_index,t.scjzmj,t.isfsss,t.sctnjzmj,t.scftjzmj,t.ycjzmj,t.yctnjzmj,t.ycftjzmj,t.fjh,t.dyh,t.wlcs,t.sxh,t.hbfx,t.hbhs,t.fcdah,t.cg,t.fw_hst_index,t.qlzt,t.dcsj,t.dcz,t.dcyj,t.fjsm,t.xzzt,t.ysfw,t.fwbm
+        FROM djsj_fwychs t
+        WHERE 1=1
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND bdcdyh = #{bdcdyh}
+        </if>
+    </select>
+
+    <select id="getDjsjHsBgJlb" parameterType="java.util.Map" resultType="map">
+        SELECT t.ybdcdyh,t.bdcdyh,t.ybdcdyfwlx,t.bdcdyfwlx,t.bgbh,t.bglx
+        FROM djsj_hsbgjlb t
+        LEFT JOIN bdc_bdcdy d ON t.bdcdyh=d.bdcdyh
+        WHERE 1=1
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND t.bdcdyh = #{bdcdyh}
+        </if>
+        <if test="ybdcdyh != null and ybdcdyh !=''">
+            AND t.ybdcdyh = #{ybdcdyh}
+        </if>
+        <if test="bdcdyid != null and bdcdyid !=''">
+            AND d.bdcdyid = #{bdcdyid}
+        </if>
+    </select>
+
+    <select id="getYbdcdyhByBdcdyh" parameterType="java.util.Map" resultType="String">
+        SELECT t.ybdcdyh FROM djsj_hsbgjlb t
+        WHERE t.ybdcdyh IS NOT NULL
+        start WITH
+        <if test="bdcdyh != null and bdcdyh !=''">
+            t.bdcdyh= #{bdcdyh}
+        </if>
+        CONNECT BY NOCYCLE t.bdcdyh=PRIOR t.ybdcdyh
+    </select>
+
+    <select id="getDzFwHs" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.DjsjFwHs">
+        SELECT t.fwbm FROM djsj_fwhs t LEFT JOIN djsj_fw_ljz s ON t.fw_dcb_index = s.fw_dcb_index LEFT JOIN djsj_fw_xmxx x ON s.fw_xmxx_index = x.fw_xmxx_index
+        WHERE 1=1
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND x.bdcdyh= #{bdcdyh}
+        </if>
+    </select>
+
+    <select id="getDjsjFwHsByFwbm" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjFwHs">
+        SELECT fw_hs_index, bdcdyh, lszd, zl, jyjg, fttdmj, dytdmj, cqly, gyqk, fwlx, fwxz, ghyt, dycs,
+        fw_dcb_index, scjzmj, sctnjzmj, scftjzmj, ycjzmj, yctnjzmj, ycftjzmj, fjh, dyh, wlcs, sxh,
+        hbfx, hbhs,fcdah,fwbm,qlzt,fwlx,ghyt,cg,tdyt,qsrq,zzrq,isfsss
+        FROM djsj_fwhs t
+        WHERE instr(t.fwbm ,#{fwbm})>0
+    </select>
+</mapper>

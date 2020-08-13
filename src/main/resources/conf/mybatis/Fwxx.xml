@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDyMapper">
+    <select id="getFwxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT qlr,bdcdyh,zl,yt,fwjg,jzmj,ftjzmj,bdcdyid
+        FROM (SELECT c.qlrmc qlr,q.bdcdyh,w.zl ,k.mc yt,g.mc fwjg,d.jzmj,d.ftjzmj,d.bdcdyid
+        FROM BDC_ZS a
+        INNER JOIN BDC_ZS_QLR_REL b ON a.zsid=b.zsid
+        INNER JOIN BDC_QLR c ON b.qlrid=c.qlrid
+        INNER JOIN BDC_FDCQ d ON c.proid=d.proid AND d.qszt=1
+        INNER JOIN BDC_ZD_FWYT k ON d.ghyt=k.dm
+        INNER JOIN BDC_BDCDY q ON q.bdcdyid=d.bdcdyid
+        INNER JOIN BDC_SPXX w ON w.proid=c.proid
+        INNER JOIN bdc_zd_fwjg g ON g.dm =d.fwjg
+        where 1=1
+        <if test="fwzl !=null and fwzl !=''">
+            AND w.zl =#{fwzl}
+        </if>
+        <if test="sfzh !=null and sfzh !=''">
+            AND c.qlrzjh =#{sfzh}
+        </if>
+        <if test="cqzh !=null and cqzh !=''">
+            AND a.bdcqzh =#{cqzh}
+        </if>
+        <if test="(fwzl ==null or fwzl =='') and (sfzh ==null or sfzh =='')and (cqzh ==null or cqzh =='')">
+            AND 1=2
+        </if>
+        UNION ALL
+        SELECT c.qlrmc qlr,q.bdcdyh,w.zl ,k.mc yt,g.mc fwjg,e.jzmj,d.ftjzmj,d.bdcdyid
+        FROM BDC_ZS a
+        INNER JOIN BDC_ZS_QLR_REL b ON a.zsid=b.zsid
+        INNER JOIN BDC_QLR c ON b.qlrid=c.qlrid
+        INNER JOIN BDC_FDCQ_dz d ON c.proid=d.proid AND d.qszt=1
+        INNER JOIN BDC_BDCDY q ON q.bdcdyid=d.bdcdyid
+        INNER JOIN BDC_SPXX w ON w.proid=c.proid
+        INNER JOIN Bdc_Fwfzxx e ON e.qlid=d.qlid
+        INNER JOIN Bdc_Zd_Fwyt k ON e.ghyt=k.dm
+        INNER JOIN bdc_zd_fwjg g ON g.dm=e.fwjg
+        where 1=1
+        <if test="fwzl !=null and fwzl !=''">
+            AND w.zl =#{fwzl}
+        </if>
+        <if test="sfzh !=null and sfzh !=''">
+            AND c.qlrzjh =#{sfzh}
+        </if>
+        <if test="cqzh !=null and cqzh !=''">
+            AND a.bdcqzh =#{cqzh}
+        </if>
+        <if test="(fwzl ==null or fwzl =='') and (sfzh ==null or sfzh =='')and (cqzh ==null or cqzh =='')">
+            AND 1=2
+        </if>
+        UNION ALL
+        SELECT t1.qlr,r.bdcdyh bdcdyh,t2.fwzl zl,t2.ghyt yt,t2.fwjg,t2.jzmj,t2.ftjzmj,t2.fwid bdcdyid
+        FROM GD_QLR t1
+        INNER JOIN gd_bdc_ql_rel t5 ON t5.qlid = t1.qlid
+        INNER JOIN GD_FW t2 ON t5.bdcid=t2.fwid
+        INNER JOIN GD_FWSYQ t4 ON t4.qlid=t1.qlid AND nvl(t4.iszx,0)=0
+        LEFT JOIN gd_dyh_rel r ON r.gdid=t2.fwid
+        WHERE 1=1
+        <if test="fwzl !=null and fwzl !=''">
+            AND t2.fwzl =#{fwzl}
+        </if>
+        <if test="sfzh !=null and sfzh !=''">
+            AND t1.qlrzjh =#{sfzh}
+        </if>
+        <if test="cqzh !=null and cqzh !=''">
+            AND t4.fczh =#{cqzh}
+        </if>
+        <if test="(fwzl ==null or fwzl =='') and (sfzh ==null or sfzh =='')and (cqzh ==null or cqzh =='')">
+            AND 1=2
+        </if>
+        ) p
+    </select>
+
+    <select id="getBdcZsByBdcdyid" parameterType="string" resultType="map">
+        select replace(strcat(z.zsid),'/',',') zsid,replace(strcat(z.bdcqzh),'/',',') bdcqzh from bdc_zs z left join  bdc_xmzs_rel r on r.zsid=z.zsid left join
+        (
+        select t.proid,t.qlid,t.bdcdyid from bdc_yg t where t.qszt='1' and (t.ygdjzl='1' or t.ygdjzl='2')
+        UNION ALL
+        select t.proid,t.qlid,t.bdcdyid from bdc_fdcq t where t.qszt='1'
+        UNION ALL
+        select t.proid,t.qlid,t.bdcdyid from bdc_fdcq_dz t where t.qszt='1'
+        UNION ALL
+        select t.proid,t.qlid,t.bdcdyid from bdc_jsydzjdsyq t where t.qszt='1'
+        UNION ALL
+        select t.proid,t.qlid,t.bdcdyid from bdc_tdsyq t where t.qszt='1'
+        )t on t.proid=r.proid
+        where t.bdcdyid=#{bdcdyid}
+    </select>
+</mapper>

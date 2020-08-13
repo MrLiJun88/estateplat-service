@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <!--<mapping map-null="false">-->
+        <!--<class-a>cn.gtmap.estateplat.model.exchange.transition.QzZd</class-a>-->
+        <!--<class-b>cn.gtmap.estateplat.model.server.core.BdcBdcdy</class-b>-->
+        <!--<field>-->
+            <!--<a>zdmj</a>-->
+            <!--<b>zdzhmj</b>-->
+        <!--</field>-->
+        <!--<field>-->
+            <!--<a>yt</a>-->
+            <!--<b>zdzhyt</b>-->
+        <!--</field>-->
+        <!--<field>-->
+            <!--<a>qlxz</a>-->
+            <!--<b>zdzhqlxz</b>-->
+        <!--</field>-->
+    <!--</mapping>-->
+    <!--<mapping map-null="false">-->
+        <!--<class-a>cn.gtmap.estateplat.model.exchange.transition.QzH</class-a>-->
+        <!--<class-b>cn.gtmap.estateplat.model.server.core.BdcBdcdy</class-b>-->
+        <!--<field>-->
+            <!--<a>zl</a>-->
+            <!--<b>zl</b>-->
+        <!--</field>-->
+        <!--<field>-->
+            <!--<a>scjzmj</a>-->
+            <!--<b>djzwmj</b>-->
+        <!--</field>-->
+        <!--<field>-->
+            <!--<a>fwyt1</a>-->
+            <!--<b>dzwyt</b>-->
+        <!--</field>-->
+    <!--</mapping>-->
+    <!--<mapping map-null="false">-->
+        <!--<class-a>cn.gtmap.estateplat.model.exchange.transition.QzZh</class-a>-->
+        <!--<class-b>cn.gtmap.estateplat.model.server.core.BdcBdcdy</class-b>-->
+        <!--<field>-->
+            <!--<a>zhmj</a>-->
+            <!--<b>zdzhmj</b>-->
+        <!--</field>-->
+        <!--<field>-->
+            <!--<a>hdyt</a>-->
+            <!--<b>zdzhyt</b>-->
+        <!--</field>-->
+    <!--</mapping>-->
+</mappings>

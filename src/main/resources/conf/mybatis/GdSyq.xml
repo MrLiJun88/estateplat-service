@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcQlrMapper">
+    <select id="getGdSYQByPage" parameterType="java.util.Map" resultType="map">
+        SELECT nvl(s.iszx,0) iszx,s.djlx,s.fczh,s.yqzh,s.proid,fw.fwzl,fw.jzmj,fw.ghyt,s.qlid,fw.fwid,s.oinsid FROM gd_fwsyq s
+        LEFT JOIN gd_bdc_ql_rel r ON s.qlid = r.qlid
+        LEFT JOIN gd_fw fw ON r.bdcid=fw.fwid
+        <where>
+            fw.fwid IS NOT NULL
+        <if test="dcxc != null and dcxc !=''">
+            AND s.fczh LIKE '%'||#{dcxc}||'%'
+        </if>
+        <if test="fwzl != null and fwzl !=''">
+            AND fw.fwzl LIKE '%'||#{fwzl}||'%'
+        </if>
+        <if test="fczh != null and fczh !=''">
+            AND s.fczh LIKE '%'||#{fczh}||'%'
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND s.qlid IN (SELECT qlid FROM gd_qlr WHERE qlr LIKE '%'||#{qlr}||'%')
+        </if>
+        </where>
+    </select>
+
+    <select id="getGdQlrByQlID" parameterType="java.util.Map" resultType="map">
+        SELECT q.qlr FROM gd_qlr q
+        LEFT JOIN gd_fwsyq s ON q.qlid=s.qlid
+        WHERE s.qlid = #{qlid}
+    </select>
+
+    <select id="getGdTdsyqByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.qlid,t.tdzh,t.iszx,d.zl tdzl,d.djh,q.qlr FROM GD_TDSYQ t
+        LEFT JOIN gd_bdc_ql_rel r ON t.qlid = r.qlid
+        LEFT JOIN gd_td d ON r.bdcid=d.tdid
+        LEFT JOIN gd_qlr q ON q.qlid=t.qlid
+        WHERE t.tdzh IS NOT NULL AND nvl(t.iszx,0)=0
+        <if test="dcxc != null and dcxc !=''">
+            AND (t.tdzh LIKE '%'||#{dcxc}||'%' OR q.qlr LIKE '%'||#{dcxc}||'%' OR d.zl LIKE '%'||#{dcxc}||'%' OR d.djh LIKE '%'||#{dcxc}||'%')
+        </if>
+        <if test="tdzh != null and tdzh !=''">
+            AND t.tdzh LIKE '%'||#{tdzh}||'%'
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND q.qlr LIKE '%'||#{qlr}||'%'
+        </if>
+        <if test="zl != null and zl !=''">
+            AND d.zl LIKE '%'||#{zl}||'%'
+        </if>
+        <if test="djh != null and djh !=''">
+            AND d.djh LIKE '%'||#{djh}||'%'
+        </if>
+    </select>
+</mapper>

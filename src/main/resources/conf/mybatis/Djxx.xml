@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.DjxxMapper">
+    <!--临时视图 -->
+    <select id="getDjBdcdyListByPage" parameterType="java.util.Map" resultType="map">
+        <if test="bdclx != null and bdclx =='TDFW'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TDFW t
+        </if>
+        <if test="bdclx != null and bdclx =='TD'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TD t
+        </if>
+        <if test="bdclx != null and bdclx =='TDSL'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TDSL t
+        </if>
+        <if test="bdclx != null and bdclx =='TDQT'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TDQT t
+        </if>
+        <if test="bdclx != null and bdclx =='HY'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_HY t
+        </if>
+        <if test="bdclx != null and bdclx =='YCTDFW'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_YCBDCDY_TDFW t
+        </if>
+        <if test="bdclx == null or bdclx ==''">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY t
+        </if>
+        <where>
+            <if test="id !=null and id !=''">
+                AND t.id=#{id}
+            </if>
+            <!--通过档案号查询FW_HS-->
+            <if test="dah != null and dah !=''">
+                AND t.id=#{dah}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlr ,#{qlr} )>0
+            </if>
+            <if test="zl != null and zl !=''">
+                AND instr(t.tdzl ,#{zl} )>0
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND instr(t.bdcdyh ,#{bdcdyh} )>0
+            </if>
+            <if test="bdcdyhsForTd != null and bdcdyhsForTd !=''">
+                AND
+                <foreach collection="bdcdyhsForTd" item="item" open="(" separator=" or " close=")">
+                    t.bdcdyh = #{item}
+                </foreach>
+            </if>
+            <if test="bdclx != null and bdclx !='' and bdclx != 'YCTDFW'">
+                AND t.bdclx = #{bdclx}
+            </if>
+            <if test="bdclx != null and bdclx !='' and bdclx == 'YCTDFW'">
+                AND t.bdclx = 'TDFW'
+            </if>
+            <if test="bdclx != null and bdclx =='TD'">
+                AND t.bdcdyh IS NOT NULL
+            </if>
+            <if test="djh != null and djh !=''">
+                AND instr(t.djh ,#{djh} )>0
+            </if>
+            <if test="hhSearch != null and hhSearch !=''">
+                AND ( instr(t.bdcdyh ,#{hhSearch} )>0 or instr(t.tdzl ,#{hhSearch} )>0 or instr(t.qlr ,#{hhSearch} )>0
+                <if test="djids != null and djids !=''">
+                    OR
+                    <foreach collection="djids" item="item" open="(" separator=" or " close=")">
+                        t.id = #{item}
+                    </foreach>
+                </if>
+                )
+            </if>
+
+            <if test="bdcdyhs != null and bdcdyhs !=''">
+                AND
+                <foreach collection="bdcdyhs" item="item" open="(" separator=" or " close=")">
+                    t.bdcdyh = #{item}
+                </foreach>
+            </if>
+
+            <if test="viewByDwdm == 'true'">
+                <if test="dwdm != null and dwdm != ''">
+                    AND t.bdcdyh LIKE #{dwdm}||'%'
+                </if>
+            </if>
+
+            <if test="zdgl !=null and zdgl !=''">
+                AND t.bdclx!=#{zdgl}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcdyhByZrzh" parameterType="java.util.Map" resultType="String">
+        <if test="bdcfwlx != null and bdcfwlx ==2">
+            SELECT t.bdcdyh
+            FROM djsj_fw_ljz t
+            <where>
+                <if test="zrzh != null and zrzh !=''">
+                    AND t.zrzh=#{zrzh}
+                </if>
+            </where>
+        </if>
+        <if test="bdcfwlx != null and bdcfwlx ==4">
+            SELECT x.bdcdyh
+            FROM djsj_fw_ljz t
+            LEFT JOIN djsj_fwhs x ON x.FW_DCB_INDEX=t.FW_DCB_INDEX
+            <where>
+                <if test="zrzh != null and zrzh !=''">
+                    AND t.zrzh=#{zrzh}
+                </if>
+            </where>
+        </if>
+        <if test="bdcfwlx != null and bdcfwlx ==1">
+            SELECT c.bdcdyh
+            FROM djsj_fw_ljz t
+            LEFT JOIN djsj_fw_xmxx c ON c.fw_xmxx_index=t.fw_xmxx_index
+            <where>
+                <if test="zrzh != null and zrzh !=''">
+                    AND t.zrzh=#{zrzh}
+                </if>
+            </where>
+        </if>
+    </select>
+
+    <select id="getZrzhByBdcdyh" parameterType="String" resultType="String">
+          SELECT distinct zrzh
+          FROM (
+              SELECT t.zrzh FROM djsj_fw_ljz t
+              WHERE t.bdcdyh=#{bdcdyh}
+              UNION ALL
+               SELECT t.zrzh FROM djsj_fw_ljz t
+                LEFT JOIN djsj_fwhs x ON x.FW_DCB_INDEX=t.FW_DCB_INDEX
+              WHERE x.bdcdyh=#{bdcdyh}
+              UNION ALL
+               SELECT t.zrzh FROM djsj_fw_ljz t
+                LEFT JOIN djsj_fw_xmxx c ON c.fw_xmxx_index=t.fw_xmxx_index
+              WHERE c.bdcdyh=#{bdcdyh}
+          )
+    </select>
+    <select id="getBdcfwlxByzrzh" parameterType="String" resultType="String">
+        SELECT DISTINCT t.bdcdyfwlx
+        FROM djsj_fw_ljz t
+        WHERE t.zrzh=#{zrzh}
+    </select>
+
+    <select id="getDjsjBdcdyByPage" parameterType="java.util.Map" resultType="map">
+        <!--zdd 此处需要修改 if 为choose (when, otherwise)-->
+        <if test="bdclx != null and bdclx =='TDFW'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TDFW t
+        </if>
+        <if test="bdclx != null and bdclx =='TD'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TD t
+        </if>
+        <if test="bdclx != null and bdclx =='TDSL'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TDSL t
+        </if>
+        <if test="bdclx != null and bdclx =='TDQT'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TDQT t
+        </if>
+        <if test="bdclx != null and bdclx =='HY'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_HY t
+        </if>
+        <if test="bdclx == null or bdclx ==''">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY t
+        </if>
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (t.djh LIKE '%' || #{dcxc} || '%' OR t.bdcdyh LIKE '%' || #{dcxc} || '%'
+                OR t.tdzl LIKE '%' || #{dcxc} || '%' OR t.qlr LIKE '%' || #{dcxc} || '%'
+                <if test="djids != null and djids !='' and bdclx !='TD' ">
+                    OR
+                    <foreach collection="djids" item="item" open="(" separator=" or " close=")">
+                        t.id = #{item}
+                    </foreach>
+                </if>
+                <if test="djids != null and djids !='' and bdclx =='TD'">
+                    OR
+                    <foreach collection="djids" item="item" open="(" separator=" or " close=")">
+                        t.djh = #{item}
+                    </foreach>
+                </if>
+                <if test="bdclx =='TDFW' and bdclx != null and bdclx !='' and fwbh !=null and fwbh !=''" >
+                    OR ${fwbh}
+                </if>
+                )
+            </if>
+            <if test="fwdm != null and fwdm !=''">
+                AND t.fwbm LIKE #{fwdm}
+            </if>
+            <if test="djh != null and djh !=''">
+                AND t.djh LIKE '%' || #{djh} || '%'
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND t.bdcdyh LIKE #{bdcdyh}
+            </if>
+            <if test="tdzl != null and tdzl !=''">
+                AND t.tdzl LIKE #{tdzl}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND t.qlr LIKE '%' || #{qlr} || '%'
+            </if>
+            <!--zdd 如果确定为TDFW 则不需要进行其他匹配查询  加上like条件反而更慢 提高检索效率 去掉左侧百分号-->
+            <if test="bdclx !='TDFW' and bdclx != null and bdclx !=''">
+                AND t.bdclx LIKE #{bdclx} || '%'
+            </if>
+
+            <!--substr(a.bdcdyh,13,4) 正常是2 客户端是UTF-8编码的会占3个字节 -->
+            <!--zdd 如果确定为TDFW 则不需要进行其他匹配查询  -->
+            <!--zwq 如果有国有土地和集体土地之分，则要这个匹配 -->
+            <if test=" zdtzm != null and zdtzm !=''">
+                AND
+                <foreach collection="zdtzm" item="item" open="(" separator=" or " close=")">
+                    substr(t.bdcdyh,13,4) LIKE #{item} || '%'
+                </foreach>
+            </if>
+
+            <!--zdd 如果确定为TDFW 则不需要进行其他匹配查询 -->
+            <if test="bdclx !='TDFW' and bdclxdm != null and bdclxdm !=''">
+                AND
+                <foreach collection="bdclxdm" item="item" open="(" separator=" or " close=")">
+                    substr(t.bdcdyh,20,1) = #{item}
+                </foreach>
+            </if>
+            <if test="qlxzdm != null and qlxzdm !='' and bdclx!='HY' and bdclx!='TDSL'">
+                AND
+                <foreach collection="qlxzdm" item="item" open="(" separator=" or " close=")">
+                    t.qlxz = #{item}
+                </foreach>
+            </if>
+            <if test="qlrDjids != null and qlrDjids !=''">
+                AND
+                <foreach collection="qlrDjids" item="item" open="(" separator=" or " close=")">
+                    t.id = #{item}
+                </foreach>
+            </if>
+            <if test="bdcdyhs !=null and bdcdyhs !=''">
+                AND
+                <foreach collection="bdcdyhs" item="bdcdyh" open="(" separator=" or " close=")">
+                    t.bdcdyh = #{bdcdyh}
+                </foreach>
+            </if>
+            <if test="xzqdm != null and xzqdm !=''">
+                AND t.bdcdyh LIKE #{xzqdm} || '%'
+            </if>
+            <if test="isfsss != null and isfsss !=''">
+                AND nvl(t.isfsss,'0') = #{isfsss}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDjsjBdcdyOptimizeByPage" parameterType="java.util.Map" resultType="map">
+        <if test="bdclx != null and bdclx =='TDFW'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdclx bdcdylx,t.bdcdyfwlx,f.fwbm
+            FROM DJSJ_BDCDY_TDFW t
+        </if>
+        <if test="bdclx != null and bdclx =='TD'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdclx bdcdylx,t.bdcdyfwlx,f.fwbm
+            FROM DJSJ_BDCDY_TD t
+        </if>
+        <if test="bdclx != null and bdclx =='TDSL'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdclx bdcdylx,t.bdcdyfwlx,f.fwbm
+            FROM DJSJ_BDCDY_TDSL t
+        </if>
+        <if test="bdclx != null and bdclx =='TDQT'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdclx bdcdylx,t.bdcdyfwlx,f.fwbm
+            FROM DJSJ_BDCDY_TDQT t
+        </if>
+        <if test="bdclx != null and bdclx =='HY'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdclx bdcdylx,t.bdcdyfwlx,f.fwbm
+            FROM DJSJ_BDCDY_HY t
+        </if>
+        <if test="bdclx == null or bdclx ==''">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdclx bdcdylx,t.bdcdyfwlx,f.fwbm
+            FROM DJSJ_BDCDY t
+        </if>
+          LEFT JOIN djsj_fwhs f on t.bdcdyh=f.bdcdyh
+        <where>
+            <if test="djids != null and djids !='' and bdclx !='TD' ">
+                AND
+                <foreach collection="djids" item="item" open="(" separator=" or " close=")">
+                    t.id = #{item}
+                </foreach>
+            </if>
+            <if test="djids != null and djids !='' and bdclx =='TD'">
+                AND
+                <foreach collection="djids" item="item" open="(" separator=" or " close=")">
+                    t.djh = #{item}
+                </foreach>
+            </if>
+            <if test="bdclx =='TDFW' and bdclx != null and bdclx !='' and fwbh !=null and fwbh !=''" >
+                OR ${fwbh}
+            </if>
+            <if test="djh != null and djh !=''">
+                <if test="exactQuery == 'false'">
+                    AND t.djh like #{djh}
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND t.djh = #{djh}
+                </if>
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                <if test="exactQuery == 'false'">
+                    AND t.bdcdyh like #{bdcdyh}
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND t.bdcdyh = #{bdcdyh}
+                </if>
+            </if>
+            <if test="tdzl != null and tdzl !=''">
+                <if test="exactQuery == 'false'">
+                    AND t.tdzl like #{tdzl}
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND t.tdzl = #{tdzl}
+                </if>
+            </if>
+            <if test="qlr != null and qlr !=''">
+                <if test="exactQuery == 'false'">
+                    AND t.qlr like #{qlr}
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND t.qlr = #{qlr}
+                </if>
+            </if>
+            <!--zdd 如果确定为TDFW 则不需要进行其他匹配查询  加上like条件反而更慢 提高检索效率 去掉左侧百分号-->
+            <if test="bdclx !='TDFW' and bdclx != null and bdclx !=''">
+                <if test="exactQuery == 'false'">
+                    AND t.bdclx like #{bdclx}
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND t.bdclx = #{bdclx}
+                </if>
+            </if>
+
+            <!--substr(a.bdcdyh,13,4) 正常是2 客户端是UTF-8编码的会占3个字节 -->
+            <!--zdd 如果确定为TDFW 则不需要进行其他匹配查询  -->
+            <!--zwq 如果有国有土地和集体土地之分，则要这个匹配 -->
+            <if test=" zdtzm != null and zdtzm !=''">
+                AND
+                <foreach collection="zdtzm" item="item" open="(" separator=" or " close=")">
+                    substr(t.bdcdyh,13,4) LIKE #{item} || '%'
+                </foreach>
+            </if>
+
+            <!--zdd 如果确定为TDFW 则不需要进行其他匹配查询 -->
+            <if test="bdclx !='TDFW' and bdclxdm != null and bdclxdm !=''">
+                AND
+                <foreach collection="bdclxdm" item="item" open="(" separator=" or " close=")">
+                    substr(t.bdcdyh,20,1) = #{item}
+                </foreach>
+            </if>
+            <if test="qlxzdm != null and qlxzdm !='' and bdclx!='HY' and bdclx!='TDSL'">
+                AND
+                <foreach collection="qlxzdm" item="item" open="(" separator=" or " close=")">
+                    t.qlxz = #{item}
+                </foreach>
+            </if>
+            <if test="qlrDjids != null and qlrDjids !=''">
+                AND
+                <foreach collection="qlrDjids" item="item" open="(" separator=" or " close=")">
+                    t.id = #{item}
+                </foreach>
+            </if>
+            <if test="bdcdyhs !=null and bdcdyhs !=''">
+                AND
+                <foreach collection="bdcdyhs" item="bdcdyh" open="(" separator=" or " close=")">
+                    t.bdcdyh = #{bdcdyh}
+                </foreach>
+            </if>
+            <if test="xzqdm != null and xzqdm !=''">
+                AND instr(t.bdcdyh ,#{xzqdm} )>0
+            </if>
+            <if test="isfsss != null and isfsss !=''">
+                AND nvl(t.isfsss,'0') = #{isfsss}
+            </if>
+        </where>
+        ORDER BY t.tdzl ASC
+    </select>
+
+    <select id="getDjQlrList" parameterType="java.util.Map" resultType="map">
+        <if test="bdclx != null and bdclx =='TDFW'">
+            SELECT t.qlr,id FROM djsj_fwqlr t
+            WHERE 1=1
+            <if test="djid != null and djid !=''">
+                AND t.id=#{djid}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlr ,#{qlr} )>0
+            </if>
+        </if>
+        <if test="bdclx != null and bdclx =='TD'">
+            SELECT t.qlr,t.id FROM (
+            SELECT t.qlrmc qlr,t.djh id FROM djsj_zd_qlr t
+            UNION ALL
+            SELECT t.qlrmc qlr,t.djh id FROM djsj_qszd_qlr t
+            UNION ALL
+            SELECT t.qlrmc qlr,t.djh id FROM djsj_nyd_qlr t
+            ) t
+            WHERE 1=1
+            <if test="djh != null and djh !=''">
+                AND t.id=#{djh}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlr ,#{qlr} )>0
+            </if>
+        </if>
+        <if test="bdclx != null and (bdclx =='TDSL' or bdclx =='TDQT')">
+            SELECT t.qlr,t.id FROM (SELECT t.qlrmc qlr,t.djh id FROM djsj_nyd_qlr t) t
+            WHERE 1=1
+            <if test="djh != null and djh !=''">
+                AND t.id=#{djh}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlr ,#{qlr} )>0
+            </if>
+        </if>
+        <if test="bdclx != null and bdclx =='HY'">
+            SELECT t.qlrmc qlr,t.djh id FROM djsj_zh_qlr t
+            WHERE 1=1
+            <if test="djh != null and djh !=''">
+                AND t.djh=#{djh}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlrmc ,#{qlr} )>0
+            </if>
+        </if>
+        <if test="bdclx == null or bdclx ==''">
+            SELECT t.qlr,id FROM (
+            SELECT qlr,id FROM djsj_fwqlr t
+            WHERE 1=1
+            <if test="djid != null and djid !=''">
+                AND t.id=#{djid}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlr ,#{qlr} )>0
+            </if>
+            UNION ALL
+            SELECT t.qlrmc qlr, t.djh id
+            FROM djsj_zd_qlr t
+            WHERE 1=1
+            <if test="djh != null and djh !=''">
+                AND t.djh=#{djh}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlrmc ,#{qlr} )>0
+            </if>
+            UNION ALL
+            SELECT t.qlrmc qlr, t.djh id
+            FROM djsj_nyd_qlr t
+            WHERE 1=1
+            <if test="djh != null and djh !=''">
+                AND t.djh=#{djh}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlrmc ,#{qlr} )>0
+            </if>
+            UNION ALL
+            SELECT t.qlrmc qlr, t.djh id
+            FROM djsj_qszd_qlr t
+            WHERE 1=1
+            <if test="djh != null and djh !=''">
+                AND t.djh=#{djh}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlrmc ,#{qlr} )>0
+            </if>
+            ) t
+            WHERE 1=1
+            <if test="qlrTemp != null and qlrTemp !=''">
+                AND instr(t.qlr ,#{qlrTemp} )>0
+            </if>
+        </if>
+
+    </select>
+    <!--通过过渡库的不动产单元编号查询地级数据的djid-->
+    <select id="getDjid" parameterType="java.util.Map" resultType="String">
+        <if test="bdclx != null and bdclx =='TDFW'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TDFW t
+        </if>
+        <if test="bdclx != null and bdclx =='TD'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TD t
+        </if>
+        <if test="bdclx != null and bdclx =='TDZJGZW'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TD t
+        </if>
+        <if test="bdclx != null and bdclx =='TDSL'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TDSL t
+        </if>
+        <if test="bdclx != null and bdclx =='TDQT'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_TDQT t
+        </if>
+        <if test="bdclx != null and bdclx =='HY'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_HY t
+        </if>
+        <if test="bdclx != null and bdclx =='HYWJM'">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY_HY t
+        </if>
+        <if test="bdclx == null or bdclx ==''">
+            SELECT t.id,t.djh,t.bdcdyh,t.tdzl,t.qlr,t.bdclx,t.bdcdyfwlx
+            FROM DJSJ_BDCDY t
+        </if>
+        WHERE 1=1
+        <if test="hhSearch != null or hhSearch !=''">
+            AND t.bdcdyh= #{hhSearch}
+        </if>
+    </select>
+
+    <select id="getFwDjidByBdcdyh" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT id FROM (
+        SELECT t.fw_xmxx_index id,t.bdcdyh FROM ${table}.fw_xmxx t
+        WHERE t.bdcdyh IS NOT NULL
+        UNION ALL
+        SELECT t.fw_dcb_index id,t.bdcdyh FROM ${table}.fw_ljz t
+        WHERE t.bdcdyh IS NOT NULL AND t.bdcdyfwlx='2'
+        UNION ALL
+        SELECT t.fw_hs_index id,t.bdcdyh FROM ${table}.fw_hs t
+        LEFT JOIN  ${table}.fw_ljz t1 ON t.fw_dcb_index= t1.fw_dcb_index
+        WHERE t.bdcdyh IS NOT NULL AND t1.bdcdyfwlx='4' AND NVL(t.isfsss,0)=0
+        )
+        WHERE rownum=1 AND bdcdyh=#{bdcdyh,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getYcFwDjidByBdcdyh" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT t.fw_hs_index id FROM ${table}.fw_ychs t
+        WHERE t.bdcdyh= #{bdcdyh,jdbcType=VARCHAR} AND NVL(t.isfsss,0)=0 AND ROWNUM=1
+    </select>
+
+    <!--通过不动产单元编号查询权籍数据的bdcdyh-->
+    <select id="getDjsjBdcdyhByBdcdyh" parameterType="java.util.Map" resultType="String">
+        <if test="bdclx != null and bdclx =='TDFW'">
+            SELECT t.bdcdyh
+            FROM DJSJ_BDCDY_TDFW t
+        </if>
+        <if test="bdclx != null and bdclx =='TD'">
+            SELECT t.bdcdyh
+            FROM DJSJ_BDCDY_TD t
+        </if>
+        <if test="bdclx != null and bdclx =='TDZJGZW'">
+            SELECT t.bdcdyh
+            FROM DJSJ_BDCDY_TD t
+        </if>
+        <if test="bdclx != null and bdclx =='TDSL'">
+            SELECT t.bdcdyh
+            FROM DJSJ_BDCDY_TDSL t
+        </if>
+        <if test="bdclx != null and bdclx =='TDQT'">
+            SELECT t.bdcdyh
+            FROM DJSJ_BDCDY_TDQT t
+        </if>
+        <if test="bdclx != null and bdclx =='HY'">
+            SELECT t.bdcdyh
+            FROM DJSJ_BDCDY_HY t
+        </if>
+        <if test="bdclx != null and bdclx =='HYWJM'">
+            SELECT t.bdcdyh
+            FROM DJSJ_BDCDY_HY t
+        </if>
+        <if test="bdclx == null or bdclx ==''">
+            SELECT t.bdcdyh
+            FROM DJSJ_BDCDY t
+        </if>
+        <where>
+            <if test="bdcdyh != null or bdcdyh !=''">
+                AND t.bdcdyh= #{bdcdyh}
+            </if>
+        </where>
+    </select>
+</mapper>

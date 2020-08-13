@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcXyglMapper">
+
+    <select id="getSzBdcXyglListJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT g.qlrmc,z.mc zjlx,g.qlrzjh,g.qlrtxdz,x.nr,
+        case when x.sfsx='2' then '历史'
+        when x.sfsx='1' then '现势'
+        else '临时' end sfxs,g.xyglid,x.xymxid
+        FROM bdc_xygl g
+        LEFT JOIN bdc_xymx x ON g.xyglid=x.xyglid
+        LEFT JOIN bdc_zd_zjlx z ON z.dm=g.qlrsfzjzl
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND instr(g.qlrzjh,#{dcxc})>0 OR instr(g.qlrmc,#{dcxc})>0
+            </if>
+            <if test="zjh != null and zjh !=''">
+                AND g.qlrzjh=#{zjh}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND g.qlrmc=#{qlr}
+            </if>
+            <if test="txdz != null and txdz !=''">
+                AND g.qlrtxdz=#{txdz}
+            </if>
+            <if test="zt!='' and zt!=null">
+                AND nvl(x.sfsx,'0')=#{zt}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcXyglListJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT g.qlrmc,z.mc zjlx,g.qlrzjh,g.qlrtxdz,x.nr,g.xyglid
+        FROM bdc_xygl g
+        LEFT JOIN (SELECT t.xyglid,strcat(t.nr) nr
+        FROM bdc_xymx t
+        group by t.xyglid) x ON x.xyglid=g.xyglid
+        LEFT JOIN bdc_zd_zjlx z ON z.dm=g.qlrsfzjzl
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND instr(g.qlrzjh,#{dcxc})>0 OR instr(g.qlrmc,#{dcxc})>0
+            </if>
+            <if test="zjh != null and zjh !=''">
+                AND g.qlrzjh=#{zjh}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND g.qlrmc=#{qlr}
+            </if>
+            <if test="txdz != null and txdz !=''">
+                AND g.qlrtxdz=#{txdz}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcRyxxJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT rownum,t.ryxxid,t.rymc,z.mc as zjlx,t.zjbh,t.txdz,t.yb,t.lxdh,t.yx,t.bz,t.zjlx as zjlxdm
+        FROM bdc_ryxx t
+        LEFT JOIN BDC_ZD_ZJLX z ON t.zjlx=z.dm
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND instr(t.rymc,#{dcxc})>0
+            </if>
+            <if test="rymc != null and rymc !=''">
+                AND t.rymc=#{rymc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcXyglByQlrzjh" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcXygl">
+        SELECT t.xyglid,t.qlrmc,t.qlrsfzjzl,t.qlrzjh,t.sjly
+        FROM bdc_xygl t
+        WHERE t.qlrzjh=#{qlrzjh} AND t.sjly=#{sjly}
+    </select>
+
+</mapper>

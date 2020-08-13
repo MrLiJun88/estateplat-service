@@ -1,0 +1,14 @@
+{
+  "gxYhValidateConfig": [
+    {
+      "sqlxdm": "1019",
+      "targetActivityName": "收件",
+      "bjzt": "3"
+    },
+    {
+      "sqlxdm": "218",
+      "targetActivityName": "缮证",
+      "bjzt": "2"
+    }
+  ]
+}

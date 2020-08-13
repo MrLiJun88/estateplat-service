@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--不动产预告-->
+    <mapping map-empty-string="false" map-null="false">
+        <class-a>cn.gtmap.estateplat.model.server.core.DjsjFwzbxx</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcYg</class-b>
+        <!--总层数-->
+        <field>
+            <a>zcs</a>
+            <b>zcs</b>
+        </field>
+        <!--房屋结构-->
+        <field>
+            <a>fwjg</a>
+            <b>fwjg</b>
+        </field>
+    </mapping>
+
+</mappings>

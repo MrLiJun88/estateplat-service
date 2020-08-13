@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdDhDzhMapper">
+    <select id="getOldDhByNewDh" parameterType="String" resultType="String">
+        SELECT to_char(d.ydjh) ydjh
+        FROM djsj_qszd_dcb d
+        WHERE d.djh =#{djh}
+        AND to_char(d.ydjh) IS NOT NULL
+        GROUP BY to_char(d.ydjh)
+    </select>
+
+    <select id="getAllDjh" parameterType="String" resultType="String">
+        SELECT dh
+        FROM GD_DH_DZB
+        WHERE  zduniqueid IN (
+        SELECT zduniqueid
+        FROM GD_DH_DZB
+        WHERE dh LIKE #{dh}
+        )
+    </select>
+</mapper>

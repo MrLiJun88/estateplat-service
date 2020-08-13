@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--不动产流水号-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcLshMapper">
+
+    <select id="getMaxLsh" parameterType="map" resultType="java.lang.Integer">
+        SELECT MAX(to_number(LSH)) FROM bdc_lsh t
+        <where>
+            <if test="nf != null and nf != ''">
+                AND t.nf = #{nf}
+            </if>
+            <if test="qh != null and qh != ''">
+                AND t.qh = #{qh}
+            </if>
+            <if test="zhqc != null and zhqc != ''">
+                AND t.zhqc = #{zhqc}
+            </if>
+            <if test="bhlxdm != null and bhlxdm != ''">
+                AND t.bhlxdm = #{bhlxdm}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcLshList" parameterType="map" resultType="cn.gtmap.estateplat.model.server.core.BdcLsh">
+        SELECT t.lshid,t.lsh,t.nf,t.qh,t.bhlxdm FROM bdc_lsh t
+        <where>
+            <if test="lsh != null and lsh != ''">
+                AND t.lsh = #{lsh}
+            </if>
+            <if test="nf != null and nf != ''">
+                AND t.nf = #{nf}
+            </if>
+            <if test="qh != null and qh != ''">
+                AND t.qh = #{qh}
+            </if>
+            <if test="zhqc != null and zhqc != ''">
+                AND t.zhqc = #{zhqc}
+            </if>
+            <if test="bhlxdm != null and bhlxdm != ''">
+                AND t.bhlxdm = #{bhlxdm}
+            </if>
+        </where>
+    </select>
+
+</mapper>

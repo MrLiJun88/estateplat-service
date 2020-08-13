@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcSfxmMapper">
+    <select id="getSfXm" parameterType="java.util.HashMap" resultType="cn.gtmap.estateplat.model.server.core.BdcSfxm">
+        SELECT  t.sfxmid,t.sfxmmc,t.xh,t.sl,t.je,t.bz,t.dw,t.sfxxid,t.fph,t.jsff,t.qlrlx,t.sfxmdm,t.sfbl,t.fffs,t.ffzd
+        FROM bdc_sfxm t
+        <where>
+            <if test="sfxxid != null and sfxxid !=''">
+                AND t.sfxxid=#{sfxxid}
+            </if>
+            <if test="qlrlx != null and qlrlx !=''">
+                AND t.qlrlx=#{qlrlx}
+            </if>
+            <if test="sfxmmc != null and sfxmmc != ''">
+                AND bz IN
+                <foreach collection="sfxmmc" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

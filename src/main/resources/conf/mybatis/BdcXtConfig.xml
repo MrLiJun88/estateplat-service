@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcXtConfigMapper">
+
+
+     <select id="selectBdcXtConfig" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcXtConfig">
+         SELECT xtid,nf,dwdm,qllx,bdcqzh,bdcqzhws,djjg,sqsjc,szsxqc,sqdm,djjgdh
+         FROM bdc_xt_config
+          <where>
+              <if test="dwdm != null and dwdm !=''">
+                  AND dwdm = #{dwdm}
+              </if>
+              <if test="nf != null and nf !=''">
+                  AND nf = #{nf}
+              </if>
+          </where>
+     </select>
+
+</mapper>

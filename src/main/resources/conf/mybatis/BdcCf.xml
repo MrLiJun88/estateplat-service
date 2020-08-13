@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//查封-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcCfMapper">
+
+    <select id="queryBdcCfByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.QLID,t.BDCDYID,t.CFJG,t.CFLX,t.CFWH,t.CFFW,t.JFYWH,t.JFJG,t.JFWJ,t.JFWH,t.JFSJ,t.JFDJSJ,t.JFDBR,t.CFKSQX,t.CFJSQX,t.ZXSQR,t.BZXR,t.CFYY,t.LHSX,t.YWH,t.QLLX,t.PROID,t.GYQK,t.DJSJ,t.DBR,t.FJ,t.QSZT,t.CFSJ,t.QLQSSJ,t.QLJSSJ,t.CFWJ,t.CFSQR,t.LHCFQX,t.FYSDR,t.FYSDRLXFS,t.YSXKZMH,t.FYSDRZJHM,t.JFLX,t.ISSX,t.ISCD,t.BZ,t.CFSX
+        FROM bdc_cf t
+        LEFT JOIN bdc_bdcdy t1 ON t.bdcdyid=t1.bdcdyid
+        <where>
+            <if test="cfkssj != null and cfkssj !=''">
+                and t.cfksqx is not null
+            </if>
+            <if test="dcxc != null and dcxc !=''">
+                AND t.ywh LIKE '%'||#{dcxc}||'%'
+            </if>
+            <if test="ywh != null and ywh !=''">
+                AND t.ywh LIKE '%'||#{ywh}||'%'
+            </if>
+            <if test="qszt != null ">
+                AND nvl(t.qszt,'0') = #{qszt}
+            </if>
+            <!--<if test="isjf != null  and isjf !=''">-->
+            <!--and nvl(t.isjf,'0') = #{isjf}-->
+            <!--</if>-->
+            <if test="djqssj != null and djqssj !=''">
+                <![CDATA[   AND t.djsj >= #{djqssj} ]]>
+            </if>
+            <if test="djjssj != null and djjssj !=''">
+                <![CDATA[  AND t.djsj <= #{djjssj} ]]>
+            </if>
+            <if test="jfdbr != null and jfdbr !=''">
+                AND t.jfdbr LIKE '%'||#{jfdbr}||'%'
+            </if>
+            <if test="dbr != null and dbr !=''">
+                AND t.dbr LIKE '%'||#{dbr}||'%'
+            </if>
+            <if test="jfqssj != null and jfqssj !=''">
+                <![CDATA[   AND t.jfdjsj >= #{jfqssj} ]]>
+            </if>
+            <if test="jfjssj != null and jfjssj !=''">
+                <![CDATA[  AND t.jfdjsj <= #{jfjssj} ]]>
+            </if>
+           
+            <if test="cfqsjsqx != null and cfqsjsqx !=''">
+                <![CDATA[   AND t.cfjsqx >= #{cfqsjsqx} ]]>
+            </if>
+            <if test="cfjsjsqx != null and cfjsjsqx !=''">
+                <![CDATA[  AND t.cfjsqx <= #{cfjsjsqx} ]]>
+            </if>
+            <if test="xzqdm != null and xzqdm !=''">
+                AND t1.bdcdyh LIKE #{xzqdm}||'%'
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND t1.bdcdyh = #{bdcdyh}
+            </if>
+            <if test="bdcdyid != null and bdcdyid !=''">
+                AND t.bdcdyid = #{bdcdyid}
+            </if>
+            <if test="bzxr != null and bzxr !=''">
+                AND t.bzxr LIKE '%'||#{bzxr}||'%'
+            </if>
+            <if test="proids != null and proids !=''">
+                AND
+                <foreach collection="proids" item="item" open="(" separator=" or " close=")">
+                    t.proid = #{item}
+                </foreach>
+            </if>
+            <if test="cflx!=null and cflx!=''">
+                and t.cflx !=#{cflx}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectCfByProid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcCf">
+        SELECT t.QLID,t.BDCDYID,t.CFJG,t.CFLX,t.CFWH,t.CFFW,t.JFYWH,t.JFJG,t.JFWJ,t.JFWH,t.JFSJ,t.JFDJSJ,t.JFDBR,t.CDYWH,t.CFKSQX,t.CFJSQX,t.ZXSQR,t.BZXR,t.CFYY,t.LHSX,t.YWH,t.QLLX,t.PROID,t.GYQK,t.DJSJ,t.DBR,t.FJ,t.QSZT,t.CFSJ,t.QLQSSJ,t.QLJSSJ,t.CFWJ,t.CFSQR,t.LHCFQX,t.FYSDR,t.FYSDRLXFS,t.YSXKZMH,t.FYSDRZJHM,t.JFLX,t.ISSX,t.ISCD,t.BZ,t.CFSX
+        FROM bdc_cf t
+        WHERE t.proid=#{proid}
+    </select>
+
+    <update id="updateBdcCfForJfxx" parameterType="cn.gtmap.estateplat.model.server.core.BdcCf">
+         update bdc_cf
+         set jfywh=#{jfywh,jdbcType=VARCHAR},jfjg=#{jfjg,jdbcType=VARCHAR},jfwj=#{jfwj,jdbcType=VARCHAR},
+         jfwh=#{jfwh,jdbcType=VARCHAR},jfsj=#{jfsj,jdbcType=DATE},jfdjsj=#{jfdjsj,jdbcType=DATE},jfdbr=#{jfdbr,jdbcType=VARCHAR}
+         WHERE  qlid = #{qlid}
+    </update>
+
+    <select id="getBdcCfByPage" parameterType="java.util.Map" resultType="map">
+        SELECT DISTINCT s.bdcdyid,s.bdcdyh,t.cfwh,k.mc as cflx,t.cfjg,t.lhsx,x.bjsj,x.proid,t.qszt
+        FROM bdc_cf t
+        LEFT JOIN bdc_bdcdy s ON t.bdcdyid=s.bdcdyid
+        LEFT JOIN bdc_zd_cflx k ON t.cflx=k.dm
+        LEFT JOIN bdc_xm x ON x.proid=t.proid
+        WHERE x.xmzt='1'
+        <if test="dcxc != null and dcxc !=''">
+            AND (s.bdcdyh LIKE '%' || #{dcxc} || '%' OR t.cfwh LIKE '%' || #{dcxc} || '%' OR k.mc LIKE '%' || #{dcxc}
+            ||
+            '%' OR t.cfjg LIKE '%' || #{dcxc} || '%')
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND s.bdcdyh LIKE '%' || #{bdcdyh} || '%'
+        </if>
+        <if test="cfwh != null and cfwh !=''">
+            AND t.cfwh LIKE '%' || #{cfwh} || '%'
+        </if>
+        <if test="cflx != null and cflx !=''">
+            AND k.mc LIKE '%' || #{cflx} || '%'
+        </if>
+        <if test="cfjg != null and cfjg !=''">
+            AND t.cfjg LIKE '%' || #{cfjg} || '%'
+        </if>
+        ORDER BY x.bjsj DESC
+    </select>
+
+    <select id="getBdcCflxMc" resultType="String">
+       SELECT t.mc FROM bdc_zd_cflx t
+    </select>
+
+    <select id="getXfByBdcdyh" resultType="cn.gtmap.estateplat.model.server.core.BdcCf" parameterType="String">
+        SELECT t.QLID,t.BDCDYID,t.CFJG,t.CFLX,t.CFWH,t.CFFW,t.JFYWH,t.JFJG,t.JFWJ,t.JFWH,t.JFSJ,t.JFDJSJ,t.JFDBR,t.CFKSQX,t.CFJSQX,t.ZXSQR,t.BZXR,t.CFYY,t.LHSX,t.YWH,t.QLLX,t.PROID,t.GYQK,t.DJSJ,t.DBR,t.FJ,t.QSZT,t.CFSJ,t.QLQSSJ,t.QLJSSJ,t.CFWJ,t.CFSQR,t.LHCFQX,t.FYSDR,t.FYSDRLXFS,t.YSXKZMH,t.FYSDRZJHM,t.JFLX,t.ISSX,t.ISCD,t.BZ,t.CFSX
+        FROM bdc_cf t
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyid = t.bdcdyid
+        LEFT JOIN bdc_xm x ON x.proid=t.proid
+        WHERE t.cflx='5' AND x.xmzt='1' AND nvl(t.qszt,'0')!='2' AND b.bdcdyh=#{bdcdyh}
+    </select>
+    <select id="getLhcfByBdcdyh" resultType="cn.gtmap.estateplat.model.server.core.BdcCf" parameterType="String">
+        SELECT t.QLID,t.BDCDYID,t.CFJG,t.CFLX,t.CFWH,t.CFFW,t.JFYWH,t.JFJG,t.JFWJ,t.JFWH,t.JFSJ,t.JFDJSJ,t.JFDBR,t.CFKSQX,t.CFJSQX,t.ZXSQR,t.BZXR,t.CFYY,t.LHSX,t.YWH,t.QLLX,t.PROID,t.GYQK,t.DJSJ,t.DBR,t.FJ,t.QSZT,t.CFSJ,t.QLQSSJ,t.QLJSSJ,t.CFWJ,t.CFSQR,t.LHCFQX,t.FYSDR,t.FYSDRLXFS,t.YSXKZMH,t.FYSDRZJHM,t.JFLX,t.ISSX,t.ISCD,t.BZ,t.CFSX
+        FROM bdc_cf t
+        LEFT JOIN bdc_xm x ON x.proid=t.proid
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyid=t.bdcdyid
+        WHERE t.cflx='2' AND x.xmzt='1' AND b.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="getCfByBdcdyid" resultType="cn.gtmap.estateplat.model.server.core.BdcCf" parameterType="String">
+        SELECT t.*
+        FROM bdc_cf t
+        LEFT JOIN bdc_xm x ON x.proid=t.proid
+        WHERE x.bdcdyid=#{bdcdyid}
+    </select>
+
+    <select id="queryYcfByBdcdyh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcCf">
+        SELECT t.QLID,t.BDCDYID,t.CFJG,t.CFLX,t.CFWH,t.CFFW,t.JFYWH,t.JFJG,t.JFWJ,t.JFWH,t.JFSJ,t.JFDJSJ,t.JFDBR,t.CFKSQX,t.CFJSQX,t.ZXSQR,t.BZXR,t.CFYY,t.LHSX,t.YWH,t.QLLX,t.PROID,t.GYQK,t.DJSJ,t.DBR,t.FJ,t.QSZT,t.CFSJ,t.QLQSSJ,t.QLJSSJ,t.CFWJ,t.CFSQR,t.LHCFQX,t.FYSDR,t.FYSDRLXFS,t.YSXKZMH,t.FYSDRZJHM,t.JFLX,t.ISSX,t.ISCD,t.BZ,t.CFSX
+        FROM bdc_cf t
+        LEFT JOIN bdc_xm x ON x.proid=t.proid
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyid=t.bdcdyid
+        WHERE x.sqlx='801' AND t.qszt='1' AND t.cflx='2'  AND b.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="getCfByMap" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcCf">
+        SELECT t.QLID,t.BDCDYID,t.CFJG,t.CFLX,t.CFWH,t.CFFW,t.JFYWH,t.JFJG,t.JFWJ,t.JFWH,t.JFSJ,t.JFDJSJ,t.JFDBR,t.CFKSQX,t.CFJSQX,t.ZXSQR,t.BZXR,t.CFYY,t.LHSX,t.YWH,t.QLLX,t.PROID,t.GYQK,t.DJSJ,t.DBR,t.FJ,t.QSZT,t.CFSJ,t.QLQSSJ,t.QLJSSJ,t.CFWJ,t.CFSQR,t.LHCFQX,t.FYSDR,t.FYSDRLXFS,t.YSXKZMH,t.FYSDRZJHM,t.JFLX,t.ISSX,t.ISCD,t.BZ,t.CFSX
+        FROM bdc_cf t
+        LEFT JOIN bdc_xm x ON x.proid=t.proid
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyid=t.bdcdyid
+        <where>
+            <if test="qszt!=null and qszt!=''">
+                AND t.qszt=#{qszt}
+            </if>
+            <if test="bdcdyh!=null and bdcdyh!=''">
+                AND b.bdcdyh=#{bdcdyh}
+            </if>
+            <if test="cflx!=null and cflx!=''">
+                AND t.cflx=#{cflx}
+            </if>
+            <if test="bdcdyid!=null and bdcdyid!=''">
+                AND b.bdcdyid=#{bdcdyid}
+            </if>
+        </where>
+        <if test="desc != null and desc !=''">
+            ${desc}
+        </if>
+    </select>
+
+    <select id="getCfXmByBdcdyh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcXm">
+       SELECT x.*
+       FROM bdc_cf t
+       LEFT JOIN bdc_xm x ON x.proid=t.proid
+       LEFT JOIN bdc_bdcdy b ON b.bdcdyid=x.bdcdyid
+       WHERE b.bdcdyh=#{bdcdyh}
+    </select>
+
+	<select id="queryBdcGdCf" parameterType="java.util.Map"
+		resultType="map">
+		SELECT DISTINCT a.qlid
+		FROM bdc_cf a
+		WHERE 1=1
+		<if test="bdcdyid != null and bdcdyid !='' ">
+            AND a.bdcdyid= #{bdcdyid}
+        </if>
+		<if test="qszt != null ">
+            AND a.qszt = #{qszt}
+        </if>
+		UNION ALL
+		SELECT DISTINCT e.cfid
+        FROM gd_cf e
+		INNER JOIN gd_bdc_ql_rel f ON e.cfid = f.qlid
+        WHERE e.isjf = 0
+		<if test="bdcdyid != null and bdcdyid !='' ">
+             AND f.bdcid = #{bdcdyid}
+        </if>
+		UNION ALL
+		SELECT DISTINCT k.qlid
+        FROM gd_fw g
+        INNER JOIN gd_bdc_ql_rel h ON g.fwid = h.bdcid
+        INNER JOIN gd_fwsyq i ON i.qlid = h.qlid
+        INNER JOIN bdc_xm_rel j ON i.proid = j.yproid
+        INNER JOIN bdc_cf k ON k.proid = j.proid
+        WHERE 1=1 AND i.iszx = 0
+		<if test="qszt != null ">
+            AND k.qszt = #{qszt}
+        </if>
+	    <if test="bdcdyid != null and bdcdyid !='' ">
+            AND g.fwid = #{bdcdyid}
+        </if>
+	    UNION ALL
+	    SELECT DISTINCT p.qlid
+		FROM gd_fw l
+		INNER JOIN gd_bdc_ql_rel m ON l.fwid = m.bdcid
+		INNER JOIN gd_yg n ON n.ygid = m.qlid
+		INNER JOIN bdc_xm_rel o ON n.proid = o.yproid
+		INNER JOIN bdc_cf p ON p.proid = o.proid
+		WHERE 1=1 AND n.iszx=0
+		<if test="qszt != null ">
+            AND p.qszt = #{qszt}
+        </if>
+	   <if test="bdcdyid != null and bdcdyid !='' ">
+           AND l.fwid = #{bdcdyid}
+       </if>
+	</select>
+	
+	<select id="queryCfxxByPage" parameterType="java.util.Map" resultType="map">
+        select substr(b.bdcdyh,0,19) djh,b.bdcdyh,t.bzxr ,t.cfsqr,x.zl,t.cfjg,t.cfwh,TO_CHAR(t.cfksqx,'yyyy/MM/dd') cfksqx,TO_CHAR(t.cfjsqx,'yyyy/MM/dd') cfjsqx,c.MC cflx,t.qszt sfjf,x.xmzt,t.proid,t.qlid from bdc_cf t
+            LEFT JOIN bdc_xm x ON x.proid=t.proid
+            LEFT JOIN bdc_bdcdy b ON b.bdcdyid=x.bdcdyid
+            LEFT JOIN bdc_zd_cflx c ON c.DM=t.cflx
+            WHERE 1=1
+	  <if test="dcxc != null and dcxc !=''">
+            AND (b.bdcdyh LIKE '%' || #{dcxc} || '%' OR t.bzxr LIKE '%' || #{dcxc} || '%' OR t.cfwh LIKE '%' || #{dcxc} || '%'  )
+      </if>
+      <if test="djh != null and djh !=''">
+            AND substr(b.bdcdyh,0,19) = #{djh}
+      </if>
+	  <if test="bdcdyh !=null and bdcdyh !=''">
+            AND b.bdcdyh = #{bdcdyh}
+	  </if>
+	  <if test="bcfr !=null and bdfr !=''">
+	        AND t.bzxr = #{bcfr}
+	  </if>
+	  <if test="cfjg !=null and cfjg !=''">
+	        AND t.cfjg = #{cfjg}
+	  </if>
+	  <if test="cfzt !=null and cfzt !=''">
+	        AND t.qszt = #{cfzt}
+	  </if>
+	  UNION ALL
+	  SELECT t2.djh,r2.bdcdyh,q.qlr bzxr,'' cfsqr,t2.zl,t1.cfjg,t1.cfwh,TO_CHAR(t1.cfksrq, 'yyyy/MM/dd') cfksqx,TO_CHAR(t1.cfjsrq, 'yyyy/MM/dd') cfjsqx,t1.cflx,t1.isjf+1 sfjf,'' xmzt,t1.proid,t1.cfid qlid
+      FROM gd_cf t1
+      LEFT JOIN gd_bdc_ql_rel r1 ON t1.cfid = r1.qlid
+      LEFT JOIN gd_dyh_rel r2 ON r1.bdcid = r2.gdid
+      LEFT JOIN gd_qlr q ON q.qlid = r1.qlid AND q.qlrlx != 'ywr'
+      INNER JOIN gd_td t2 ON t2.tdid = r1.bdcid
+	  WHERE 1=1
+	  <if test="dcxc != null and dcxc !=''">
+            AND (r2.bdcdyh LIKE '%' || #{dcxc} || '%' OR q.qlr LIKE '%' || #{dcxc}||'%'  OR t1.cfwh LIKE '%' || #{dcxc} || '%' OR t2.djh LIKE '%' || #{dcxc} || '%'  )
+      </if>
+      <if test="djh != null and djh !=''">
+            AND t2.djh = #{djh}
+      </if>
+	  <if test="bdcdyh !=null and bdcdyh !=''">
+            AND r2.bdcdyh = #{bdcdyh}
+	  </if>
+	  <if test="bcfr !=null and bdfr !=''">
+	        AND q.qlr = #{bcfr}
+	  </if>
+	  <if test="cfjg !=null and cfjg !=''">
+	        AND t1.cfjg = #{cfjg}
+	  </if>
+	  <if test="cfzt !=null and cfzt !=''">
+	        AND t1.isjf = #{cfzt}
+	  </if>
+	  UNION ALL
+	    SELECT f1.fwid djh,r4.bdcdyh,q1.qlr bzxr,'' cfsqr,f1.fwzl,t3.cfjg,t3.cfwh,TO_CHAR(t3.cfksrq, 'yyyy/MM/dd') cfksqx,TO_CHAR(t3.cfjsrq, 'yyyy/MM/dd') cfjsqx,t3.cflx,t3.isjf+1 sfjf,'' xmzt,t3.proid,t3.cfid qlid
+        FROM gd_cf t3
+		LEFT JOIN gd_bdc_ql_rel r3 ON t3.cfid=r3.qlid
+		LEFT JOIN gd_dyh_rel r4 ON r3.bdcid=r4.gdid
+		LEFT JOIN gd_qlr q1 ON r3.qlid=q1.qlid
+		INNER JOIN gd_fw f1 ON f1.fwid=r3.bdcid
+		WHERE 1=1
+	  <if test="dcxc != null and dcxc !=''">
+            AND (r4.bdcdyh LIKE '%' || #{dcxc} || '%' OR q1.qlr LIKE '%' || #{dcxc}||'%' OR f1.fwid LIKE '%' || #{dcxc} || '%'  OR t3.cfwh LIKE '%' || #{dcxc} || '%')
+      </if>
+      <if test="djh != null and djh !=''">
+            AND f1.fwid = #{djh}
+      </if>
+	  <if test="bdcdyh !=null and bdcdyh !=''">
+            AND r4.bdcdyh = #{bdcdyh}
+	  </if>
+	  <if test="bcfr !=null and bdfr !=''">
+	        AND q1.qlr = #{bcfr}
+	  </if>
+	  <if test="cfjg !=null and cfjg !=''">
+	        AND t3.cfjg = #{cfjg}
+	  </if>
+	  <if test="cfzt !=null and cfzt !=''">
+	        AND t3.isjf = #{cfzt}
+	  </if>
+	  UNION ALL
+        SELECT l.djh,r6.bdcdyh,q2.qlr bzxr,'' cfsqr,l.lqzl,t4.cfjg,t4.cfwh,TO_CHAR(t4.cfksrq, 'yyyy/MM/dd') cfksqx,TO_CHAR(t4.cfjsrq, 'yyyy/MM/dd') cfjsqx,t4.cflx,t4.isjf+1 sfjf,'' xmzt,t4.proid,t4.cfid qlid
+        FROM gd_cf t4
+        LEFT JOIN gd_bdc_ql_rel r5 ON t4.cfid=r5.qlid
+        LEFT JOIN gd_dyh_rel r6 ON r5.bdcid=r6.gdid
+        LEFT JOIN gd_qlr q2 ON r5.qlid=q2.qlid
+        INNER JOIN gd_lq l ON l.lqid=r5.bdcid
+        WHERE 1=1
+	  <if test="dcxc != null and dcxc !=''">
+            AND (r6.bdcdyh LIKE '%' || #{dcxc} || '%' OR q2.qlr LIKE '%' || #{dcxc}||'%' OR t4.cfwh LIKE '%' || #{dcxc} || '%' OR l.djh  LIKE '%' || #{dcxc} || '%')
+      </if>
+      <if test="djh != null and djh !=''">
+            AND l.djh = #{djh}
+      </if>
+	  <if test="bdcdyh !=null and bdcdyh !=''">
+            AND r6.bdcdyh = #{bdcdyh}
+	  </if>
+	  <if test="bcfr !=null and bdfr !=''">
+	        AND q2.qlr = #{bcfr}
+	  </if>
+	  <if test="cfjg !=null and cfjg !=''">
+	        AND t4.cfjg = #{cfjg}
+	  </if>
+	  <if test="cfzt !=null and cfzt !=''">
+	        AND t4.isjf = #{cfzt}
+	  </if>
+	</select>
+
+    <!--查询所有不动产单元上的现势查封（不动产和过度）-->
+    <select id="selectAllCfxxByBdcdyh" parameterType="java.util.Map" resultType="map">
+        select substr(b.bdcdyh,0,19) djh,b.bdcdyh,t.cfwh,t.cfksqx,t.cfjsqx,c.MC cflx,nvl(t.qszt,1) sfjf,t.proid,t.qlid from bdc_cf t
+        left join bdc_bdcdy b on b.bdcdyid=x.bdcdyid
+        left join bdc_zd_cflx c on c.DM=t.cflx
+        where nvl(t.qszt,1) = 1
+        <if test="bdcdyh !=null and bdcdyh !=''">
+            and b.bdcdyh = #{bdcdyh}
+        </if>
+        union all
+        select t2.djh,
+        r2.bdcdyh,
+        t1.cfwh,
+        t1.cfksrq cfksqx,
+        t1.cfjsrq cfjsqx,
+        t1.cflx,
+        nvl(t1.isjf,0) sfjf,
+        t1.proid,
+        t1.cfid qlid
+        from gd_cf t1
+        inner join gd_bdc_ql_rel r1
+        on t1.cfid = r1.qlid
+        inner join gd_dyh_rel r2
+        on r1.bdcid = r2.gdid
+        inner join gd_td t2
+        on t2.tdid = r1.bdcid
+        where nvl(t1.isjf,0) =0
+        <if test="bdcdyh !=null and bdcdyh !=''">
+            and r2.bdcdyh = #{bdcdyh}
+        </if>
+        union all
+        select djh,bdcdyh,cfwh,cfksqx,cfjsqx,cflx,sfjf,xmzt,proid,qlid FROM (
+        select
+        '' djh,
+        r4.bdcdyh,
+        t3.cfwh,
+        t3.cfksrq cfksqx,
+        t3.cfjsrq cfjsqx,
+        t3.cflx,
+        nvl(t3.isjf,0) sfjf,
+        t3.proid,
+        t3.cfid qlid
+        from gd_cf t3
+        inner join gd_bdc_ql_rel r3 on t3.cfid=r3.qlid
+        inner join gd_dyh_rel r4 on r3.bdcid=r4.gdid
+        inner join gd_fw f1 on f1.fwid=r3.bdcid
+        where nvl(t3.isjf,0)=0
+        UNION ALL
+        select
+        '' djh,
+        r4.bdcdyh,
+        t3.cfwh,
+        t3.cfksrq cfksqx,
+        t3.cfjsrq cfjsqx,
+        t3.cflx,
+        nvl(t3.isjf,0) sfjf,
+        t3.proid,
+        t3.cfid qlid
+        from gd_cf t3
+        inner join gd_bdc_ql_rel r3 on t3.cfid=r3.qlid
+        inner join gd_dyh_rel r4 on r3.bdcid=r4.tdid
+        inner join gd_td t1 on t1.tdid=r4.tdid
+        where nvl(t3.isjf,0)=0
+        )
+        where 1=1
+        <if test="bdcdyh !=null and bdcdyh !=''">
+            and bdcdyh = #{bdcdyh}
+        </if>
+
+    </select>
+
+
+    <select id="getBdcCfByCfwhAndBdcdyh" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcCf">
+        SELECT t.* FROM bdc_cf t
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyid = t.bdcdyid
+        WHERE t.qszt = 1
+        <if test="bdcdyh !=null and bdcdyh !=''">
+            AND b.bdcdyh = #{bdcdyh}
+        </if>
+        <if test="bdcdyh !=null and bdcdyh !=''">
+            AND t.cfwh=  #{cfwh}
+        </if>
+    </select>
+
+    <select id="updatCfsjForNull" parameterType="cn.gtmap.estateplat.model.server.core.BdcCf">
+       UPDATE bdc_cf SET cfksqx = #{cfksqx,jdbcType=DATE} ,cfjsqx = #{cfjsqx,jdbcType=DATE}
+       WHERE qlid = #{qlid}
+    </select>
+</mapper>

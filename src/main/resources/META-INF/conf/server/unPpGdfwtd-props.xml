@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--过渡房屋匹配时，如果申请类型为配置不匹配房屋土地-->
+<props>
+    <sqlxdm>800</sqlxdm>
+    <sqlxdm>311</sqlxdm>
+    <sqlxdm>1003</sqlxdm>
+    <sqlxdm>904</sqlxdm>
+    <sqlxdm>802</sqlxdm>
+    <sqlxdm>1115</sqlxdm>
+    <sqlxdm>1117</sqlxdm>
+    <sqlxdm>1116</sqlxdm>
+    <sqlxdm>1118</sqlxdm>
+</props>

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcQlrMapper">
+
+
+    <select id="queryBdcQlrByProid" parameterType="java.lang.String" resultType="cn.gtmap.estateplat.model.server.core.BdcQlr">
+        SELECT t.qlrid,t.proid,t.qlrmc,t.qlrsfzjzl,t.qlrzjh,t.qlrtxdz,t.qlryb,t.qlrfddbr,t.qlrfddbrdh,t.qlrdlr,t.qlrdlrdh,t.qlrdljg,t.qlrlx,t.qlbl,t.gyfs,t.qlrxz,t.qlrlxdh,t.sfczr,t.sxh,t.sfxs,t.gyqk,t.sshy,t.qygyr
+        FROM bdc_qlr t
+        WHERE t.proid = #{proid}
+        ORDER BY t.sxh,t.qlrmc
+    </select>
+
+    <select id="queryBdcQlrList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcQlr">
+        SELECT t.qlrid,t.proid,t.qlrmc,t.qlrsfzjzl,t.qlrzjh,t.qlrtxdz,t.qlryb,t.qlrfddbr,t.qlrfddbrdh,t.qlrdlr,t.qlrdlrdh,t.qlrdljg,t.qlrlx,t.qlbl,t.gyfs,t.qlrxz,t.qlrlxdh,t.sfczr,t.sxh,t.sfxs,t.gyqk,t.sshy,t.qygyr
+        FROM bdc_qlr t
+        LEFT JOIN bdc_xm x ON x.proid=t.proid
+        WHERE 1=1
+        <if test="proid != null and proid !=''">
+            AND t.proid = #{proid}
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND t.qlrmc = #{qlr}
+        </if>
+        <if test="qlrmc != null and qlrmc !=''">
+            <if test="exactQuery == 'false'">
+                AND t.qlrmc like #{qlrmc}
+            </if>
+            <if test="exactQuery == 'true'">
+                AND t.qlrmc=#{qlrmc}
+            </if>
+        </if>
+        <if test="qlrlx != null and qlrlx !=''">
+            AND t.qlrlx = #{qlrlx}
+        </if>
+        <if test="wiid != null and wiid !=''">
+            AND x.wiid = #{wiid}
+        </if>
+        <if test="sfczr != null and sfczr !=''">
+            AND nvl(t.sfczr,'0') = #{sfczr}
+        </if>
+        <if test="qygyr != null and qygyr !=''">
+            AND instr(#{qygyr},t.qlrmc)>0
+        </if>
+        <if test="qllxDy != null and qllxDy !=''">
+            AND x.qllx='18'
+        </if>
+        <if test="qllxNotDy != null and qllxNotDy !=''">
+            AND x.qllx!='18'
+        </if>
+        ORDER BY t.sxh
+    </select>
+
+    <delete id="delQlrByProids">
+        DELETE FROM bdc_qlr
+        WHERE proid IN
+        <foreach collection="array" item="proids" open="(" separator="," close=")">
+            #{proids}
+        </foreach>
+    </delete>
+
+    <insert id="saveDjBdcQlrxx" parameterType="cn.gtmap.estateplat.model.server.core.BdcQlr">
+        INSERT INTO bdc_qlr(qlrid,proid,qlrmc,qlrsfzjzl,qlrzjh,qlrtxdz,qlryb,qlrfddbr,qlrfddbrdh,qlrdlr,qlrdlrdh,qlrdljg,qlrlx,qlrxz)
+        VALUES(#{qlrid,jdbcType=VARCHAR},#{proid,jdbcType=VARCHAR},#{qlrmc,jdbcType=VARCHAR},#{qlrsfzjzl,jdbcType=VARCHAR}
+        ,#{qlrzjh,jdbcType=VARCHAR},#{qlrtxdz,jdbcType=VARCHAR},#{qlryb,jdbcType=VARCHAR},#{qlrfddbr,jdbcType=VARCHAR}
+        ,#{qlrfddbrdh,jdbcType=VARCHAR},#{qlrdlr,jdbcType=VARCHAR},#{qlrdlrdh,jdbcType=VARCHAR},#{qlrdljg,jdbcType=VARCHAR}
+        ,#{qlrlx,jdbcType=VARCHAR},#{qlrxz,jdbcType=INTEGER}))
+    </insert>
+    <select id="getFwYwrByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.qlrmc as qlr,t.qlrzjh,CASE WHEN z.mc IS NULL THEN t.qlrsfzjzl ELSE z.mc END qlrsfzjzl
+        FROM bdc_qlr t
+        LEFT JOIN BDC_ZD_ZJLX z ON t.qlrsfzjzl=z.dm WHERE t.qlrlx='ywr'
+        <if test="proid != null and proid !=''">
+            AND t.proid = #{proid}
+        </if>
+    </select>
+    <select id="getNydQlrByDjh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.NydQlr">
+             SELECT QLRMC qlr,QLRZJLX qlrsfzjzl,QLRZJH qlrzjh,TXDZ QLRTXDZ,SFLDSYQR,SFLMSUQR,SFLMSYQR,FRDBXM QLRFDDBR,FRDBDHHM QLRFDDBRDH,DLRXM QLRDLR,DLRDHHM  QLRDLRDH
+             FROM djsj_nyd_qlr
+             WHERE djh=#{djh}
+    </select>
+    <select id="getQszdQlrDjh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjQszdQlr">
+             SELECT t.* FROM djsj_qszd_qlr t
+             WHERE t.djh=#{djh}
+    </select>
+
+    <select id="getFwqlrByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.qlrmc qlr,t.qlrzjh,CASE WHEN z.mc IS NULL THEN t.qlrsfzjzl ELSE z.mc END qlrsfzjzl
+        FROM bdc_qlr t
+        LEFT JOIN BDC_ZD_ZJLX z ON t.qlrsfzjzl=z.dm
+        WHERE t.qlrlx='qlr'
+        <if test="proid != null and proid !=''">
+            AND t.proid = #{proid}
+        </if>
+    </select>
+
+    <select id="changQlrsfzjzlToDm" parameterType="String" resultType="String">
+        SELECT t.dm FROM bdc_zd_zjlx t
+        WHERE t.mc=#{qlrsfzjzl}
+    </select>
+    <select id="getGyfsByProid" parameterType="String" resultType="String">
+      SELECT distinct t.gyfs
+      FROM bdc_qlr t
+      WHERE t.qlrlx='qlr' AND t.proid=#{proid}
+    </select>
+    <select id="getQlrByPage" parameterType="java.util.Map" resultType="map">
+        SELECT DISTINCT t.bdcdyid,t.bdcdyh,'' qlr,'' zl,'' zs
+        FROM (
+            SELECT a.bdcdyid,b.bdcdyh
+            FROM bdc_tdsyq a
+            LEFT JOIN bdc_bdcdy b ON a.bdcdyid = b.bdcdyid
+            WHERE nvl(a.qszt,'0')='1'
+            UNION ALL
+            SELECT b.bdcdyid,b.bdcdyh
+            FROM BDC_JSYDZJDSYQ a
+            LEFT JOIN bdc_bdcdy b ON b.bdcdyid = a.bdcdyid
+            WHERE nvl(a.qszt,'0')='1'
+            UNION ALL
+            SELECT a.bdcdyid,b.bdcdyh
+            FROM bdc_fdcq a
+            LEFT JOIN bdc_bdcdy b ON a.bdcdyid = b.bdcdyid
+            WHERE nvl(a.qszt,'0')='1'
+            UNION ALL
+            SELECT b.bdcdyid,b.bdcdyh
+            FROM bdc_fdcq_dz a
+            LEFT JOIN bdc_bdcdy b ON b.bdcdyid = a.bdcdyid
+            WHERE nvl(a.qszt,'0')='1'
+--             union all
+--             select g.tdid bdcdyid,g.djh bdcdyh
+--             FROM gd_td g
+--             inner join gd_bdc_ql_rel h on g.tdid = h.bdcid
+--             inner join GD_TDSYQ i on h.qlid = i.qlid and nvl(i.iszx,0) = 0
+--             union all
+--             select g.fwid bdcdyid,g.dah bdcdyh
+--             FROM gd_fw g
+--             inner join gd_bdc_ql_rel h on g.fwid = h.bdcid
+--             inner join GD_fwsyq i on h.qlid = i.qlid and nvl(i.iszx,0) = 0
+        ) t
+        <where>
+            <if
+                    test="(xm ==null or xm == '') and (zs == null or zs== '') and (zl == null or zl == '') ">
+                1=2
+            </if>
+            <if  test="(xm !=null and xm != '' ) or (zs!=null and zs != '') or (zl != null and zl != '')">
+                EXISTS (
+                SELECT bdcdyid FROM (
+                SELECT t1.bdcdyid   FROM bdc_tdsyq t1
+                <if test="zs != null and zs != '' ">
+                    LEFT JOIN bdc_xmzs_rel t2 ON t1.proid = t2.proid
+                    LEFT JOIN bdc_zs t3 ON t3.zsid = t2.zsid
+                </if>
+                <if test="xm != null and xm != '' ">
+                    LEFT JOIN bdc_qlr t5 ON t1.proid = t5.proid AND t5.qlrlx='qlr'
+                </if>
+                <if test="zl != null and zl != '' ">
+                    LEFT JOIN bdc_spxx t6 ON t6.proid = t1.proid
+                </if>
+                WHERE  t1.qszt=1
+                <if test="xm != null and xm != '' ">AND instr(t5.qlrmc, #{xm}) > 0</if>
+                <if test="zs != null and zs != '' ">AND instr(t3.bdcqzh, #{zs}) > 0</if>
+                <if test="zl != null and zl != '' ">AND instr(t6.zl, #{zl}) > 0</if>
+                UNION ALL
+                SELECT t1.bdcdyid
+                FROM BDC_JSYDZJDSYQ t1
+                <if test="zs != null and zs != '' ">
+                    LEFT JOIN bdc_xmzs_rel t2 ON t1.proid = t2.proid
+                    LEFT JOIN bdc_zs t3 ON t3.zsid = t2.zsid
+                </if>
+                <if test="xm != null and xm != '' ">
+                    LEFT JOIN bdc_qlr t5 ON t1.proid = t5.proid AND t5.qlrlx='qlr'
+                </if>
+                <if test="zl != null and zl != '' ">
+                    LEFT JOIN bdc_spxx t6 ON t6.proid = t1.proid
+                </if>
+                WHERE  t1.qszt=1
+                <if test="xm != null and xm != '' ">AND instr(t5.qlrmc, #{xm}) > 0</if>
+                <if test="zs != null and zs != '' ">AND instr(t3.bdcqzh, #{zs}) > 0</if>
+                <if test="zl != null and zl != '' ">AND instr(t6.zl, #{zl}) > 0</if>
+                UNION ALL
+
+                SELECT t1.bdcdyid   FROM bdc_fdcq t1
+                <if test="zs != null and zs != '' ">
+                    LEFT JOIN bdc_xmzs_rel t2 ON t1.proid = t2.proid
+                    LEFT JOIN bdc_zs t3 ON t3.zsid = t2.zsid
+                </if>
+                <if test="xm != null and xm != '' ">
+                    LEFT JOIN bdc_qlr t5 ON t1.proid = t5.proid AND t5.qlrlx='qlr'
+                </if>
+                <if test="zl != null and zl != '' ">
+                    LEFT JOIN bdc_spxx t6 ON t6.proid = t1.proid
+                </if>
+                WHERE  t1.qszt=1
+                <if test="xm != null and xm != '' ">AND instr(t5.qlrmc, #{xm}) > 0</if>
+                <if test="zs != null and zs != '' ">AND instr(t3.bdcqzh, #{zs}) > 0</if>
+                <if test="zl != null and zl != '' ">AND instr(t6.zl, #{zl}) > 0</if>
+                UNION ALL
+
+                SELECT t1.bdcdyid   FROM bdc_fdcq_dz t1
+                <if test="zs != null and zs != '' ">
+                    LEFT JOIN bdc_xmzs_rel t2 ON t1.proid = t2.proid
+                    LEFT JOIN bdc_zs t3 ON t3.zsid = t2.zsid
+                </if>
+                <if test="xm != null and xm != '' ">
+                    LEFT JOIN bdc_qlr t5 ON t1.proid = t5.proid AND t5.qlrlx='qlr'
+                </if>
+                <if test="zl != null and zl != '' ">
+                    LEFT JOIN bdc_spxx t6 ON t6.proid = t1.proid
+                </if>
+                WHERE  t1.qszt=1
+                <if test="xm != null and xm != '' ">AND instr(t5.qlrmc, #{xm}) > 0</if>
+                <if test="zs != null and zs != '' ">AND instr(t3.bdcqzh, #{zs}) > 0</if>
+                <if test="zl != null and zl != '' ">AND instr(t6.zl, #{zl}) > 0</if>
+                <!--union all-->
+                <!--select t1.tdid bdcdyid-->
+                <!--FROM gd_td t1-->
+                <!--inner join gd_bdc_ql_rel t2 on t1.tdid = t2.bdcid-->
+                <!--inner join gd_tdsyq t3 on t3.qlid = t2.qlid-->
+                <!--LEFT JOIN gd_qlr t5 on t3.qlid = t5.qlid and t5.qlrlx='qlr'-->
+                <!--where  nvl(t3.iszx,0)=0-->
+                <!--<if test="xm != null and xm != '' ">and instr(t5.qlr, #{xm}) > 0</if>-->
+                <!--<if test="zs != null and zs != '' ">and instr(t3.tdzh, #{zs}) > 0</if>-->
+                <!--<if test="zl != null and zl != '' ">and instr(t1.zl, #{zl}) > 0</if>-->
+                <!--union all-->
+                <!--select t1.fwid bdcdyid-->
+                <!--FROM gd_fw t1-->
+                <!--inner join gd_bdc_ql_rel t2 on t1.fwid = t2.bdcid-->
+                <!--inner join gd_tdsyq t3 on t3.qlid = t2.qlid-->
+                <!--LEFT JOIN gd_qlr t5 on t3.qlid = t5.qlid and t5.qlrlx='qlr'-->
+                <!--where  nvl(t3.iszx,0)=0-->
+                <!--<if test="xm != null and xm != '' ">and instr(t5.qlr, #{xm}) > 0</if>-->
+                <!--<if test="zs != null and zs != '' ">and instr(t3.tdzh, #{zs}) > 0</if>-->
+                <!--<if test="zl != null and zl != '' ">and instr(t1.fwzl, #{zl}) > 0</if>-->
+                )t1 WHERE t.bdcdyid =t1.bdcdyid
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcdyidByProid" parameterType="java.util.Map" resultType="map">
+       SELECT a.*,t.qlrid,t.proid
+       FROM bdc_bdcdy a
+       LEFT JOIN bdc_xm b ON a.bdcdyid=b.bdcdyid
+       LEFT JOIN bdc_qlr t ON b.proid = t.proid
+       WHERE t.qlrmc=#{qlr} AND t.qlrzjh=#{qlrzjh}
+    </select>
+
+
+    <select id="getQlrmcByProid" resultType="String" parameterType="String">
+        SELECT t.qlrmc
+        FROM bdc_qlr t
+        WHERE t.proid=#{proid} AND t.qlrlx='qlr'
+    </select>
+
+    <select id="getGzwQlrByDcbIndex" resultType="String" parameterType="cn.gtmap.estateplat.model.server.core.DjsjGzwQlr">
+      SELECT t.* FROM gzw_qlr t
+      WHERE t.gzw_dcb_index=#dcbindex#
+    </select>
+
+    <select id="getQlrxxPagesJson" parameterType="java.util.Map" resultType="map">
+        SELECT sxh,qlrmc,qlrzjh,qlrsfzjzl,qlrlx,gyfs,qlbl,qlrid,proid
+        FROM bdc_qlr
+        <where>
+            <if test="proid != null and proid !=''">
+                AND proid = #{proid}
+            </if>
+        </where>
+        ORDER BY sxh
+    </select>
+    <select id="getZjzlByMc" parameterType="java.lang.String" resultType="String">
+        SELECT t.dm FROM bdc_zd_zjlx t
+        WHERE t.mc = #{mc}
+    </select>
+    <select id="ywrMcAndZjhByProid" parameterType="java.lang.String" resultType="map">
+        SELECT t.qlrmc,t.qlrzjh FROM bdc_qlr t
+        WHERE t.proid = #{proid} AND t.qlrlx='ywr' ORDER BY t.sxh
+    </select>
+    <select id="qlrMcAndZjhByProid" parameterType="java.lang.String" resultType="map">
+        SELECT t.qlrmc,t.qlrzjh FROM bdc_qlr t
+        WHERE t.proid = #{proid} AND t.qlrlx='qlr' ORDER BY t.sxh
+    </select>
+
+
+    <select id="getBdcQlrListByBdcXmList" parameterType="java.util.List" resultType="cn.gtmap.estateplat.model.server.core.BdcQlr">
+        SELECT t.qlrid,t.proid,t.qlrmc,t.qlrsfzjzl,t.qlrzjh,t.qlrtxdz,t.qlryb,t.qlrfddbr,t.qlrfddbrdh,t.qlrdlr,t.qlrdlrdh,t.qlrdljg,t.qlrlx,t.qlbl,t.gyfs,t.qlrxz,t.qlrlxdh,t.sfczr,t.sxh,t.sfxs,t.gyqk,t.sshy FROM bdc_qlr t
+        WHERE t.qlrlx='qlr' AND t.proid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item.proid}
+        </foreach>
+    </select>
+
+    <delete id="batchDelBdcQlrByBdcXmList" parameterType="java.util.List">
+        DELETE FROM bdc_qlr t WHERE t.proid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item.proid}
+        </foreach>
+    </delete>
+
+    <select id="getFzjlQlrxxList" parameterType="java.util.HashMap" resultType="java.util.Map">
+        SELECT wm_concat(t.qlrmc) qlrmc,wm_concat(nvl(t.gyfs,'单独所有')) gyqk,wm_concat(t.qlrlxdh) qlrlxdh,wm_concat(t.sxh) sxh FROM bdc_qlr t
+        WHERE 1=1
+        <if test="proid != null and proid != ''">
+            AND t.proid = #{proid}
+        </if>
+    </select>
+</mapper>

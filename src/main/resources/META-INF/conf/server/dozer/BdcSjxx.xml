@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <mapping map-null="false">
+        <class-a>cn.gtmap.estateplat.model.exchange.transition.QzSj</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcSjxx</class-b>
+        <field>
+            <a>sjsj</a>
+            <b>sjrq</b>
+        </field>
+        <field>
+            <a>bz</a>
+            <b>bz</b>
+        </field>
+    </mapping>
+</mappings>

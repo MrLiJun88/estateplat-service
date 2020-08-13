@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZsPrintMapper">
+    <select id="getZsPrint" parameterType="map" resultType="map">
+        SELECT a.bdcqzh,a.zsid,CASE WHEN x.sqfbcz='是' then a.czr ELSE a.qlr END AS qlr,CASE WHEN b.mc='/' THEN '' ELSE b.mc END AS gyqk,a.zl,c.mc qllx,a.dwdm,a.bh zsbh,a.fzrq,a.syqx,
+        substr(a.bdcdyh,0,6)||' '||substr(a.bdcdyh,7,6)||' '||substr(a.bdcdyh,13,7)||' '||substr(a.bdcdyh,20) bdcdyh,
+        a.qlqtzk,a.nf,a.szsxqc,a.zhlsh,a.yt,a.mj,a.fj,a.qlxz,a.ywr,a.fzrq,a.sqsjc
+        FROM bdc_zs a
+        LEFT JOIN bdc_zd_gyfs b ON a.gyqk=b.dm
+        LEFT JOIN bdc_zd_qllx c ON a.qllx=c.dm
+        LEFT JOIN bdc_xmzs_rel xr on xr.zsid = a.zsid
+        LEFT JOIN bdc_xm x on xr.proid = x.proid
+        WHERE 1=1
+        <if test="proid!=null and proid!=''">
+            AND a.zsid in(SELECT zsid FROM bdc_xmzs_rel WHERE proid=#{proid})
+        </if>
+        <if test="zsid!=null and zsid!=''">
+            AND a.zsid=#{zsid}
+        </if>
+        ORDER BY a.bdcqzh
+    </select>
+
+    <select id="getZmdPrint" parameterType="String" resultType="map">
+        SELECT a.bdcqzh,a.zsid,a.qlr,b.mc gyqk,a.zl,c.mc qllx,a.dwdm,a.bh zsbh,a.fzrq,a.syqx,a.czrq,
+        substr(a.bdcdyh,0,6)||' '||substr(a.bdcdyh,7,6)||' '||substr(a.bdcdyh,13,7)||' '||substr(a.bdcdyh,20) bdcdyh,
+        a.qlqtzk,a.nf,a.szsxqc,a.zhlsh,a.yt,a.mj,a.fj,a.qlxz,a.ywr,a.fzrq,a.sqsjc,d.zxzh||a.zhlsh cqzh
+        FROM bdc_zs a
+        LEFT JOIN bdc_zd_gyfs b ON a.gyqk=b.dm
+        LEFT JOIN bdc_zd_qllx c ON a.qllx=c.dm
+        LEFT JOIN bdc_xmzs_rel x on a.zsid=x.zsid
+        LEFT JOIN bdc_fdcq d on d.proid=x.proid
+        where x.proid = #{proid}
+        ORDER BY a.bdcqzh
+    </select>
+
+</mapper>

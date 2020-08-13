@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdXmMapper">
+
+    <select id="getGdXmByfwid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdXm">
+      SELECT t.proid,t.csr,t.shr,t.gxrq,t.bdclx,t.zl,t.ppzt,t.djlx,t.slbh,t.dwdm,t.yproid,t.sffbcz,t.csrq,t.cjsj,t.bjsj,t.csyj,t.fsr,t.fsrq,t.fsyj,t.hdr,t.hdrq,t.hdyj,t.bz,t.xmmc,t.cjr,t.szr,t.szrq,t.sffz,t.fzsj,t.bsm,t.xmsx,t.daspsj,t.ydjsj,t.ydjlx,t.yzl,t.ywh,t.xmly,t.djyy
+      FROM gd_xm t
+      LEFT JOIN gd_fwsyq q ON q.bdcid=t.proid
+      WHERE q.qlid=#{fwid}
+    </select>
+
+    <select id="getGdXmBytdid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdXm">
+      SELECT t.proid,t.csr,t.shr,t.gxrq,t.bdclx,t.zl,t.ppzt,t.djlx,t.slbh,t.dwdm,t.yproid,t.sffbcz,t.csrq,t.cjsj,t.bjsj,t.csyj,t.fsr,t.fsrq,t.fsyj,t.hdr,t.hdrq,t.hdyj,t.bz,t.xmmc,t.cjr,t.szr,t.szrq,t.sffz,t.fzsj,t.bsm,t.xmsx,t.daspsj,t.ydjsj,t.ydjlx,t.yzl,t.ywh,t.xmly,t.djyy
+      FROM gd_xm t
+      LEFT JOIN gd_tdsyq q ON q.proid=t.proid
+      WHERE q.tdid=#{tdid}
+    </select>
+
+    <select id="getGdBdcQlRelByQlidAndBdcId" parameterType="map"
+            resultType="cn.gtmap.estateplat.model.server.core.GdBdcQlRel">
+        SELECT t.relid,t.bdcid,t.qlid,t.bdclx,t.bz
+        FROM GD_BDC_QL_REL t
+        <where>
+            <if test="bdcid!=null and bdcid!=''">
+                AND t.bdcid=#{bdcid}
+            </if>
+            <if test="qlid!=null and qlid!=''">
+                AND t.qlid=#{qlid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getGdDyFromBdcid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdDy">
+        SELECT *
+        FROM  gd_dy t
+        WHERE t.bdcid=#{bdcid}
+    </select>
+
+    <select id="getGdCfList" parameterType="java.util.HashMap" resultType="cn.gtmap.estateplat.model.server.core.GdCf">
+        SELECT t.cfid,t.proid
+        FROM gd_cf t
+        WHERE 1=1
+        <if test="qlids != null and qlids !=''">
+            AND
+            <foreach collection="qlids" item="item" open="(" separator=" or " close=")">
+                t.cfid=#{item}
+            </foreach>
+        </if>
+        <if test="proid!='' and proid != null">
+            AND t.proid=#{proid}
+        </if>
+        <if test="qlid!='' and qlid != null">
+            and t.cfid=#{qlid}
+        </if>
+    </select>
+
+    <select id="getGdCfListByBdcdyid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdCf">
+        SELECT f.*
+        FROM bdc_bdcdy b
+        INNER JOIN gd_dyh_rel r ON b.bdcdyh = r.bdcdyh
+        INNER JOIN gd_bdc_ql_rel r1 ON r.gdid = r1.bdcid
+        INNER JOIN gd_cf f ON r1.qlid = f.cfid
+        WHERE b.bdcdyid = #{bdcdyid} AND f.isjf != 1
+        UNION ALL
+        SELECT f.*
+        FROM bdc_bdcdy b
+        INNER JOIN gd_dyh_rel r ON b.bdcdyh = r.bdcdyh
+        INNER JOIN gd_bdc_ql_rel r1 ON r.tdid = r1.bdcid
+        INNER JOIN gd_cf f ON r1.qlid = f.cfid
+        WHERE b.bdcdyid = #{bdcdyid} AND f.isjf != 1
+    </select>
+
+    <select id="getGdFwsyqListByBdcdyid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdFwsyq">
+        SELECT f.*
+        FROM bdc_bdcdy b
+        INNER JOIN gd_dyh_rel r ON b.bdcdyh = r.bdcdyh
+        INNER JOIN gd_bdc_ql_rel r1 ON r.gdid = r1.bdcid
+        INNER JOIN gd_fwsyq f ON r1.qlid = f.qlid AND f.iszx != 1
+        WHERE b.bdcdyid = #{bdcdyid}
+    </select>
+
+    <select id="getGdTdsyqListByBdcdyid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdTdsyq">
+        SELECT f.*
+        FROM bdc_bdcdy b
+        INNER JOIN gd_dyh_rel r ON b.bdcdyh = r.bdcdyh
+        INNER JOIN gd_bdc_ql_rel r1 ON r.gdid = r1.bdcid
+        INNER JOIN gd_tdsyq f ON r1.qlid = f.qlid AND f.iszx != 1
+        WHERE b.bdcdyid = #{bdcdyid}
+    </select>
+
+    <select id="getGdDyList" parameterType="java.util.HashMap" resultType="cn.gtmap.estateplat.model.server.core.GdDy">
+        SELECT t.dyid
+        FROM gd_dy t
+        WHERE 1=1
+        <if test="qlids != null and qlids !=''">
+            AND
+            <foreach collection="qlids" item="item" open="(" separator=" or " close=")">
+                t.dyid=#{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getBdcdyhsByGdProid" parameterType="String" resultType="String">
+        SELECT replace(strcat(t.bdcdyh),'/','$')
+        FROM GD_DYH_REL t
+        WHERE t.gdid=#{proid}
+    </select>
+    <select id="getDjidByGdid" parameterType="String" resultType="String">
+      SELECT t.id
+      FROM DJSJ_BDCDY_TDFW t
+      LEFT JOIN gd_dyh_rel r ON r.bdcdyh=t.BDCDYH
+      WHERE  r.gdid=#{gdid}
+    </select>
+
+    <select id="getQlidByGdproid" parameterType="String" resultType="String">
+        SELECT t.qlid
+        FROM gd_fwsyq t
+        WHERE t.proid=#{proid}
+        UNION ALL
+         SELECT t.dyid
+         FROM gd_dy t
+        WHERE t.proid=#{proid}
+        UNION ALL
+        SELECT t.cfid
+        FROM gd_cf t
+        WHERE t.proid=#{proid}
+        UNION ALL
+        SELECT t.ygid
+        FROM gd_yg t
+        WHERE t.proid=#{proid}
+        UNION ALL
+        SELECT t.yyid
+        FROM gd_yy t
+        WHERE t.proid=#{proid}
+        UNION ALL
+        SELECT t.qlid
+        FROM gd_tdsyq t
+        WHERE t.proid=#{proid}
+    </select>
+    <select id="getGdproidByQild" parameterType="String" resultType="String">
+        SELECT t.proid  FROM gd_fwsyq t
+        WHERE t.qlid=#{qlid}
+        UNION ALL
+        SELECT t.proid  FROM gd_dy t
+        WHERE t.dyid=#{qlid}
+        UNION ALL
+        SELECT t.proid  FROM gd_cf t
+        WHERE t.cfid=#{qlid}
+        UNION ALL
+        SELECT t.proid FROM gd_yg t
+        WHERE t.ygid=#{qlid}
+        UNION ALL
+        SELECT t.proid FROM gd_yy t
+        WHERE t.yyid=#{qlid}
+        UNION ALL
+        SELECT t.proid FROM gd_tdsyq t
+        WHERE t.qlid=#{qlid}
+    </select>
+    <select id="getGdDyhRelByMap" parameterType="HashMap" resultType="cn.gtmap.estateplat.model.server.core.GdDyhRel">
+        SELECT t.*
+        FROM gd_dyh_rel t
+        LEFT JOIN gd_bdc_ql_rel s ON s.bdcid=t.gdid
+        <where>
+            <if test="qlid!='' and qlid!=null">
+                s.qlid=#{qlid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getYzhByGdproid" parameterType="String" resultType="String">
+       SELECT replace(strcat(zsh),'/',',') fczh FROM(
+        SELECT t.fczh zsh,t.proid FROM gd_fwsyq t
+        UNION ALL
+        SELECT t.dydjzmh zsh,t.proid FROM gd_dy t
+        UNION ALL
+        SELECT t.yqzh zsh,t.proid FROM gd_cf t
+        UNION ALL
+        SELECT t.ygdjzmh zsh,t.proid FROM gd_yg t
+        UNION ALL
+        SELECT '' zsh,t.proid FROM gd_yy t
+        UNION ALL
+        SELECT t.tdzh zsh,t.proid FROM gd_tdsyq t
+        UNION ALL
+        SELECT t.lqzh zsh,t.proid FROM gd_lq t
+        )
+        WHERE proid=#{proid}
+    </select>
+
+    <!-- 获取权利人 -->
+    <select id="getQlrByqlid" parameterType="String" resultType="String">
+        SELECT replace(strcat(qlr), '/', ', ')
+        FROM gd_qlr
+        WHERE qlid=#{qlid} AND qlrlx='qlr'
+    </select>
+
+    <!-- 获取义务人 -->
+    <select id="getYwrByqlid" parameterType="String" resultType="String">
+        SELECT replace(strcat(qlr), '/', ', ')
+        FROM gd_qlr
+        WHERE qlid=#{qlid} AND qlrlx='ywr'
+    </select>
+
+    <!-- 获取Gdproid-->
+    <select id="getGdproidByQlid" parameterType="String" resultType="String">
+       SELECT proid FROM (
+       SELECT t.qlid,t.proid FROM gd_fw_ql t
+       UNION ALL
+       SELECT t.qlid,t.proid FROM gd_td_ql t
+       )
+       WHERE qlid=#{qlid}
+    </select>
+
+    <select id="getGdFwDybyBdcdyid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdDy">
+        SELECT DISTINCT t.dyid,t.dyksrq,t.dyjsrq,t.dyfs,t.zjgczl,t.zjgcdyfw,t.zgzqqdss,t.bdclx,t.dydjzmh,t.isjy,t.dbfw,t.bdbzzqse,t.zgzqqdse,t.gxrq,t.djlx,t.fj,t.bz,t.proid,t.cjrid,t.yqzh,t.gxr,t.zxr,t.zxrq,t.bdcjg,t.dkfs,t.pgjgbz,t.dyhtbh,t.zwr,t.sfgtdb,t.lzrq,t.dbr,t.djsj,t.sydyje,t.sydymj,t.dysx,t.jezl,t.daywh,t.zxdyywh,t.zxdyyy,t.qllx,t.bsm,t.qlsx,t.bdcjg1,t.dymj,t.pgjg,t.zxdbr,t.zxdbsj
+        FROM gd_dy t
+        LEFT JOIN gd_bdc_ql_rel r ON r.qlid = t.dyid
+        LEFT JOIN gd_dyh_rel e ON e.gdid = r.bdcid
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyh = e.bdcdyh
+        WHERE b.bdcdyid=#{bdcdyid} AND t.isjy != 1
+    </select>
+
+    <select id="getGdTdDybyBdcdyid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdDy">
+        SELECT DISTINCT t.dyid,t.dyksrq,t.dyjsrq,t.dyfs,t.zjgczl,t.zjgcdyfw,t.zgzqqdss,t.bdclx,t.dydjzmh,t.isjy,t.dbfw,t.bdbzzqse,t.zgzqqdse,t.gxrq,t.djlx,t.fj,t.bz,t.proid,t.cjrid,t.yqzh,t.gxr,t.zxr,t.zxrq,t.bdcjg,t.dkfs,t.pgjgbz,t.dyhtbh,t.zwr,t.sfgtdb,t.lzrq,t.dbr,t.djsj,t.sydyje,t.sydymj,t.dysx,t.jezl,t.daywh,t.zxdyywh,t.zxdyyy,t.qllx,t.bsm,t.qlsx,t.bdcjg1,t.dymj,t.pgjg,t.zxdbr,t.zxdbsj
+        FROM gd_dy t
+        LEFT JOIN gd_bdc_ql_rel r ON r.qlid = t.dyid
+        LEFT JOIN gd_dyh_rel e ON e.tdid = r.bdcid
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyh = e.bdcdyh
+        WHERE b.bdcdyid=#{bdcdyid} AND t.isjy != 1
+    </select>
+
+    <select id="getTdqlidByBdcdyhAndYqlid" parameterType="Map" resultType="String">
+        SELECT t.tdqlid
+        FROM gd_ql_dyh_rel t
+        <where>
+            t.qlid = #{yqlid}
+            <if test="bdcdyh!=null and bdcdyh!=''">
+                AND t.bdcdyh = #{bdcdyh}
+            </if>
+        </where>
+    </select>
+
+    <select id="getXmidByGdzh" parameterType="String" resultType="String">
+        SELECT proid
+        FROM (SELECT fczh gdzh,proid
+        FROM gd_fwsyq
+        UNION ALL
+        SELECT tdzh gdzh,proid
+        FROM gd_tdsyq
+        UNION ALL
+        SELECT dydjzmh gdzh,proid
+        FROM gd_dy
+        )
+        WHERE gdzh =#{gdzh}
+    </select>
+
+    <select id="getQlzt" parameterType="Map" resultType="String">
+        SELECT a.iszx FROM
+        (SELECT t.qlid qlid,t.iszx iszx FROM gd_fwsyq t
+        UNION ALL
+        SELECT t.dyid qlid,t.isjy iszx FROM gd_dy t
+        UNION ALL
+        SELECT t.cfid qlid,t.isjf iszx FROM gd_cf t
+        UNION ALL
+        SELECT t.ygid qlid,t.iszx iszx FROM gd_yg t
+        UNION ALL
+        SELECT t.yyid,t.iszx iszx FROM gd_yy t
+        UNION ALL
+        SELECT t.qlid qlid,t.iszx iszx FROM gd_tdsyq t
+        UNION ALL
+        SELECT t.lqid qlid,t.iszx iszx FROM gd_lq t) a
+        WHERE 1=1
+        <if test="qlid != null and qlid !=''">
+            AND a.qlid = #{qlid}
+        </if>
+    </select>
+
+    <select id="getFwGdproidByGdzh" parameterType="String" resultType="String">
+        SELECT proid
+        FROM gd_fwsyq
+        WHERE fczh =#{gdzh}
+    </select>
+
+    <select id="getTdGdproidByGdzh" parameterType="String" resultType="String">
+        SELECT proid
+        FROM gd_tdsyq
+        WHERE tdzh =#{gdzh}
+    </select>
+
+    <select id="getDyGdproidByGdzh" parameterType="String" resultType="String">
+        SELECT proid
+        FROM gd_dy
+        WHERE dydjzmh =#{gdzh}
+    </select>
+
+</mapper>

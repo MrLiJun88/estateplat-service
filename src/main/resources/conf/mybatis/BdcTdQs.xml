@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcQsMapper">
+    <select id="queryBdcTdQsByPage" parameterType="java.util.Map"
+            resultType="map">
+        SELECT DISTINCT t.bdcdyid,t.bdcdyh,'' qlr,'' zl,'' zs
+        FROM (
+            SELECT a.bdcdyid,b.bdcdyh
+            FROM bdc_tdsyq a
+            LEFT JOIN bdc_bdcdy b ON a.bdcdyid = b.bdcdyid
+            WHERE nvl(a.qszt,'0')='1'
+            UNION ALL
+            SELECT b.bdcdyid,b.bdcdyh
+            FROM BDC_JSYDZJDSYQ a
+            LEFT JOIN bdc_bdcdy b ON b.bdcdyid = a.bdcdyid
+            WHERE nvl(a.qszt,'0')='1'
+            UNION ALL
+            SELECT g.tdid bdcdyid,g.djh bdcdyh
+            FROM gd_td g
+            inner join gd_bdc_ql_rel h ON g.tdid = h.bdcid
+            inner join GD_TDSYQ i ON h.qlid = i.qlid AND nvl(i.iszx,0) = 0
+        ) t
+        <where>
+            <if
+                    test="(xm ==null or xm == '') and (zs == null or zs== '') and (zl == null or zl == '') ">
+                1=2
+            </if>
+            <if  test="(xm !=null and xm != '' ) or (zs!=null and zs != '') or (zl != null and zl != '')">
+                EXISTS (
+                SELECT bdcdyid FROM(
+                     SELECT t1.bdcdyid   FROM bdc_tdsyq t1
+                    <if test="zs != null and zs != '' ">
+                        LEFT JOIN bdc_xmzs_rel t2 ON t1.proid = t2.proid
+                        LEFT JOIN bdc_zs t3 ON t3.zsid = t2.zsid
+                    </if>
+                    <if test="xm != null and xm != '' ">
+                        LEFT JOIN bdc_qlr t5 ON t1.proid = t5.proid and t5.qlrlx='qlr'
+                    </if>
+                    <if test="zl != null and zl != '' ">
+                        LEFT JOIN bdc_spxx t6 ON t6.proid = t1.proid
+                    </if>
+                    WHERE  t1.qszt=1
+                    <if test="xm != null and xm != '' ">AND instr(t5.qlrmc, #{xm}) > 0</if>
+                    <if test="zs != null and zs != '' ">AND instr(t3.bdcqzh, #{zs}) > 0</if>
+                    <if test="zl != null and zl != '' ">AND instr(t6.zl, #{zl}) > 0</if>
+                    UNION ALL
+                    SELECT t1.bdcdyid
+                    FROM BDC_JSYDZJDSYQ t1
+                    <if test="zs != null and zs != '' ">
+                        LEFT JOIN bdc_xmzs_rel t2 ON t1.proid = t2.proid
+                        LEFT JOIN bdc_zs t3 ON t3.zsid = t2.zsid
+                    </if>
+                    <if test="xm != null and xm != '' ">
+                        LEFT JOIN bdc_qlr t5 ON t1.proid = t5.proid AND t5.qlrlx='qlr'
+                    </if>
+                    <if test="zl != null and zl != '' ">
+                        LEFT JOIN bdc_spxx t6 ON t6.proid = t1.proid
+                    </if>
+                    WHERE  t1.qszt=1
+                    <if test="xm != null and xm != '' ">AND instr(t5.qlrmc, #{xm}) > 0</if>
+                    <if test="zs != null and zs != '' ">AND instr(t3.bdcqzh, #{zs}) > 0</if>
+                    <if test="zl != null and zl != '' ">AND instr(t6.zl, #{zl}) > 0</if>
+                    UNION ALL
+                    SELECT t1.tdid bdcdyid
+                    FROM gd_td t1
+                        inner join gd_bdc_ql_rel t2 ON t1.tdid = t2.bdcid
+                        inner join gd_tdsyq t3 ON t3.qlid = t2.qlid
+                        LEFT JOIN gd_qlr t5 ON t3.qlid = t5.qlid AND t5.qlrlx='qlr'
+                    WHERE  nvl(t3.iszx,0)=0
+                    <if test="xm != null and xm != '' ">AND instr(t5.qlr, #{xm}) > 0</if>
+                    <if test="zs != null and zs != '' ">AND instr(t3.tdzh, #{zs}) > 0</if>
+                    <if test="zl != null and zl != '' ">AND instr(t1.zl, #{zl}) > 0</if>
+                   )t1 WHERE t.bdcdyid =t1.bdcdyid
+                )
+            </if>
+        </where>
+    </select>
+    <select id="getTdBdcdyXxByBdcdyid" parameterType="java.util.Map"
+            resultType="map">
+		SELECT replace(strcat(qlr), '/', ' ') qlr,replace(strcat(zs), '/', ' ') zs,replace(strcat(zl), '/', ' ') zl FROM (
+    SELECT #{bdcdyid} bdcdyid,h.* FROM (
+    SELECT (replace(strcat(qlr), '/', ' ')) qlr,zs,replace(strcat(zl), '/', ' ') zl
+      FROM (
+        SELECT t5.qlrmc qlr,t3.bdcqzh zs,to_char(cast(t6.zl as varchar2(500))) zl
+          FROM bdc_tdsyq t1
+           LEFT JOIN bdc_xmzs_rel t2 ON t1.proid = t2.proid
+           LEFT JOIN bdc_zs t3 ON t3.zsid = t2.zsid
+           LEFT JOIN bdc_qlr t5 ON t1.proid = t5.proid AND t5.qlrlx='qlr'
+            LEFT JOIN bdc_spxx t6 ON t6.proid = t1.proid
+        WHERE t1.bdcdyid=#{bdcdyid} AND t3.bdcqzh is not null AND t1.qszt=1
+        UNION ALL
+         SELECT t5.qlrmc qlr,t3.bdcqzh zs,to_char(cast(t6.zl as varchar2(500))) zl
+          FROM BDC_JSYDZJDSYQ t1
+           LEFT JOIN bdc_xmzs_rel t2 ON t1.proid = t2.proid
+           LEFT JOIN bdc_zs t3 ON t3.zsid = t2.zsid
+           LEFT JOIN bdc_qlr t5 ON t1.proid = t5.proid AND t5.qlrlx='qlr'
+            LEFT JOIN bdc_spxx t6 ON t6.proid = t1.proid
+        WHERE t1.bdcdyid=#{bdcdyid} AND t3.bdcqzh is not null AND t1.qszt=1
+        UNION ALL
+        SELECT t5.qlr,t3.tdzh zs ,t1.zl zl
+          FROM gd_td t1
+              inner join gd_bdc_ql_rel t2 ON t1.tdid = t2.bdcid
+              inner join gd_tdsyq t3 ON t3.qlid = t2.qlid
+              LEFT JOIN gd_qlr t5 ON t3.qlid = t5.qlid AND t5.qlrlx='qlr'
+          WHERE  nvl(t3.iszx,0)=0
+
+        AND t1.tdid=#{bdcdyid} AND t3.tdzh IS NOT NULL
+
+		)  GROUP BY zs) h
+		)GROUP BY bdcdyid
+	</select>
+</mapper>

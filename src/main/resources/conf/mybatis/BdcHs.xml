@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcHsMapper">
+    <!--查询hs视图 验证是否用展示楼盘表  不要删掉-->
+    <select id="selectHsCount"  resultType="java.lang.String">
+     SELECT bdcdyh FROM(
+		SELECT t.bdcdyh bdcdyh FROM DJSJ_FWHS t
+        LEFT JOIN djsj_fw_ljz t1 ON t.FW_DCB_INDEX=t1.FW_DCB_INDEX
+        LEFT JOIN djsj_fw_xmxx t2 ON t1.fw_xmxx_index=t2.fw_xmxx_index
+        WHERE t.FW_DCB_INDEX=#{keyCode}
+        UNION ALL
+    	SELECT t.bdcdyh FROM djsj_fw_ljz t WHERE t.fw_dcb_index=#{keyCode}
+    	UNION ALL
+    	SELECT t.bdcdyh FROM djsj_fw_xmxx t INNER JOIN djsj_fw_ljz t1 ON t.fw_xmxx_index=t1.fw_xmxx_index WHERE t1.fw_dcb_index=#{keyCode}
+    )WHERE bdcdyh IS NOT NULL
+    </select>
+
+    <select id="getBdcFwhsQlztList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcFwHs">
+        <![CDATA[
+        SELECT distinct bdcdyh,fw_hs_index,fw_dcb_index,bdcdyid, proid,wlcs,dycs,dyh,fjh,hbfx,hbhs,sxh,qlzt FROM (
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,''  proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'3' qlzt FROM djsj_fwhs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_cf t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2' )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh, t.fw_hs_index, t.fw_dcb_index, '' bdcdyid,  '' proid,  t.wlcs, t.dycs, t.dyh,  t.fjh, t.hbfx, t.hbhs,  t.sxh, '8' qlzt  FROM djsj_fwhs t
+        INNER JOIN bdc_zjjzwxx t1 ON t.bdcdyh = t1.bdcdyh AND (nvl(t1.dyzt,0)=0)
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'6' qlzt FROM djsj_fwhs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_yy t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2' )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'5' qlzt FROM djsj_fwhs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_yg t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2'  )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        WHERE t2.ygdjzl='3' OR t2.ygdjzl='4'
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'4' qlzt FROM djsj_fwhs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_yg t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2'  )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        WHERE t2.ygdjzl='1' OR t2.ygdjzl='2'
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'2' qlzt FROM djsj_fwhs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_dyaq t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2'   )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'7' qlzt FROM djsj_fwhs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_dyq t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2'  )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'1' qlzt FROM djsj_fwhs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_fdcq t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2')
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,''  proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'1' qlzt FROM djsj_fwhs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_fdcq_dz t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2')
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        )
+          ]]>
+        WHERE 1=1
+        <if test="dcbId != null and dcbId !=''">
+            AND fw_dcb_index = #{dcbId}
+        </if>
+        <if test="wlcs != null and wlcs !=''">
+            AND wlcs = #{wlcs}
+        </if>
+        ORDER BY wlcs DESC,dyh ,sxh,qlzt DESC
+    </select>
+
+    <select id="getGdFwhsList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT distinct b.fw_hs_index,t.dah,t.qszt FROM (
+        SELECT t.dah,
+          CASE WHEN q.zslx='查封文号'
+            THEN 3
+          WHEN q.zslx='他项证明'
+            THEN 2
+          WHEN q.zslx='预告证明' or q.zslx='预告抵押证明'
+            THEN 4
+          WHEN q.zslx='房屋所有权' or q.zslx='房屋登记证明'
+            THEN  1
+          ELSE 0
+          END
+        AS qszt
+        FROM gd_fw t
+        LEFT JOIN gd_bdc_ql_rel r ON r.bdcid = t.fwid
+        LEFT JOIN gd_fw_ql q ON q.qlid=r.qlid
+        ) t LEFT JOIN djsj_fwhs b ON t.dah=b.fcdah
+        WHERE 1=1
+        <if test="dcbId != null and dcbId !=''">
+            AND b.fw_dcb_index = #{dcbId}
+        </if>
+    </select>
+
+
+    <select id="getBdcYcFwhsQlztList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcFwHs">
+        <![CDATA[
+        SELECT distinct bdcdyh,fw_hs_index,fw_dcb_index,bdcdyid, proid,wlcs,dycs,dyh,fjh,hbfx,hbhs,sxh,qlzt FROM (
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,''  proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'3' qlzt FROM djsj_fwychs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_cf t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2' )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh, t.fw_hs_index, t.fw_dcb_index, '' bdcdyid,  '' proid,  t.wlcs, t.dycs, t.dyh,  t.fjh, t.hbfx, t.hbhs,  t.sxh, '8' qlzt  from djsj_fwychs t
+        INNER JOIN bdc_zjjzwxx t1 ON t.bdcdyh = t1.bdcdyh AND (nvl(t1.dyzt,0)=0)
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'6' qlzt from djsj_fwychs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_yy t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2' )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'5' qlzt from djsj_fwychs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_yg t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2'  )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        WHERE t2.ygdjzl='3' OR t2.ygdjzl='4'
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'4' qlzt from djsj_fwychs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_yg t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2'  )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        WHERE t2.ygdjzl='1' OR t2.ygdjzl='2'
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'2' qlzt from djsj_fwychs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_dyaq t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2'   )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'7' qlzt from djsj_fwychs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_dyq t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2'  )
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'1' qlzt from djsj_fwychs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_fdcq t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2')
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,''  proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'1' qlzt from djsj_fwychs t
+        INNER JOIN bdc_bdcdy t1 ON t.bdcdyh=t1.bdcdyh
+        INNER JOIN bdc_fdcq_dz t2 ON (t1.bdcdyid= t2.bdcdyid AND nvl(t2.qszt,'0')<>'2')
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')='2' OR nvl(t3.xmzt,'0')='1'))
+        UNION ALL
+        SELECT t.bdcdyh,t.fw_hs_index,t.fw_dcb_index,'' bdcdyid,'' proid,t.wlcs,t.dycs,t.dyh,t.fjh,t.hbfx,t.hbhs,t.sxh,'2' qlzt from djsj_fwychs t
+        INNER JOIN bdc_zjjzwxx t1 ON (t.bdcdyh=t1.bdcdyh AND nvl(t1.dyzt,'0')='0')
+        INNER JOIN bdc_dyaq t2 ON (t1.proid= t2.proid AND nvl(t2.qszt,'0')<>'2')
+        INNER JOIN bdc_xm t3 ON (t2.proid= t3.proid AND (nvl(t3.xmzt,'0')=2 OR nvl(t3.xmzt,0)='1'))
+        )
+          ]]>
+        WHERE 1=1
+        <if test="dcbId != null and dcbId !=''">
+            AND fw_dcb_index = #{dcbId}
+        </if>
+        <if test="wlcs != null and wlcs !=''">
+            AND wlcs = #{wlcs}
+        </if>
+        ORDER BY wlcs DESC,dyh ,sxh,qlzt DESC
+    </select>
+
+    <select id="getGdYcFwhsList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT a.fwid,a.dah,a.qszt,b.fw_hs_index,b.bdcdyh from gd_fwxx a
+        LEFT JOIN djsj_fwychs b ON a.dah=b.fcdah
+        WHERE 1=1
+        <if test="dcbId != null and dcbId !=''">
+            AND b.fw_dcb_index = #{dcbId}
+        </if>
+        ORDER BY b.wlcs DESC,b.dyh ,b.sxh,a.qszt DESC
+    </select>
+
+    <select id="getBdcdyhByHsid" parameterType="String" resultType="String">
+        SELECT t.bdcdyh FROM djsj_fwhs  t WHERE t.fw_hs_index=#{dcbId}
+    </select>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDjbQueryMapper">
+	<select id="queryBdcdjbByPage" parameterType="java.util.Map"
+		resultType="map">
+		SELECT DISTINCT y.bdcdyh, x.zl, q.jzmj mj, t.mc yt,y.djbid,to_char(w.fw_hs_index) djid,m.wiid,q.qllx,q.proid
+		FROM bdc_fdcq q
+		LEFT JOIN bdc_xm m ON m.proid = q.proid
+		LEFT JOIN bdc_bdcdy y ON y.bdcdyid = m.bdcdyid
+		LEFT JOIN bdc_spxx x ON x.proid = m.proid
+		LEFT JOIN BDC_ZD_FWYT t ON t.dm = q.ghyt
+		LEFT JOIN djsj_fwhs w ON w.bdcdyh = y.bdcdyh
+		WHERE 1=1 AND m.wiid = #{wiid}
+		<if test="zl != null and zl!=''">
+			AND instr(x.zl ,#{zl})>0
+		</if>
+		UNION ALL
+		SELECT DISTINCT y.bdcdyh, x.zl, x.mj mj, x.zdzhyt yt,y.djbid,'' djid,m.wiid,q.qllx,q.proid
+		FROM bdc_tdsyq q
+		LEFT JOIN bdc_xm m ON m.proid = q.proid
+		LEFT JOIN bdc_bdcdy y ON y.bdcdyid = m.bdcdyid
+		LEFT JOIN bdc_spxx x ON x.proid = m.proid
+		WHERE 1=1 AND m.wiid = #{wiid}
+		<if test="zl != null and zl!=''">
+			AND instr(x.zl,#{zl})>0
+		</if>
+		UNION ALL
+		SELECT DISTINCT y.bdcdyh, x.zl, x.mj mj, x.fcghyt,y.djbid,to_char(w.fw_hs_index) djid,m.wiid,q.qllx,q.proid
+		FROM bdc_fdcq_dz q
+		LEFT JOIN bdc_xm m ON m.proid = q.proid
+		LEFT JOIN bdc_bdcdy y ON y.bdcdyid = m.bdcdyid
+		LEFT JOIN bdc_spxx x ON x.proid = m.proid
+		LEFT JOIN BDC_ZD_FWYT t ON t.dm = x.fcghyt
+		LEFT JOIN djsj_fwhs w ON w.bdcdyh = y.bdcdyh
+		WHERE 1=1
+        AND m.wiid = #{wiid}
+		<if test="zl != null and zl!=''">
+			AND instr(x.zl ,#{zl})>0
+		</if>
+		UNION ALL
+		SELECT DISTINCT y.bdcdyh, x.zl, x.mj mj, t.mc yt,y.djbid,to_char(w.fw_hs_index) djid,m.wiid,q.qllx,q.proid
+		FROM bdc_dyaq q
+		LEFT JOIN bdc_xm m ON m.proid = q.proid
+		LEFT JOIN bdc_bdcdy y ON y.bdcdyid = m.bdcdyid
+		LEFT JOIN bdc_spxx x ON x.proid = m.proid
+		LEFT JOIN BDC_ZD_FWYT t ON t.dm = x.yt
+		LEFT JOIN djsj_fwhs w ON w.bdcdyh = y.bdcdyh
+		WHERE 1=1 AND m.wiid = #{wiid}
+		<if test="zl != null and zl!=''">
+			AND instr(x.zl ,#{zl})>0
+		</if>
+		UNION ALL
+		SELECT DISTINCT y.bdcdyh, x.zl, x.mj mj, t.mc yt,y.djbid,to_char(w.fw_hs_index) djid,m.wiid,q.qllx,q.proid
+		FROM bdc_cf q
+		LEFT JOIN bdc_xm m ON m.proid= q.proid
+		LEFT JOIN bdc_bdcdy y ON y.bdcdyid = m.bdcdyid
+		LEFT JOIN bdc_spxx x ON x.proid = m.proid
+		LEFT JOIN BDC_ZD_FWYT t ON t.dm = x.yt
+		LEFT JOIN djsj_fwhs w ON w.bdcdyh = y.bdcdyh
+		WHERE 1=1
+		AND m.wiid = #{wiid}
+		<if test="zl != null and zl!=''">
+			AND instr(x.zl ,#{zl})>0
+		</if>
+	</select>
+</mapper>

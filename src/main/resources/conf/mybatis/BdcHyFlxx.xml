@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//海域分类信息表-->
+<mapper namespace="cn.gtmap.bdcdj.mapper.BdcHyFlxxMapper">
+
+     <select id="selectBdcHyFlxx" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcHyFlxx">
+          SELECT * FROM bdc_hy_flxx  WHERE hyid = #{hyid}
+     </select>
+
+</mapper>

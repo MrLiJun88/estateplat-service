@@ -1,0 +1,23 @@
+/*
+ * 不动产确认配置
+ * qrlx：确认类型
+ * qrms:确认描述
+ * sqlx:申请类型
+ * xgzd:修改字段
+*/
+{
+  "qr": [
+    {
+      "qrlx": "1",
+      "qrms": "预查封转现",
+      "sqlx": "130,211",
+      "xgzd": "qszt,cflx"
+    },
+    {
+      "qrlx": "2",
+      "qrms": "司法处置注销",
+      "sqlx": "9930004",
+      "xgzd": "qszt,issx,iscd"
+    }
+  ]
+}

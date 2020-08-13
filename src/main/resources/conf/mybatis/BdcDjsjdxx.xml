@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDjsjdxxMapper">
+    <select id="getBdcSjclByProid" parameterType="String" resultType="Integer">
+        SELECT count(*)
+        FROM bdc_sjcl t
+        INNER JOIN bdc_sjxx a ON a.sjxxid=t.sjxxid
+        WHERE a.proid=#{proid}
+    </select>
+
+    <select id="getDjzxByProid" parameterType="String" resultType="String">
+      SELECT t.djzxdm
+      FROM bdc_sqlx_djzx_rel t
+      LEFT JOIN bdc_xm m ON t.sqlxdm=m.sqlx
+      WHERE m.proid=#{proid} AND rownum=1
+    </select>
+
+    <select id="getSjclWithProidAndDjzxByPage" parameterType="java.util.Map" resultType="map">
+      SELECT ROWNUM, SJCLID, SJCLMC,fs,ys,sqlx,cllx,djzx,fs
+         FROM
+        ( SELECT rawtohex(sys_guid()) as SJCLID, t.clmc as SJCLMC,1 as ys,t.mrfs as fs,t1.DM sqlx,t.cllx,t.djzx,t.mrfs
+          FROM BDC_XT_SJCL t
+          LEFT JOIN bdc_zd_sqlx T1 ON T.SQLX = T1.DM
+          LEFT JOIN bdc_xm x ON x.sqlx =t.sqlx
+          LEFT JOIN bdc_zd_cllx a ON a.dm=t.cllx
+          <where>
+              <if test="proid != null and proid !=''">
+                  AND x.proid = #{proid}
+              </if>
+              <if test="djzxdm != null and djzxdm !=''">
+                  AND t.djzx = #{djzxdm}
+              </if>
+          </where>
+        ORDER BY T.SJCLID)
+    </select>
+
+    <select id="getSjclWithProidByPage" parameterType="java.util.Map" resultType="map">
+        SELECT ROWNUM, SJCLID, SJCLMC,XH,fs,ys,sqlx,cllx,djzx,mrfs
+        FROM (SELECT t.sjclid AS SJCLID, t.clmc AS SJCLMC,T.XH AS XH,t.fs,t.ys,t2.sqlx,t.cllx,t2.djzx
+        ,t.mrfs
+        FROM BDC_SJCL t
+        INNER JOIN BDC_SJXX t1
+        ON t.sjxxid = t1.sjxxid
+        LEFT JOIN bdc_xm t2 ON t1.proid=t2.proid
+        WHERE t1.proid = #{proid} ORDER BY T.XH)
+    </select>
+
+    <select id="getSjclXhBySjxxid" parameterType="String" resultType="String">
+        SELECT MAX(t.xh)+1 AS xh
+        FROM BDC_SJCL t
+        WHERE t.sjxxid=#{sjxxid}
+    </select>
+</mapper>

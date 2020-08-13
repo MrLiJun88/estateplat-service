@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcQllxMapper">
+
+    <select id="queryQllxByProid" parameterType="java.lang.String"
+            resultType="cn.gtmap.estateplat.model.server.core.QllxParent">
+        SELECT * FROM (
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_TDSYQ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_JSYDZJDSYQ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_FDCQ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_JZWGY
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_FDCQ_DZ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_TDCBNYDSYQ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_LQ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_HYSYQ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_JZWSYQ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_QTXGQL
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_DYQ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_DYAQ
+        UNION ALL
+        select qlid,proid,bdcdyid,ywh,qllx FROM BDC_CF
+        UNION ALL
+        SELECT qlid,proid,bdcdyid,ywh,qllx FROM BDC_YG
+        UNION ALL
+        SELECT qlid,proid,bdcdyid,ywh,qllx FROM BDC_YY
+        )
+        WHERE PROID = #{PROID}
+    </select>
+
+    <select id="queryQllxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.qlid,t.proid,t.bdcdyid,t.ywh,t.qszt,q.mc qllx,s.mc sqlx,b.bdcdyh,b.zl,z.bdcqzh ,a.qlrmc FROM
+        bdc_qlxxlist t
+        LEFT JOIN bdc_xm m on t.PROID=m.proid
+        LEFT JOIN bdc_zd_qllx q on q.dm=m.qllx
+        LEFT JOIN bdc_zd_sqlx s on s.dm=m.sqlx
+        LEFT JOIN bdc_spxx b on b.proid=t.proid
+        LEFT JOIN bdc_xmzs_rel x on x.proid=t.proid
+        LEFT JOIN bdc_zs z on z.zsid=x.zsid
+        LEFT JOIN bdc_zs_qlr_rel r on r.zsid=z.zsid
+        LEFT JOIN bdc_qlr a on a.qlrid=r.qlrid AND a.qlrlx='qlr'
+        WHERE m.XMZT='1'
+        <if test="dcxc != null and dcxc !=''">
+            AND (b.bdcdyh like '%' || #{dcxc} || '%' or s.mc like '%' || #{dcxc} || '%' or b.zl like '%' || #{dcxc} ||
+            '%' or z.bdcqzh like '%' || #{dcxc} || '%'
+            or q.mc like '%' || #{dcxc} || '%'or a.qlrmc like '%' || #{dcxc} || '%')
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND b.bdcdyh like '%' || #{bdcdyh} || '%'
+        </if>
+        <if test="sqlx != null and sqlx !=''">
+            AND s.dm = #{sqlx}
+        </if>
+        <if test="zl != null and zl !=''">
+            AND b.zl like '%' || #{zl} || '%'
+        </if>
+        <if test="bdcqzh != null and bdcqzh !=''">
+            AND z.bdcqzh like '%' || #{bdcqzh} || '%'
+        </if>
+        <if test="qllx != null and qllx !=''">
+            AND q.dm = #{qllx}
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND a.qlrmc like '%' || #{qlr} || '%'
+        </if>
+        order by m.bjsj desc
+    </select>
+
+    <select id="getQllxIdByproid" parameterType="String" resultType="String">
+      SELECT * FROM BDC_QLXXLIST t WHERE t.PROID= #{proid}
+    </select>
+
+    <select id="getQllxListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT c.bdcdyh,c.zl,c.mj as djzwmj,a.ywh,a.QLID,a.proid,a.qllx,a.bdcdyid, c.zdzhmj FROM BDC_QLXXLIST a
+        LEFT JOIN bdc_spxx c on a.proid=c.proid
+        LEFT JOIN bdc_xm b on b.proid=a.PROID
+        <where>
+            <if test="wiid!=null and wiid!='' and yqlList != 'true'">
+                AND b.wiid = #{wiid}
+            </if>
+            <if test="zl!=null and zl!=''">
+                AND c.zl like '%'||#{zl}||'%'
+            </if>
+            <if test="bdcdyh != null and bdcdyh != ''">
+                AND c.bdcdyh like '%'||#{bdcdyh}||'%'
+            </if>
+            <if test="xmzt != null and xmzt != ''">
+                AND b.xmzt !=#{xmzt}
+            </if>
+            <if test="yqlList != null and yqlList != ''">
+                AND b.proid in (SELECT t.yproid FROM bdc_xm_rel t WHERE proid in (SELECT t.proid FROM bdc_xm t WHERE
+                wiid = #{wiid}))
+            </if>
+            <if test="needFilterQszt != null and needFilterQszt != ''">
+                AND a.qszt != 2
+            </if>
+        </where>
+        ORDER BY c.bdcdyh,b.proid
+    </select>
+
+    <select id="getQlxxListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT c.bdcdyh,c.zl,c.mj as djzwmj,a.ywh,a.QLID,a.proid,a.qllx,a.bdcdyid, c.zdzhmj
+        <if test="djlx!=null and djlx=='800'">
+            ,f.cfwh,f.cfjg,f.cfwj
+        </if>
+        <if test="djlx!=null and djlx=='1000'">
+            ,q.bdbzzqse,s.mc dyfs,q.dbfw
+        </if>
+        FROM BDC_QLXXLIST a
+        LEFT JOIN bdc_spxx c on a.proid=c.proid
+        LEFT JOIN bdc_xm b on b.proid=a.proid
+        <if test="djlx!=null and djlx=='800'">
+            LEFT JOIN bdc_cf f on f.proid=b.proid
+        </if>
+        <if test="djlx!=null and djlx=='1000'">
+            LEFT JOIN bdc_dyaq q on q.proid=b.proid
+            LEFT JOIN bdc_zd_dyfs s on s.dm=q.dyfs
+        </if>
+        <where>
+            <if test="needFilterQszt != null and needFilterQszt != '' and needFilterQszt == 'true'">
+                AND a.qszt != 2
+            </if>
+            <if test="wiid!=null and wiid!='' and yqlList != 'true'">
+                AND b.wiid = #{wiid}
+            </if>
+            <if test="zl!=null and zl!=''">
+                AND c.zl like '%'||#{zl}||'%'
+            </if>
+            <if test="yqlList != null and yqlList != ''">
+                AND b.proid in (SELECT t.yproid FROM bdc_xm_rel t WHERE proid in (SELECT t.proid FROM bdc_xm t WHERE
+                wiid = #{wiid}))
+            </if>
+        </where>
+        order by c.bdcdyh,b.proid
+    </select>
+
+    <select id="queryDjsyByQllx" resultType="java.lang.String">
+        SELECT t.djsydm FROM BDC_QLLX_DJSY_REL t
+        WHERE t.qllxdm = #{qllx} and t.djsydm != '9'
+    </select>
+
+    <select id="queryQllx" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.QllxParent">
+        SELECT t.qlid,t.proid,t.bdcdyid,t.ywh,t.qszt,t.qllx FROM ${tableName} t
+        LEFT JOIN bdc_bdcdy b on b.bdcdyid=t.bdcdyid
+        LEFT JOIN bdc_bdcdy b1 on b1.bdcdyh=b.bdcdyh
+        LEFT JOIN bdc_xm_rel r on r.yproid=t.proid
+        <where>
+            <if test="proid != null and proid !=''">
+                AND r.proid=#{proid}
+            </if>
+            <if test="bdcdyid != null and bdcdyid !=''">
+                AND b1.bdcdyid=#{bdcdyid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcdyQlxxList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT bdcdyh, qlzt, proid, qlrmc qlr, qlrsfzjzl, qlrzjh, qlrtxdz, qlryb, qlrfddbr, qlrfddbrdh, qlrdlr,
+        qlrdlrdh,
+        qlrdljg FROM bdc_bdcdy_qlzt
+        <where>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                bdcdyh=#{bdcdyh}
+            </if>
+            <if test="qszt != null and qszt !=''">
+                AND ${qszt}
+            </if>
+        </where>
+    </select>
+
+    <select id="getGdYgByBdcdyh" parameterType="String" resultType="java.util.Map">
+        SELECT y.* FROM gd_yg y LEFT JOIN gd_bdc_ql_rel r on y.ygid = r.qlid
+        LEFT JOIN gd_fw f on r.bdcid = f.fwid
+        LEFT JOIN gd_dyh_rel d on d.gdid = f.fwid WHERE d.bdcdyh=#{bdcdyh} AND y.iszx = 0
+    </select>
+
+    <select id="getGdYgXxByBdcdyh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdYg">
+        SELECT y.* FROM gd_yg y LEFT JOIN gd_bdc_ql_rel r on y.ygid = r.qlid
+        LEFT JOIN gd_fw f on r.bdcid = f.fwid
+        LEFT JOIN gd_dyh_rel d on d.gdid = f.fwid WHERE d.bdcdyh=#{bdcdyh} AND y.iszx = 0
+    </select>
+
+</mapper>

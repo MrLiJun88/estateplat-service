@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZdQllxMapper">
+
+    <select id="queryBdcZdQllxByDm"  resultType="cn.gtmap.estateplat.model.server.core.BdcZdQllx">
+        SELECT t.dm,t.mc,t.table_name,t.archive_name
+        FROM bdc_zd_qllx t
+        <where>
+            <if test="dm != null and dm !=''">
+                AND t.dm = #{dm}
+            </if>
+        </where>
+    </select>
+
+    <select id="getAllBdcZdQllx" resultType="cn.gtmap.estateplat.model.server.core.BdcZdQllx">
+        SELECT t.dm,t.mc,t.table_name,t.archive_name FROM bdc_zd_qllx t
+    </select>
+    <select id="queryQlxx" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.QllxVo">
+        SELECT * FROM ${tableName} t
+        <where>
+                <if test="proid !=null and proid !=''">
+                        AND t.proid = #{proid}
+                </if>
+        </where>
+    </select>
+</mapper>

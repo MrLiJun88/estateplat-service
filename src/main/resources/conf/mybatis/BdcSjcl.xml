@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcSjclMapper">
+
+    <select id="getSjclByproid" parameterType="java.lang.String" resultType="cn.gtmap.estateplat.model.server.core.BdcSjcl">
+      SELECT t.sjclid,t.sjxxid,t.clmc,t.fs,t.xh,t.cllx,t.mrfs,t.sfsjsy,t.sfewsj,t.sfbcsj,t.ys,t.bz,t.xbclfs,t.wjzxid,t.clrq
+      FROM bdc_sjcl t
+      LEFT JOIN bdc_sjxx x ON x.sjxxid=t.sjxxid
+      LEFT JOIN bdc_xm a ON  a.proid=x.proid
+      WHERE x.proid=#{proid}
+      ORDER BY t.xh
+    </select>
+
+    <select id="getNewCheckCode" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT t.newcheck_code
+        FROM bdc_zd_check t
+        WHERE t.check_code = #{oldCode}
+    </select>
+
+    <select id="getSjclMaxXh" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT max(t.xh)+1
+        FROM BDC_SJCL t
+        WHERE t.sjxxid = #{sjxxid}
+    </select>
+
+    <select id="getbdcXtSjcl" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcSjcl">
+        SELECT ROWNUM xh, SJCLID, CLMC ,fs,cllx,mrfs
+        FROM ( SELECT rawtohex(sys_guid()) AS SJCLID, t.clmc AS CLMC,t.mrfs fs,t1.DM sqlx,t.cllx,t.mrfs
+        FROM BDC_XT_SJCL t
+        LEFT JOIN bdc_zd_sqlx T1 ON T.SQLX = T1.DM
+        LEFT JOIN bdc_xm x ON x.sqlx =t.sqlx
+        WHERE 1=1
+        <if test="proid != null and proid !=''">
+            AND x.proid = #{proid}
+        </if>
+        <if test="djzx != null and djzx !=''">
+            AND t.djzx = #{djzx}
+        </if>
+        ORDER BY T.SJCLID)
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--不动产编号-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcSllshMapper">
+
+    <select id="getBdcSllshList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcSllsh">
+        SELECT bhid, slbhlsh, cjsj, qh FROM bdc_sllsh
+        <where>
+            <if test="cjsj != null and cjsj !=''">
+                <![CDATA[   AND to_char(cjsj,'yyyy-MM-dd') >= #{cjsj} ]]>
+            </if>
+            <if test="cjyf != null and cjyf !=''">
+                <![CDATA[   AND to_char(cjsj,'yyyyMM') >= #{cjyf} ]]>
+            </if>
+            <if test="cjnf != null and cjnf !=''">
+                <![CDATA[   AND to_char(cjsj,'yyyy') >= #{cjnf} ]]>
+            </if>
+            <if test="qh != null and qh != ''">
+                 AND qh = #{qh}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcJsydsyqLhxxMapper">
+
+    <select id="getZdJsydsybList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdJsydsyb">
+        SELECT t.* FROM djsj_zd_jsydsyb t
+        WHERE 1 = 1
+        <if test="djh != null and djh !=''">
+            and t.djh = #{djh}
+        </if>
+    </select>
+
+    <select id="getFwJsydzrzxxList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.DjsjFwJsydzrzxx">
+        SELECT t.* FROM djsj_fw_jsydzrzxx t
+        <where>
+            <if test="lszd != null and lszd !=''">
+                and t.lszd = #{lszd}
+            </if>
+            <if test="gcjd != null and gcjd !=''">
+                and
+                <foreach collection="gcjd" item="item" open="(" separator=" or " close=")">
+                    t.gcjd = #{item}
+                </foreach>
+            </if>
+            <if test="ids != null and ids !=''">
+                and
+                <foreach collection="ids" item="item" open="(" separator=" or " close=")">
+                    t.FW_JSYDZRZXX_INDEX = #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <update id="updateFwljzGcjd" parameterType="java.util.Map">
+        UPDATE djsj_fw_jsydzrzxx t SET t.GCJD = #{gcjd} WHERE t.FW_DCB_INDEX = #{id}
+    </update>
+
+    <select id="getJsydZrzListByPage" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT t.* FROM DJSJ_FW_JSYDZRZXX t
+        WHERE 1 = 1
+        <if test="dcxc != null and dcxc !=''">
+            AND (instr(t.lszd,#{dcxc}) > 0 )
+        </if>
+    </select>
+
+    <update id="updateDjsjFwJsydzrzxx" parameterType="cn.gtmap.estateplat.model.server.core.DjsjFwJsydzrzxx">
+        UPDATE djsj_fw_jsydzrzxx t
+        <set>
+            <if test="gcjd != null">t.GCJD=#{gcjd},</if>
+            <if test="ghjzmj != null">t.ghjzmj=#{ghjzmj},</if>
+            <if test="bzghmjbl != null">t.bzghmjbl=#{bzghmjbl},</if>
+            <if test="scjzmj != null">t.scjzmj=#{scjzmj},</if>
+            <if test="bz != null">t.bz=#{bz},</if>
+        </set>
+        WHERE t.lszd = #{lszd} AND t.zrzh= #{zrzh}
+    </update>
+
+    <delete id="batchDelBdcJsydLhxx" parameterType="java.util.List">
+        DELETE FROM bdc_jsydsyq_lhxx t WHERE t.proid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item.proid}
+        </foreach>
+    </delete>
+
+</mapper>

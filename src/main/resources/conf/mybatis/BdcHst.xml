@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcHstMapper">
+
+    <select id="selectBdcHst" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcHst">
+        SELECT t.fw_hst_index fwHstIndex,t1.fw_hs_index fwHsIndex,t.hst,nvl(nvl(t1.bdcdyh,t2.bdcdyh),t3.bdcdyh) bdcdyh FROM DJSJ_FWHST t
+        LEFT JOIN DJSJ_FWHS t1 ON t1.fw_hst_index=t.fw_hst_index
+        LEFT JOIN djsj_fw_ljz t2 ON t1.fw_dcb_index=t2.fw_dcb_index
+        LEFT JOIN djsj_fw_xmxx t3 ON t2.fw_xmxx_index=t3.fw_xmxx_index
+        LEFT JOIN djsj_fw_xmxx t4 ON t4.fw_xmxx_index=t.fw_hst_index
+        WHERE nvl(nvl(nvl(t1.bdcdyh,t2.bdcdyh),t3.bdcdyh),t4.bdcdyh)=#{bdcdyh}
+     </select>
+    <select id="selectBdcZdt" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdZdt">
+        SELECT * FROM djsj_zd_zdt t WHERE djh=#{djh}
+     </select>
+</mapper>

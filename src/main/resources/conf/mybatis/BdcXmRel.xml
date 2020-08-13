@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcXmRelMapper">
+
+    <select id="queryBdcXmRelMapper" parameterType="cn.gtmap.estateplat.model.server.core.BdcXmRel"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcXmRel">
+        SELECT relid,proid,qjid,yproid,ydjxmly,yqlid
+        FROM BDC_XM_REL
+        <where>
+            <if test="proid != null and proid !=''">
+                AND proid = #{proid}
+            </if>
+            <if test="qjid != null and qjid !=''">
+                AND qjid = #{qjid}
+            </if>
+
+            <if test="yproid != null and yproid !=''">
+                AND yproid = #{yproid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getYproid" parameterType="String" resultType="String">
+       SELECT DISTINCT t.yproid
+       FROM BDC_XM_REL t
+       WHERE t.proid=#{proid} AND t.yproid IS NOT NULL
+    </select>
+
+    <select id="getBdcXmRelByYproidAndBdcdyh" parameterType="map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcXmRel">
+        SELECT t.*,b.bdcdyh
+        FROM bdc_xm_rel t
+        LEFT JOIN bdc_xm a ON a.proid = t.proid
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyid=a.bdcdyid
+        <where>
+            <if test="yproid != null and yproid !=''">
+                AND t.yproid=#{yproid}
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND b.bdcdyh = #{bdcdyh}
+            </if>
+            <if test="wiid != null and wiid !=''">
+                AND a.wiid = #{wiid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getHisXmRelList" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcXmRel">
+      SELECT v.relid,v.proid,v.qjid,v.yproid,v.ydjxmly,v.yqlid
+      FROM bdc_xm_rel  v
+        start WITH v.proid=#{proid}
+        CONNECT BY NOCYCLE v.proid=PRIOR v.yproid
+         ORDER BY relid
+    </select>
+
+    <select id="getAllHisRelList" parameterType="map" resultType="cn.gtmap.estateplat.model.server.core.BdcXmRel">
+        SELECT t.relid, t.proid, t.qjid, t.yproid,t.ydjxmly,t.yqlid FROM(
+        SELECT DISTINCT relid, proid, qjid, yproid,ydjxmly,yqlid FROM (
+        SELECT relid, proid, qjid, yproid,ydjxmly,yqlid FROM bdc_xm_rel v
+        start WITH v.proid=#{proid}
+        CONNECT BY NOCYCLE v.proid=PRIOR v.yproid
+
+        UNION ALL
+        SELECT relid, proid, qjid, yproid,ydjxmly,yqlid FROM bdc_xm_rel v
+        start WITH v.proid=#{proid}
+        CONNECT BY NOCYCLE v.yproid=PRIOR v.proid
+        )
+        ORDER BY relid
+        ) t
+        LEFT JOIN bdc_xm t1 ON t.proid=t1.proid
+        WHERE 1=1
+        <if test="xmzt != null and xmzt !=''">
+            AND nvl(t1.xmzt,'0')=#{xmzt}
+        </if>
+        ORDER BY t1.cjsj
+    </select>
+
+    <select id="getAllHisRelListByYproid" parameterType="map" resultType="cn.gtmap.estateplat.model.server.core.BdcXmRel">
+        SELECT t.relid, t.proid, t.qjid, t.yproid,t.ydjxmly,t.yqlid FROM(
+        SELECT DISTINCT relid, proid, qjid, yproid,ydjxmly,yqlid FROM (
+        SELECT relid, proid, qjid, yproid,ydjxmly,yqlid FROM bdc_xm_rel v
+        start WITH v.yproid=#{yproid}
+        CONNECT BY NOCYCLE v.proid=PRIOR v.yproid
+
+        UNION ALL
+        SELECT relid, proid, qjid, yproid,ydjxmly,yqlid FROM bdc_xm_rel v
+        start WITH v.yproid=#{yproid}
+        CONNECT BY NOCYCLE v.yproid=PRIOR v.proid
+        )
+        ORDER BY relid
+        ) t
+        LEFT JOIN bdc_xm t1 ON t.proid=t1.proid
+        WHERE 1=1
+        <if test="xmzt != null and xmzt !=''">
+            AND nvl(t1.xmzt,'0')=#{xmzt}
+        </if>
+        ORDER BY t1.cjsj
+    </select>
+
+    <select id="getSameWFXmRelByproid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcXmRel">
+          SELECT t1.relid,t1.proid,t1.qjid,t1.yproid,t1.ydjxmly,t1.yqlid
+          FROM bdc_xm_rel t1, bdc_xm t2, bdc_xm t3
+         WHERE t1.proid = t2.proid
+           AND t2.wiid = t3.wiid
+           AND t3.proid = #{proid}
+    </select>
+
+    <select id="getAfterHisXmRelList" parameterType="String"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcXmRel">
+        SELECT v.xmzsgxid,v.zsid,v.proid FROM bdc_xm_rel  v
+        start WITH v.proid=#{proid}
+        CONNECT BY NOCYCLE v.yproid=PRIOR v.proid
+        ORDER BY relid
+    </select>
+
+    <select id="getProidByBdcqzh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcXmzsRel">
+        SELECT r.xmzsgxid,r.zsid,r.proid FROM bdc_xmzs_rel r
+        LEFT JOIN bdc_zs z ON r.zsid=z.zsid
+                WHERE z.bdcqzh = #{bdcqzh}
+    </select>
+
+    <delete id="batchDelBdcXmRel" parameterType="java.util.List">
+        DELETE FROM bdc_xm_rel t WHERE t.proid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item.proid}
+        </foreach>
+    </delete>
+
+
+    <select id="getAllHisXmRelByProid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcXmRel">
+         select distinct a.* from
+         (SELECT distinct v.*
+          FROM bdc_xm_rel  v
+          start WITH v.proid=#{proid}
+          CONNECT BY NOCYCLE v.yproid=PRIOR v.proid
+          union all
+          SELECT distinct v.*
+          FROM bdc_xm_rel  v
+          start WITH v.proid=#{proid}
+          CONNECT BY NOCYCLE v.proid=PRIOR v.yproid) a
+          WHERE proid != #{proid}
+          ORDER BY a.relid
+    </select>
+
+    <select id="getAllGdLsCfBhByCfid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdLsCfBh">
+          select distinct a.* from
+         (SELECT distinct v.*
+          FROM gd_ls_cf_bh  v
+          start WITH v.cfid=#{cfid}
+          CONNECT BY NOCYCLE v.ycfid=PRIOR v.cfid
+          union all
+          SELECT distinct v.*
+          FROM gd_ls_cf_bh  v
+          start WITH v.cfid=#{cfid}
+          CONNECT BY NOCYCLE v.cfid=PRIOR v.ycfid) a
+    </select>
+</mapper>

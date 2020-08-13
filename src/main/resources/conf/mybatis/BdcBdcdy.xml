@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//不动产单元-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcBdcdyMapper">
+    <!--房屋不动产单元 -->
+    <select id="queryDjsjBdcdyListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.id,t.djh,t.bdcdyh,t.tdzl zl,t.qlr,'土地、房屋' bdclx,nvl(a.xzzt,0) xzzt,a.xzyy,a.xztype
+        FROM DJSJ_BDCDY_TDFW t
+        LEFT JOIN bdc_bdcdysd a ON a.bdcdyid =t.id
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (instr(t.bdcdyh ,#{dcxc} )>0   OR instr(t.tdzl ,#{dcxc} )>0)
+            </if>
+            <if test="id !=null and id !=''">
+                AND t.id=#{id}
+            </if>
+            <!--通过档案号查询FW_HS-->
+            <if test="dah != null and dah !=''">
+                AND t.id=#{dah}
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND instr(t.qlr ,#{qlr} )>0
+            </if>
+            <if test="zl != null and zl !=''">
+                AND instr(t.tdzl ,#{zl} )>0
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND instr(t.bdcdyh ,#{bdcdyh} )>0
+            </if>
+            <if test="bdclx != null and bdclx !=''">
+                AND t.bdclx = #{bdclx}
+            </if>
+            <if test="djh != null and djh !=''">
+                AND instr(t.djh ,#{djh} )>0
+            </if>
+            <if test="hhSearch != null and hhSearch !=''">
+                AND ( instr(t.bdcdyh ,#{hhSearch} )>0 OR instr(t.tdzl ,#{hhSearch} )>0  OR instr(t.qlr ,#{hhSearch} )>0
+                <if test="djids != null and djids !=''">
+                    OR
+                    <foreach collection="djids" item="item" open="(" separator=" or " close=")">
+                        t.id = #{item}
+                    </foreach>
+                </if>
+                )
+            </if>
+            <if test="bdcdyhs != null and bdcdyhs !=''">
+                AND
+                <foreach collection="bdcdyhs" item="item" open="(" separator=" or " close=")">
+                    t.bdcdyh = #{item}
+                </foreach>
+            </if>
+            <if test="dwdm !=null and dwdm !=''">
+                AND  t.bdcdyh LIKE #{dwdm}||'%'
+            </if>
+            <if test="zdgl !=null and zdgl !=''">
+                AND t.bdclx!=#{zdgl}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcdylxByBdcdyh" parameterType="String" resultType="String">
+        SELECT DISTINCT bdclx
+        FROM bdc_bdcdy t
+        WHERE   t.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="getBdcdyidByBdcdyh" parameterType="String" resultType="String">
+        SELECT DISTINCT bdcdyid
+        FROM bdc_bdcdy t
+        WHERE   t.bdcdyh=#{bdcdyh} AND  rownum=1
+    </select>
+
+	<select id="getBdcdyByPage" parameterType="java.util.Map"
+		resultType="map">
+		SELECT k.bdcdyh, proid, '' qlr, '' zl, '' qszt, '' bdclx
+		FROM (SELECT bdcdyh,proid,bdclx
+		FROM (SELECT DISTINCT b.bdcdyh,
+		a.proid,
+		a.cjsj,
+		b.bdclx,
+		row_number()
+		over(PARTITION BY b.bdcdyh ORDER BY a.cjsj DESC) rn
+		FROM bdc_xm a
+		INNER JOIN bdc_bdcdy b ON a.bdcdyid = b.bdcdyid AND a.qllx NOT IN ('17', '18','20', '21')
+		WHERE EXISTS (
+        SELECT DISTINCT h.bdcdyh bdcdyh
+		FROM bdc_bdcdy h
+		INNER JOIN bdc_xm j ON h.bdcdyid = j.bdcdyid AND j.qllx NOT IN ('17', '18','20', '21')
+		INNER JOIN bdc_qlxxlist v ON v.proid = j.proid AND v.qllx NOT IN ('17', '18','20', '21')
+		WHERE b.bdcdyid = h.bdcdyid AND b.bdcdyh = h.bdcdyh)
+		GROUP BY b.bdcdyh, a.proid, a.cjsj,b.bdclx)
+		WHERE rn = 1) k
+		<where>
+			<if test="dcxc != null and dcxc !=''">
+				AND instr(k.bdcdyh ,#{dcxc} )>0 OR EXISTS
+                (SELECT t.bdcdyh FROM bdc_spxx t
+                WHERE instr( t.zl,#{dcxc} )>0 AND t.bdcdyh IS NOT NULL
+				AND k.bdcdyh = t.bdcdyh
+				AND k.proid=t.proid
+				)
+			</if>
+			<if test="bdcdyh != null and bdcdyh !=''">
+				AND instr(k.bdcdyh ,#{bdcdyh} )>0
+			</if>
+			<if test="bdclx != null and bdclx !=''">
+				AND k.bdclx=#{bdclx}
+			</if>
+			<if test="zl != null and zl !=''">
+				AND EXISTS
+                (SELECT t.bdcdyh FROM bdc_spxx t
+                WHERE instr(t.zl,#{zl} )>0 AND t.bdcdyh IS NOT NULL
+				AND k.bdcdyh = t.bdcdyh
+				AND k.proid=t.proid)
+			</if>
+            <if test="qlr != null and qlr !=''">
+                AND EXISTS
+                (SELECT t.bdcdyh FROM bdc_spxx t
+                LEFT JOIN bdc_qlr q ON t.proid = q.proid AND q.qlrlx = 'qlr'
+                WHERE instr(q.qlrmc,#{qlr} )>0 AND t.bdcdyh IS NOT NULL
+                AND k.bdcdyh = t.bdcdyh
+                AND k.proid=t.proid)
+            </if>
+			<if test="xzqdm != null and xzqdm !=''">
+				AND k.bdcdyh LIKE #{xzqdm} || '%'
+			</if>
+		</where>
+	</select>
+
+	<select id="getBdcdyQlxxByBdcdyh" parameterType="java.util.Map"
+		resultType="map">
+		SELECT replace(strcat(zl),'/',' ')zl,replace(strcat(qszt),'/',' ')qszt,replace(strcat(bdclx),'/',' ')bdclx,replace(strcat(qlrmc),'/',' ')qlr FROM(
+		SELECT DISTINCT d.zl,v.qszt ,t1.mc bdclx,z.qlrmc,z.sxh
+		FROM (SELECT bdcdyid,proid,bdclx FROM (
+		SELECT a.bdcdyid,a.proid,b.bdclx FROM bdc_xm a
+		inner join bdc_bdcdy b ON a.bdcdyid = b.bdcdyid AND a.qllx not IN ('17', '18', '19', '20','21')
+		WHERE b.bdcdyh = #{bdcdyh}
+		ORDER BY a.cjsj DESC
+		)
+		WHERE rownum = 1) c
+		LEFT JOIN bdc_spxx d ON c.proid = d.proid AND d.bdcdyh = #{bdcdyh}
+		LEFT JOIN bdc_zd_bdclx t1 ON t1.dm =c.bdclx
+		LEFT JOIN bdc_qlr z ON z.proid=c.proid AND z.qlrlx='qlr'
+		LEFT JOIN bdc_qlxxlist v ON v.proid = d.proid AND v.bdcdyid=c.bdcdyid AND v.qllx NOT IN ('17', '18', '19', '20', '21')
+		ORDER BY sxh
+		)
+	</select>
+
+    <select id="creatBdcdyh" parameterType="java.util.Map" resultType="String">
+        SELECT
+        <if test="zrzh != null and zrzh !=''">
+            #{zrzh}|| replace(lpad(MAX(to_number(substr(t.bdcdyh,25,4))+1),4),' ','0')
+        </if>
+        <if test="zrzhNull != null and zrzhNull !=''">
+            replace(lpad(MAX(to_number(substr(t.bdcdyh,21,8))+1),8),' ','0')
+        </if>
+        FROM
+        (SELECT DISTINCT t.bdcdyh FROM bdc_bdcdy t
+        <if test="bdclx != null and bdclx =='TD'">
+          UNION ALL SELECT DISTINCT to_char(t.bdcdyh) FROM DJSJ_BDCDY_TD t
+        </if>
+        <if test="bdclx != null and bdclx =='TDFW'">
+          UNION ALL SELECT DISTINCT to_char(t.bdcdyh) FROM DJSJ_BDCDY_TDFW t
+        </if>
+        <if test="bdclx != null and bdclx =='TDQT'">
+            UNION ALL SELECT DISTINCT to_char(t.bdcdyh) FROM DJSJ_BDCDY_TDQT t
+        </if>
+        <if test="bdclx != null and bdclx =='TDSL'">
+            UNION ALL SELECT DISTINCT to_char(t.bdcdyh) FROM DJSJ_BDCDY_TDSL t
+        </if>
+        )t
+        <where>
+            <if test="djh != null and djh !=''">
+                AND substr(t.bdcdyh,0,19)=#{djh}
+            </if>
+            <if test="bdclx != null and bdclx !=''">
+                AND substr(t.bdcdyh,20,1)=#{bdclx}
+            </if>
+            <if test="zrzh != null and zrzh !=''">
+                AND substr(t.bdcdyh,21,4)=#{zrzh}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcdyhByProid" parameterType="String" resultType="String">
+        SELECT b.bdcdyh
+        FROM BDC_XM t
+        LEFT JOIN BDC_BDCDY b ON b.bdcdyid = t.bdcdyid
+        <where>
+            <if test="proid != null and proid != ''">
+                t.proid = #{proid}
+            </if>
+        </where>
+    </select>
+    <select id="queryBdcdyFwByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.id,t.bdcdyh,t.bdclx,t.qlr,t.zl,t.djzt,t.qlzt FROM (
+        SELECT id, bdcdyh,'土地' bdclx    ,'' qlr, tdzl zl,'' djzt,'' qlzt FROM djsj_bdcdy_td
+        UNION ALL
+        SELECT id, bdcdyh,'土地房屋' bdclx,'' qlr, tdzl zl,'' djzt,'' qlzt FROM djsj_bdcdy_tdfw
+        UNION ALL
+        SELECT id, bdcdyh,'林权' bdclx    , qlr, tdzl zl,'' djzt,'' qlzt FROM djsj_bdcdy_tdsl
+        UNION ALL
+        SELECT id, bdcdyh,'海域' bdclx    ,'' qlr, tdzl zl,'' djzt,'' qlzt FROM djsj_bdcdy_hy
+        )t
+        <if test="fwbh != null and fwbh !=''">
+            LEFT JOIN (
+            SELECT t.bdcdyh,t.cqqid FROM DJSJ_BDCDY_TDFW t
+            )c ON c.bdcdyh=t.bdcdyh
+        </if>
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (instr(t.zl,#{dcxc})>0 OR instr(t.bdcdyh,#{dcxc})>0 OR instr(t.qlr,#{dcxc})>0 OR ${fwbh})
+            </if>
+            <if test="id != null and id !=''">
+                AND  t.id = #{id}
+            </if>
+            <if test="bdcdyhs != null and bdcdyhs !=''">
+                OR
+                <foreach collection="bdcdyhs" item="item" open="(" separator=" or " close=")">
+                    t.bdcdyh = #{item}
+                </foreach>
+            </if>
+            <if test="ids != null and ids !=''">
+                OR
+                <foreach collection="ids" item="item" open="(" separator=" or " close=")">
+                    t.id = #{item} OR substr(bdcdyh,0,19)= #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="getDjhByQlr" parameterType="java.util.Map" resultType="String">
+            SELECT t.id FROM(
+               SELECT t.qlr,id FROM djsj_fwqlr t
+               UNION ALL
+               SELECT t.qlr,t.id FROM (
+                SELECT t.qlrmc qlr,t.djh id FROM djsj_zd_qlr t
+                UNION ALL
+                SELECT t.qlrmc qlr,t.djh id FROM djsj_qszd_qlr t
+                UNION ALL
+                SELECT t.qlrmc qlr,t.djh id FROM djsj_nyd_qlr t
+               ) t
+              UNION ALL
+             SELECT t.qlrmc qlr,t.djh id FROM djsj_zh_qlr t
+            )t
+        <where>
+            <if test="qlr != null and qlr !=''">
+                AND   instr(t.qlr,#{qlr})>0
+            </if>
+        </where>
+    </select>
+    <select id="getCqqidByBdcdy" parameterType="String" resultType="String">
+       SELECT t.cqqid FROM(
+       SELECT t.cqqid,t.bdcdyh FROM djsj_fw_xmxx t
+       WHERE t.bdcdyh IS NOT NULL
+       UNION ALL
+       SELECT t.cqqid,t.bdcdyh FROM djsj_fw_ljz t
+       WHERE t.bdcdyh IS NOT NULL AND t.bdcdyfwlx='2'
+       UNION ALL
+       SELECT t.cqqid,t.bdcdyh FROM djsj_fwhs t
+       LEFT JOIN djsj_fw_ljz t1 ON t.fw_dcb_index= t1.fw_dcb_index
+       WHERE t.bdcdyh IS NOT NULL AND t1.bdcdyfwlx='4'
+       ) t WHERE t.bdcdyh=#{bdcdyh}
+    </select>
+
+        <select id="getBdcQlxxList" parameterType="java.util.Map"
+            resultType="map">
+            SELECT  t.qlid,t.proid,t.bdcdyid,t.ywh,t.qszt,t.qllx
+            FROM bdc_qlxxlist t
+            WHERE 1=1
+            <if test="bdcdyid != null and bdcdyid !=''">
+                AND t.bdcdyid=#{bdcdyid}
+            </if>
+            <if test="proid != null and proid !=''">
+                AND t.proid=#{proid}
+            </if>
+        </select>
+    <select id="getBdcdyfwlxBybdcdyh" parameterType="String" resultType="String">
+        SELECT  bdcdyfwlx
+        FROM bdc_bdcdy t
+        WHERE   t.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="getYdjhByDjh" parameterType="java.util.Map" resultType="String">
+        SELECT t.ybh
+        FROM djsj_zdbgjlb t
+        WHERE t.ybh IS NOT NULL
+        start WITH
+        <if test="djh != null and djh !=''">
+            t.bh= #{djh}
+        </if>
+        CONNECT BY NOCYCLE t.bh=PRIOR t.ybh
+    </select>
+
+    <select id="getBdcdyidAndZlByWiid" parameterType="String" resultType="map">
+          SELECT  DISTINCT a.bdcdyid id ,b.zl
+          FROM bdc_xm t
+          LEFT JOIN bdc_bdcdy a ON a.bdcdyid=t.bdcdyid
+          LEFT JOIN bdc_spxx b ON b.proid=t.proid
+          WHERE   t.wiid=#{wiid} AND a.bdcdyh IS NOT NULL
+    </select>
+
+    <select id="getLsxxBdcdyByPage" parameterType="java.util.Map" resultType="map">
+        SELECT bdcdyid,bdcdyh,bdclx,wiid,proid,qlr,zl FROM
+        (SELECT y.bdcdyid,y.bdcdyh,y.bdclx,m.wiid,m.proid,q.qlr,s.zl
+        FROM bdc_bdcdy y
+        LEFT JOIN bdc_xm m ON y.bdcdyid=m.bdcdyid
+        LEFT JOIN bdc_spxx s ON s.proid=m.proid
+        LEFT JOIN
+        (SELECT replace(strcat(qlrmc),'/',' ') qlr,r.proid
+        FROM bdc_qlr r
+        WHERE r.qlrlx='qlr'
+        GROUP BY r.proid) q
+        ON q.proid= m.proid) t
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (instr(t.zl,#{dcxc})>0 OR instr(t.bdcdyh,#{dcxc})>0 OR instr(t.qlr,#{dcxc})>0)
+            </if>
+            <if test="wiid != null and wiid !=''">
+                AND  t.wiid = #{wiid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getFwBdcdyJsonByPage"  parameterType="java.util.HashMap" resultType="map">
+        SELECT  DISTINCT t.bdcdyh,t.bdcdyid,y.zl fwzl,z.mc fwyt,y.mj jzmj,y.zdzhmj,x.wiid
+        FROM bdc_bdcdy t
+        LEFT JOIN bdc_xm x ON x.bdcdyid=t.bdcdyid
+        LEFT JOIN bdc_spxx y ON y.proid=x.proid
+        LEFT JOIN bdc_zd_fwyt z ON y.yt=z.dm
+        LEFT JOIN bdc_fwfsss w ON w.bdcdyh=t.bdcdyh AND w.wiid=x.wiid
+        <where>
+            <if test="wiid != null and wiid !=''">
+                AND x.wiid=#{wiid}
+            </if>
+            <if test="zl != null and zl !=''">
+                AND instr(y.zl,#{zl})>0
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllBdcdyh" resultType="String">
+        select distinct(bdcdyh) from(
+        select t.bdcdyh from GD_DYH_REL t
+        union all
+        select c.bdcdyh from bdc_bdcdy c )
+    </select>
+
+    <select id="getBdcdyhByBdcXmList" parameterType="java.util.List" resultType="String">
+        SELECT t.bdcdyh FROM bdc_bdcdy t
+        <where>
+            <foreach collection="list" item="item" open="(" separator=" or " close=")">
+                t.bdcdyid = #{item.bdcdyid}
+            </foreach>
+        </where>
+    </select>
+
+    <delete id="batchDelBdcBdcdyBdcXmList" parameterType="java.util.List">
+        DELETE FROM bdc_bdcdy t WHERE t.bdcdyid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item.bdcdyid}
+        </foreach>
+    </delete>
+
+    <select id="getTdDjsjBdclxByBdcdyh" parameterType="String" resultType="String">
+        SELECT t.bdclx
+        FROM djsj_bdcdy_td t
+        WHERE t.bdcdyh = #{bdcdyh}
+    </select>
+
+    <select id ="getBdcdyInfoByQueryMap" parameterType="map" resultType="cn.gtmap.estateplat.model.server.core.BdcBdcdy">
+      SELECT DISTINCT b.bdclx,b.bdcdyh FROM bdc_bdcdy b LEFT JOIN bdc_spxx x
+      ON x.bdcdyh=b.bdcdyh
+      WHERE x.zl IS NOT NULL
+      <if test="bdclx != null and bdclx !=''">
+          AND b.bdclx=#{bdclx}
+      </if>
+      <if test="zl != null and zl !=''">
+          AND x.zl=#{zl}
+      </if>
+    </select>
+
+
+    <select id="getMaxLshByDjh" parameterType="String" resultType="Integer">
+        select max(to_number(substr(t.bdcdyh,21,8))) from bdc_bdcdy t where t.bdcdyh like #{djh}
+    </select>
+
+    <select id="getCqproidByBdcdyh" parameterType="String" resultType="String">
+       select t.proid from bdc_fdcq t
+       inner join bdc_bdcdy b on b.bdcdyid=t.bdcdyid
+       where t.qszt='1' and b.bdcdyh=#{bdcdyh}
+       union all
+       select t.proid from bdc_fdcq_dz t
+       inner join bdc_bdcdy b on b.bdcdyid=t.bdcdyid
+       where t.qszt='1' and b.bdcdyh=#{bdcdyh}
+       union all
+       select t.proid from bdc_yg t
+       inner join bdc_bdcdy b on b.bdcdyid=t.bdcdyid
+       where t.qszt='1' and b.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="getBdcdyByProid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcBdcdy">
+        SELECT t.*
+        FROM BDC_BDCDY t
+        LEFT JOIN BDC_XM x ON x.bdcdyid = t.bdcdyid
+        <where>
+            <if test="proid != null and proid != ''">
+                x.proid = #{proid}
+            </if>
+        </where>
+    </select>
+</mapper>

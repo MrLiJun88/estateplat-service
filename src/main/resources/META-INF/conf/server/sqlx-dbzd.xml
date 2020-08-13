@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--配置流程（申请类型）要对比的字段-->
+<sqlxs>
+    <sqlx dm="211">
+        <zdmc>dzwyt</zdmc>
+        <zdmc>zdzhyt</zdmc>
+        <zdmc>djzwmj</zdmc>
+        <zdmc>zdzhmj</zdmc>
+    </sqlx>
+</sqlxs>

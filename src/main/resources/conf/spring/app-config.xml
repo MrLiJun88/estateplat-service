@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task  http://www.springframework.org/schema/task/spring-task-3.0.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <context:annotation-config/>
+    <!-- enable transaction demarcation with annotations -->
+    <tx:annotation-driven/>
+
+    <!-- 支持异步方法执行 -->
+    <task:annotation-driven />
+
+    <bean class="com.gtis.config.AppConfigPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>${egov.conf}/server/application.properties</value>
+                <value>${egov.conf}/examine/application.properties</value>
+                <value>${egov.conf}/form/application.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="fileEncoding" value="UTF-8"/>
+    </bean>
+
+    <context:component-scan base-package="cn.gtmap.estateplat.server">
+        <context:exclude-filter type="regex" expression="cn.gtmap.estateplat.core.ex.*"/>
+    </context:component-scan>
+
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+        <property name="shared" value="true"/>
+    </bean>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+
+    <cache:annotation-driven cache-manager="cacheManager" proxy-target-class="true"/>
+
+    <bean id="conversionService" class="cn.gtmap.estateplat.core.support.spring.ConversionService">
+        <property name="converters">
+            <set>
+                <bean class="cn.gtmap.estateplat.core.support.spring.DateToStringConverter"/>
+                <bean class="cn.gtmap.estateplat.core.support.spring.StringToDateConverter"/>
+            </set>
+        </property>
+    </bean>
+
+    <!--<bean id="httpInvokerRequestExecutor"-->
+          <!--class="org.springframework.remoting.httpinvoker.HttpComponentsHttpInvokerRequestExecutor">-->
+    <!--</bean>-->
+    <!--<bean id="splitDataService" class="cn.gtmap.estateplat.server.service.impl.SplitDataServiceImpl">-->
+    <!--</bean>-->
+
+    <bean id="bdcRequiredFieldsServiceImpl" class="cn.gtmap.estateplat.server.core.service.impl.BdcRequiredFieldsServiceImpl"/>
+    <!--创建项目受理编号-->
+    <bean id="bdcSlbhServiceImpl" class="cn.gtmap.estateplat.server.core.service.impl.BdcSlbhServiceImpl"/>
+
+    <!-- 多线程任务执行 -->
+    <bean id="bdcThreadTaskExecutor" class="cn.gtmap.estateplat.server.thread.BdcThreadTaskExecutor" scope="prototype"/>
+
+    <!-- 支持上传文件 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+    <!--支持公用mapper处理增删改查 -->
+    <bean id="serverCommonMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="cn.gtmap.estateplat.core.support.mybatis.mapper.CommonMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="entityMapper" class="cn.gtmap.estateplat.core.support.mybatis.mapper.EntityMapper" >
+        <property name="commonMapper" ref="serverCommonMapper"/>
+    </bean>
+    <!--支持分页 -->
+    <bean id="repository" class="cn.gtmap.estateplat.server.core.repository.totalRepository">
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>
+    </bean>
+
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="basenames" value="classpath:message/errors,classpath:message/messages,classpath:message/server-errors"/>
+    </bean>
+    <bean class="cn.gtmap.estateplat.core.i18n.NLS">
+        <property name="messageProvider">
+            <bean class="cn.gtmap.estateplat.core.i18n.SpringMessageProvider">
+                <property name="messageSource" ref="messageSource"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="httpClient" class="cn.gtmap.estateplat.core.support.http.HttpClientFactoryBean">
+        <property name="maxTotalConnections" value="200"/>
+        <property name="timeout" value="30000"/>
+    </bean>
+
+    <import resource="app-mybatis.xml"/>
+    <import resource="app-trans.xml"/>
+    <import resource="app-cas.xml"/>
+    <import resource="app-dozer.xml"/>
+    <import resource="app-pf-service.xml"/>
+    <import resource="app-service.xml"/>
+    <import resource="app-quartz.xml"/>
+    <import resource="app-aop.xml"/>
+    <import resource="app-aop-exchange.xml"/>
+    <import resource="app-Validate.xml"/>
+    <import resource="app-rabbitmq.xml"/>
+    <import resource="app-aop-qlzt.xml"/>
+    <import resource="app-aop-ryzd.xml"/>
+    <import resource="app-aop-xmzt.xml"/>
+    <!--<import resource="${sfgxts}"/>-->
+</beans>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdCfMapper">
+
+    <select id="getTdcfByPage" parameterType="java.util.Map" resultType="map">
+        SELECT  cf.cfid cfid,
+                cf.isjf isjf,
+                cf.cflx cflx,
+                cf.cfjg cfjg,
+                cf.cfwh cfwh,
+                cf.cfksrq cfksrq,
+                cf.cfjsrq cfjsrq,
+                s.tdzh tdzh,
+                td.zl zl,
+                td.zdmj zdmj,
+                td.yt yt
+        FROM gd_cf cf
+        LEFT JOIN gd_bdc_ql_rel r ON cf.cfid = r.qlid
+        LEFT JOIN gd_td td ON r.bdcid = td.tdid
+        LEFT JOIN gd_tdsyq s ON td.tdid = s.tdid
+        <where>
+            td.tdid IS NOT NULL AND cf.bdclx='TD'
+            <if test="dcxc != null and dcxc !=''">
+                AND (
+                      instr(cf.cfjg ,#{dcxc} )>0 OR
+                      instr(s.tdzh ,#{dcxc} )>0 OR
+                      instr(td.zl ,#{dcxc} )>0
+                )
+            </if>
+            <if test="cfjg != null and cfjg !=''">
+                AND instr(cf.cfjg ,#{cfjg} )>0
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND cf.cfid IN (SELECT qlr.qlid qlid FROM gd_qlr qlr WHERE instr(qlr.qlr ,#{qlr})>0 AND qlr.qlrlx='qlr')
+            </if>
+            <if test="tdzh != null and tdzh !=''">
+                AND  instr(s.tdzh ,#{tdzh} ) >0
+            </if>
+            <if test="zl != null and zl !=''">
+                AND  instr(td.zl ,#{zl} ) >0
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

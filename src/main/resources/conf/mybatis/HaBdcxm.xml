@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdDyMapper">
+ <select id="getHaBdcxmByPage" parameterType="java.util.Map" resultType="map">
+select t1.proid proid ,t1.bh slbh ,t4.mc qszt from BDC_XM t1
+left join BDC_SPXX t2 on t1.proid=t2.proid 
+inner join BDC_FDCQ t3 on t3.proid=t1.proid
+left join BDC_ZD_QSZT t4 on t4.dm=t3.qszt
+left join BDC_QLR t5 on t5.proid=t1.proid
+inner join BDC_XMZS_REL t6 on t6.proid=t1.proid
+inner join Bdc_Zs t7 on t7.zsid=t6.zsid
+where t1.djlx not in ('400','600','800','1000','700') 
+     <if test="dcxc != null and dcxc !=''">
+          and ((instr(t2.bdcdyh ,#{dcxc})>0 ) or 
+          		(instr(t2.zl ,#{dcxc})>0) or
+          		(t5.qlrmc=#{dcxc} and t5.qlrlx!='ywr')  or
+          		(t5.qlrzjh=#{dcxc} and t5.qlrlx!='ywr')
+            )
+            </if>
+            <if test="cqrxm != null and cqrxm !=''">
+               and  t5.qlrlx!='ywr' and  instr(t5.qlrmc ,#{cqrxm})>0 
+            </if>
+            <if test="zl != null and zl !=''">
+                and  instr(t2.zl ,#{zl})>0  
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                and instr(t2.bdcdyh ,#{bdcdyh})>0  
+            </if>
+           <if test="qsrq != null and qsrq != ''">and t7.fzrq >= to_date(#{qsrq},'yyyy-mm-dd') </if>
+			<if test="jsrq != null and jsrq != ''">and to_date(#{jsrq},'yyyy-mm-dd') >= t7.fzrq</if>
+              <if test="slbh != null and slbh !=''">
+                and  instr(t1.bh ,#{slbh} ) >0
+            </if>
+             <if test="cqrzjh != null and cqrzjh !=''">
+                and  instr(t5.qlrzjh ,#{cqrzjh} ) >0
+            </if>
+        group by t1.proid,t1.bh,t4.mc
+union all 
+select a1.proid proid ,a1.bh slbh ,a4.mc qszt  from BDC_XM a1 left join BDC_SPXX a2 on a1.proid=a2.proid
+inner join BDC_FDCQ_DZ a3 on a3.proid=a1.proid
+left join BDC_ZD_QSZT a4 on a4.dm=a3.qszt
+left join BDC_QLR a5 on a5.proid=a1.proid
+inner join BDC_XMZS_REL a6 on a6.proid=a1.proid
+inner join Bdc_Zs a7 on a7.zsid=a6.zsid
+where a1.djlx not in ('400','600','800','1000','700') 
+     <if test="dcxc != null and dcxc !=''">
+          and (
+          (instr(a2.bdcdyh ,#{dcxc})>0 ) or
+          (instr(a2.zl ,#{dcxc})>0) or
+          (a5.qlrmc=#{dcxc} and a5.qlrlx!='ywr') or
+          (a5.qlrzjh=#{dcxc} and a5.qlrlx!='ywr')
+          )
+            </if>
+            <if test="cqrxm != null and cqrxm !=''">
+               and a5.qlrlx!='ywr' and  instr(a5.qlrmc ,#{cqrxm})>0 
+            </if>
+            <if test="zl != null and zl !=''">
+                and  instr(a2.zl ,#{zl})>0  
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                and instr(a2.bdcdyh ,#{bdcdyh})>0  
+            </if>
+             <if test="qsrq != null and qsrq != ''">and a7.fzrq >= to_date(#{qsrq},'yyyy-mm-dd') </if>
+			<if test="jsrq != null and jsrq != ''">and to_date(#{jsrq},'yyyy-mm-dd') >= a7.fzrq</if>
+              <if test="slbh != null and slbh !=''">
+                and  instr(a1.bh ,#{slbh} ) >0
+            </if>
+             <if test="cqrzjh != null and cqrzjh !=''">
+                and  instr(a5.qlrzjh ,#{cqrzjh} ) >0
+            </if>
+ group by a1.proid,a1.bh,a4.mc
+union all 
+select k1.proid proid,k1.bh slbh,k4.mc qszt  from BDC_XM k1 left join Bdc_Spxx k2 on k1.proid=k2.proid
+inner join BDC_TDSYQ k3 on k3.proid=k1.proid
+left join BDC_ZD_QSZT k4 on k4.dm=k3.qszt 
+left join BDC_QLR k5 on k5.proid=k1.proid
+inner join BDC_XMZS_REL k6 on k6.proid=k1.proid
+inner join Bdc_Zs k7 on k7.zsid=k6.zsid
+where k1.djlx not in ('400','600','800','1000','700') 
+     <if test="dcxc != null and dcxc !=''">
+             and (
+          (instr(k2.bdcdyh ,#{dcxc})>0 ) or
+          (instr(k2.zl ,#{dcxc})>0) or
+          (k5.qlrmc=#{dcxc} and k5.qlrlx!='ywr') or
+          (k5.qlrzjh=#{dcxc} and k5.qlrlx!='ywr')
+          )
+            </if>
+            <if test="cqrxm != null and cqrxm !=''">
+               and k5.qlrlx!='ywr' and  instr(k5.qlrmc ,#{cqrxm})>0 
+            </if>
+            <if test="zl != null and zl !=''">
+                and  instr(k2.zl ,#{zl})>0  
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                and instr(k2.bdcdyh ,#{bdcdyh})>0  
+            </if>
+            <if test="qsrq != null and qsrq != ''">and k7.fzrq >= to_date(#{qsrq},'yyyy-mm-dd') </if>
+			<if test="jsrq != null and jsrq != ''">and to_date(#{jsrq},'yyyy-mm-dd') >= k7.fzrq</if>
+              <if test="slbh != null and slbh !=''">
+                and  instr(k1.bh ,#{slbh} ) >0
+            </if>
+             <if test="cqrzjh != null and cqrzjh !=''">
+                and  instr(k5.qlrzjh ,#{cqrzjh} ) >0
+            </if>
+group by k1.proid,k1.bh,k4.mc
+union all 
+select p1.proid,p1.slbh slbh,case when p2.iszx=0 then '现势' else '历史' end as qszt  from GD_XM p1 inner join GD_FWSYQ p2 on p1.proid=p2.proid
+left join GD_DYH_REL  p3 on p3.gdid=p2.qlid
+inner join GD_BDC_QL_REL p4 on p4.qlid=p2.qlid
+inner join GD_FW p5 on p5.fwid=p4.bdcid
+left join GD_QLR p6 on p6.qlid=p4.qlid where 1=1
+     <if test="dcxc != null and dcxc !=''">
+          and (
+          (instr(p3.bdcdyh ,#{dcxc})>0)  or
+          (instr(p5.fwzl ,#{dcxc})>0 ) or
+          (p6.qlrlx!='ywr' and p6.qlr=#{dcxc}) or
+          (p6.qlrlx!='ywr' and p6.qlrzjh=#{dcxc})
+          )
+            </if>
+            <if test="cqrxm != null and cqrxm !=''">
+               and p6.qlrlx!='ywr' and  instr(p6.qlr ,#{cqrxm})>0 
+            </if>
+            <if test="zl != null and zl !=''">
+                and  instr(p5.fwzl ,#{zl})>0  
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                and instr(p3.bdcdyh ,#{bdcdyh})>0  
+            </if>
+              <if test="slbh != null and slbh !=''">
+                and  instr(p1.slbh ,#{slbh} ) >0
+            </if>
+             <if test="cqrzjh != null and cqrzjh !=''">
+                and  instr(p6.qlrzjh ,#{cqrzjh} ) >0
+            </if>
+group by p1.proid,p1.slbh,p2.iszx
+    </select>
+ <select id="getHaBdcxmQlxx" parameterType="map" resultType="map">
+select * from (
+select strcat(t1.qlrmc) qlrmc,strcat(t3.bdcqzh) bdcqzh,strcat(t4.zl) zl,strcat(t1.qlrzjh) qlrzjh ,strcat(t1.proid) proid ,strcat(t6.mc) lcmc ,strcat(to_char(t7.jzmj)) jzmj  from BDC_QLR t1 left join BDC_XMZS_REL t2 on t1.proid=t2.proid
+inner join BDC_ZS t3 on t3.zsid=t2.zsid
+left join BDC_SPXX t4  on t4.proid=t1.proid
+inner join BDC_XM t5 on t5.proid=t1.proid
+inner join BDC_ZD_SQLX t6 on t5.sqlx=t6.dm
+inner join Bdc_Fdcq t7 on t7.proid=t1.proid
+where t1.qlrlx!='ywr'
+and t1.proid=#{proid} 
+
+union all
+select strcat(a1.qlrmc) qlrmc,strcat(a3.bdcqzh) bdcqzh,strcat(a4.zl) zl,strcat(a1.qlrzjh) qlrzjh ,strcat(a1.proid) proid ,strcat(a6.mc) lcmc,strcat(to_char(a8.jzmj))  jzmj  from BDC_QLR a1 left join BDC_XMZS_REL a2 on a1.proid=a2.proid
+inner join BDC_ZS a3 on a3.zsid=a2.zsid
+left join BDC_SPXX a4  on a4.proid=a1.proid
+inner join BDC_XM a5 on a5.proid=a1.proid
+inner join BDC_ZD_SQLX a6 on a5.sqlx=a6.dm
+inner join Bdc_Fdcq_Dz a7 on a7.proid=a1.proid
+inner join BDC_FWFZXX a8 on a8.qlid=a7.qlid
+where a1.qlrlx!='ywr'
+and a1.proid=#{proid} 
+union all 
+
+select strcat(k1.qlrmc) qlrmc,strcat(k3.bdcqzh) bdcqzh,strcat(k4.zl) zl,strcat(k1.qlrzjh) qlrzjh ,strcat(k1.proid) proid ,strcat(k6.mc) lcmc,''jzmj   from BDC_QLR k1 left join BDC_XMZS_REL k2 on k1.proid=k2.proid
+inner join BDC_ZS k3 on k3.zsid=k2.zsid
+left join BDC_SPXX k4  on k4.proid=k1.proid
+inner join BDC_XM k5 on k5.proid=k1.proid
+inner join BDC_ZD_SQLX k6 on k5.sqlx=k6.dm
+inner join BDC_TDSYQ k7 on k7.proid=k1.proid
+and k1.proid=#{proid} 
+union all
+select strcat(k1.qlr) qlrmc,strcat(k5.fczh) bdcqzh,strcat(k4.fwzl) zl,strcat(k1.qlrzjh) qlrzjh,strcat(k6.proid) proid,''lcmc ,strcat(to_char(k4.jzmj)) from gd_qlr k1 
+inner join  GD_BDC_QL_REL k3 on k1.qlid=k3.qlid
+inner join gd_fw k4 on k4.fwid=k3.bdcid
+inner join GD_FWSYQ k5 on k5.qlid=k3.qlid 
+inner join GD_XM k6 on k6.proid =k5.proid
+where k1.qlrlx!='ywr' and k6.proid=#{proid} 
+) where proid is not null
+</select>
+</mapper>

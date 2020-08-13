@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcCxjlMapper">
+	<select id="queryCxjlByPage" parameterType="java.util.Map"
+		resultType="map">
+		SELECT l.jlid,l.cxrmc,TO_CHAR(l.czsj,'yyyy/MM/dd') czsj,g.qlr,l.cxzl,g.xxnr,l.cxrzjh
+		FROM bdc_xxcxjl l
+		LEFT JOIN bdc_xxcxjg g ON l.jlid=g.jlid
+		WHERE 1=1
+	    <if test="type !=null and type =='yfwf' ">
+		     AND l.cxmd IS NOT NULL
+		</if>
+		<if test="type !=null and type =='fwxx' ">
+		     AND l.cxmd IS NULL
+		</if>
+		<if test ="cxqssj !=null and cxqssj != ''">
+		 <![CDATA[   AND to_char(l.czsj,'yyyy-mm-dd') >= #{cxqssj} ]]>
+		</if>
+		<if test ="cxjssj !=null and cxjssj != ''">
+		 <![CDATA[   AND to_char(l.czsj,'yyyy-mm-dd') <= #{cxjssj} ]]>
+		</if>
+	</select>
+</mapper>        

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDjsjMapper">
+
+    <select id="getDjsjLqxx" resultType="cn.gtmap.estateplat.model.server.core.DjsjLqxx">
+        SELECT a.*
+        FROM DJSJ_LQ_DCB a
+        WHERE     a.LQ_DCB_INDEX = #{id}
+    </select>
+    <select id="getDjsjTtxx" resultType="cn.gtmap.estateplat.model.server.core.DjsjNydDcb">
+        SELECT a.*
+        FROM Djsj_Nyd_Dcb a
+        WHERE     a.NYD_DJDCB_INDEX = #{id}
+    </select>
+    <select id="getDjsjQsxz" resultType="String">
+       SELECT case
+         when z.bdcdjdm is not null then
+          to_char(z.bdcdjdm)
+         else
+          to_char(a.qsxz)
+       end qsxz
+  FROM Djsj_Nyd_Dcb a
+  left join BDC_EXCHANGE_ZDDZ z on a.qsxz = z.stddm
+  WHERE a.bdcdyh = #{bdcdyh}
+    </select>
+    <select id="getDjsjZhxx" resultType="cn.gtmap.estateplat.model.server.core.DjsjZhxx">
+        SELECT  a.ZHDM,a.BDCDYH,a.ZHTZM,a.XMMC,a.XMXZ,a.YHZMJ,a.ZHMJ,a.DB,a.ZHAX,a.YHLXA,
+        a.YHLXB,a.YHWZSM,a.HDMC,a.HDDM,a.YDFW,a.YDMJ,a.HDWZ,a.HDYT,a.BDCDYZT,a.JLRQ,a.GXRQ,
+        a.ZH_DJDCB_INDEX,a.SYJBZYJ,a.SYJJNQK,a.JLBCLR,a.JLBSHR,a.JLBCLDW,a.JLBSDJZ,a.JLBCLRQ,
+        a.GZWLX,a.qlrmc,a.qlrzjlx,a.qlrzjh,a.frdbxm,a.frdbzjlx,a.frdbzjh,a.frdbdhhm,
+        a.dlrxm,a.mjdw,a.dlrzjlx,a.dlrzjh,a.dlrdhhm,a.dwxz,a.sjzgbm,a.dymj,a.ftmj,a.xh,a.symj,a.txdz,
+        a.qlrlx,a.qlrlxdh,a.qlryb
+        FROM djsj_zh_dcb a
+        <if test="id != null and id !=''">
+            WHERE    a.ZH_DJDCB_INDEX = #{id}
+        </if>
+    </select>
+    <select id="getDjsjLqxxByDjh" resultType="cn.gtmap.estateplat.model.server.core.DjsjLqxx">
+        SELECT a.*
+        FROM DJSJ_LQ_DCB a
+        WHERE     a.DJH = #{djh}
+    </select>
+
+
+    <select id="getDjsjZdxx" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdxx">
+        SELECT a.ZD_DJDCB_INDEX,a.djh,a.tdzl,a.fzmj,a.tdyt,a.tdyt2,a.tdyt3,a.tdjb,a.qdjg,a.qsxz,
+        a.syqlx,a.jzrjl,a.jzmd,a.jzxg,a.zdsz,a.qsrq,a.zzrq,a.qsrq2,a.zzrq2,a.qsrq3,a.zzrq3,a.QLRMC,a.QLRZJLX,a.QLRZJH,
+        a.DWXZ,a.frdbxm,a.frdbzjlx,a.frdbzjh,a.frdbdhhm,a.dlrxm,a.dlrdhhm,a.txdz,a.scmj,a.mjdw,a.bdcdyh
+        FROM djsj_zd_dcb a
+        WHERE  a.ZD_DJDCB_INDEX = #{id}
+    </select>
+
+    <select id="getDjsjZdxxWithZd" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdxx">
+        SELECT a.ZD_DJDCB_INDEX,a.djh,a.tdzl,a.fzmj,t.mc tdyt,a.tdyt2,a.tdyt3,a.tdjb,a.qdjg,a.qsxz,
+        q.mc syqlx,a.jzrjl,a.jzmd,a.jzxg,a.zdsz,a.qsrq,a.zzrq,a.qsrq2,a.zzrq2,a.qsrq3,a.zzrq3,a.QLRMC,a.QLRZJLX,a.QLRZJH,
+        a.DWXZ,a.frdbxm,a.frdbzjlx,a.frdbzjh,a.frdbdhhm,a.dlrxm,a.dlrdhhm,a.txdz,a.scmj,a.mjdw
+        FROM djsj_zd_dcb a
+        left join djsj_zd_tdyt t on a.tdyt=t.dm
+        left join bdc_zd_qlxz q on a.syqlx=q.dm
+        WHERE  a.ZD_DJDCB_INDEX = #{id}
+    </select>
+
+    <select id="getDjsjNydxx" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdxx">
+        SELECT a.NYD_DJDCB_INDEX as ZD_DJDCB_INDEX,a.djh,a.tdzl,a.fzmj,a.tdyt,a.tdjb,a.qdjg,a.qsxz,a.syqlx,a.jzrjl,a.jzmd,a.jzxg,a.zdsz,a.qsrq,
+        a.zzrq,a.QLRMC,a.QLRZJLX,a.QLRZJH,a.DWXZ,a.frdbxm,a.frdbzjlx,a.frdbzjh,a.frdbdhhm,a.dlrxm,a.dlrdhhm,a.txdz,a.scmj,a.mjdw
+        FROM djsj_nyd_dcb a
+       WHERE  a.NYD_DJDCB_INDEX = #{id}
+    </select>
+
+    <select id="getDjsjNydxxByDjh" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdxx">
+        SELECT a.NYD_DJDCB_INDEX as ZD_DJDCB_INDEX,a.djh,a.tdzl,a.fzmj,a.tdyt,a.tdjb,a.qdjg,a.qsxz,a.syqlx,a.jzrjl,a.jzmd,a.jzxg,a.zdsz,a.qsrq,
+        a.zzrq,a.QLRMC,a.QLRZJLX,a.QLRZJH,a.DWXZ,a.frdbxm,a.frdbzjlx,a.frdbzjh,a.frdbdhhm,a.dlrxm,a.dlrdhhm,a.txdz,a.scmj,a.mjdw
+        FROM djsj_nyd_dcb a
+        WHERE   a.djh = #{djh}
+    </select>
+
+    <select id="getDjsjZdxxForDjh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdxx">
+        SELECT a.ZD_DJDCB_INDEX,a.djh,a.tdzl,a.fzmj,a.tdyt,a.tdjb,a.qdjg,a.qsxz,a.syqlx,a.jzrjl,a.jzmd,a.jzxg,a.zdsz,a.qsrq,a.qlsdfs,
+        a.zzrq,a.QLRMC,a.QLRZJLX,a.QLRZJH,a.DWXZ,a.frdbxm,a.frdbzjlx,a.frdbzjh,a.frdbdhhm,a.dlrxm,a.dlrdhhm,a.txdz,a.scmj,a.mjdw
+        FROM   djsj_zd_dcb a
+       WHERE  a.djh = #{djh}
+    </select>
+    <select id="getDjsjZhxxForDjh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjZhxx">
+        SELECT  a.ZHDM,a.BDCDYH,a.ZHTZM,a.XMMC,a.XMXZ,a.YHZMJ,a.ZHMJ,a.DB,a.ZHAX,a.YHLXA,
+        a.YHLXB,a.YHWZSM,a.HDMC,a.HDDM,a.YDFW,a.YDMJ,a.HDWZ,a.HDYT,a.BDCDYZT,a.JLRQ,a.GXRQ,
+        a.ZH_DJDCB_INDEX,a.SYJBZYJ,a.SYJJNQK,a.JLBCLR,a.JLBSHR,a.JLBCLDW,a.JLBSDJZ,a.JLBCLRQ,
+        a.GZWLX,a.qlrmc,a.qlrzjlx,a.qlrzjh,a.frdbxm,a.frdbzjlx,a.frdbzjh,a.frdbdhhm,
+        a.dlrxm,a.mjdw,a.dlrzjlx,a.dlrzjh,a.dlrdhhm,a.dwxz,a.sjzgbm,a.dymj,a.ftmj,a.xh,a.symj,a.txdz,
+        a.qlrlx,a.qlrlxdh,a.qlryb
+        FROM djsj_zh_dcb a
+        WHERE  a.ZHDM = #{djh}
+    </select>
+    <select id="getDjsjFwQlr" resultType="cn.gtmap.estateplat.model.server.core.DjsjFwxx">
+        SELECT  a.id,a.qlr,a.qlrzjlx,a.qlrzjh,a.dwxz,a.gyfs,a.dh,a.yb,a.dz
+        FROM djsj_fwqlr  a
+        WHERE   a.id = #{id}
+    </select>
+    <select id="getDJsjZhjnbdyjlb" resultType="cn.gtmap.estateplat.model.server.core.DJsjZhjnbdyjlb">
+        SELECT  a.yhfs,a.nbdy,a.nbdyjzx,a.syjse,a.nbdymj,a.zh_Zhjnbdyjlb_Index,a.djdcb_Index,a.zhdm,a.xh
+        FROM djsj_ZH_JNBDYJLB  a
+        WHERE   a.zhdm = #{zhdm}
+    </select>
+    <select id="getOldDjh" resultType="String" parameterType="String">
+        SELECT t.ydjh
+        FROM djsj_zd_dcb t
+        WHERE t.djh=#{djh}
+    </select>
+
+    <select id="queryBdcdyCountByDjh" parameterType="String" resultType="Integer">
+        SELECT count(0)
+        FROM djsj_bdcdy_tdfw t
+        WHERE t.djh =#{djh}
+    </select>
+
+    <select id="getDjsjGzwxx" resultType="cn.gtmap.estateplat.model.server.core.DjsjGzwxx">
+        SELECT a.*
+        FROM DJSJ_GZW_DCB a
+        WHERE     a.GZW_DCB_INDEX = #{id}
+    </select>
+
+    <select id="getDjsjZdIsSyzdByDjid" resultType="String" parameterType="String">
+        SELECT nvl(a.issyzd,'0')
+        FROM djsj_zd_dcb a
+        WHERE  a.ZD_DJDCB_INDEX = #{id}
+    </select>
+</mapper>

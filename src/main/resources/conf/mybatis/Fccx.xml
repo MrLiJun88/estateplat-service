@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDyMapper">
+    <select id="getFcxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT  p.qlr,p.qlrzjh,p.bdcdyh,p.zl,p.yt,p.mj,p.ftjzmj,p.fwjg,p.bdcdyid FROM
+       (SELECT c.qlrmc qlr,c.qlrzjh,q.bdcdyh,w.zl ,k.mc yt,d.jzmj mj,d.ftjzmj,g.mc fwjg,d.bdcdyid FROM BDC_ZS a
+        INNER JOIN BDC_ZS_QLR_REL b ON a.zsid=b.zsid
+		INNER JOIN  BDC_QLR c ON b.qlrid=c.qlrid
+		INNER JOIN  BDC_FDCQ d ON c.proid=d.proid AND d.qszt=1
+		INNER JOIN BDC_ZD_FWYT k ON d.ghyt=k.dm
+		INNER JOIN bdc_zd_fwjg g ON g.dm=d.fwjg
+		INNER JOIN BDC_BDCDY q ON q.bdcdyid=d.bdcdyid
+    	INNER JOIN BDC_SPXX w ON w.proid=c.proid
+	    WHERE 1=1
+	    <if test="sfzh !=null and sfzh !=''">
+	              AND c.qlrzjh =#{sfzh}
+	         </if>
+	    <if test="xm !=null and xm !=''">
+	            AND c.qlrmc LIKE '%'||#{xm}||'%'
+	         </if>
+	    UNION ALL
+	    SELECT c.qlrmc qlr,c.qlrzjh,q.bdcdyh,w.zl ,k.mc yt,e.jzmj mj,d.ftjzmj,g.mc fwjg,d.bdcdyid FROM BDC_ZS a
+	    INNER JOIN BDC_ZS_QLR_REL b ON a.zsid=b.zsid
+	    INNER JOIN  BDC_QLR c ON b.qlrid=c.qlrid
+	     INNER JOIN  BDC_FDCQ_dz d ON c.proid=d.proid AND d.qszt=1
+	    INNER JOIN BDC_BDCDY q ON q.bdcdyid=d.bdcdyid
+	    INNER JOIN BDC_SPXX w ON w.proid=c.proid
+	    INNER JOIN Bdc_Fwfzxx e ON e.qlid=d.qlid
+	    INNER JOIN Bdc_Zd_Fwyt k ON e.ghyt=k.dm
+	    INNER JOIN bdc_zd_fwjg g ON g.dm=e.fwjg
+	    WHERE 1=1
+	    <if test="sfzh !=null and sfzh !=''">
+	              AND c.qlrzjh =#{sfzh}
+	         </if>
+	    <if test="xm !=null and xm !=''">
+	            AND c.qlrmc LIKE '%'||#{xm}||'%'
+	            </if>
+		UNION ALL
+	    SELECT t1.qlr,t1.qlrzjh,t6.bdcdyh bdcdyh,t2.fwzl zl,t2.ghyt yt,t2.jzmj mj,t2.ftjzmj,t2.fwjg,t2.fwid bdcdyid FROM GD_QLR t1
+	    INNER JOIN  gd_bdc_ql_rel t5 ON t5.qlid = t1.qlid
+	    INNER JOIN  GD_FW t2 ON  t5.bdcid=t2.fwid
+	    INNER JOIN  GD_FWSYQ t4 ON t4.qlid=t1.qlid AND nvl(t4.iszx,0)=0
+	    LEFT JOIN   GD_DYH_REL t6 ON t6.gdid=t2.fwid
+	    WHERE 1=1
+	    <if test="sfzh !=null and sfzh !=''">
+	            AND t1.qlrzjh=#{sfzh}
+	         </if>
+	    <if test="xm !=null and xm !=''">
+	            AND t1.qlr LIKE '%'||#{xm}||'%'
+	          </if>
+	          ) p
+    </select>
+    
+    <select id="getFwXmxxByPage" parameterType="java.util.Map"
+		resultType="map">
+		SELECT  p.qlr,p.qlrzjh,p.bdcdyh,p.zl,p.yt,p.mj,p.fwjg,p.ftjzmj,bdcdyid FROM
+       (SELECT c.qlrmc qlr,c.qlrzjh,q.bdcdyh,w.zl,k.mc yt,d.fwjg,d.jzmj mj,d.ftjzmj,d.bdcdyid FROM BDC_ZS a
+        INNER JOIN BDC_ZS_QLR_REL b ON a.zsid=b.zsid
+		LEFT JOIN  BDC_QLR c ON b.qlrid=c.qlrid AND c.qlrlx!='ywr'
+		INNER JOIN  BDC_FDCQ d ON c.proid=d.proid AND d.qszt=1
+		LEFT JOIN BDC_ZD_FWYT k ON d.ghyt=k.dm
+		LEFT JOIN BDC_BDCDY q ON q.bdcdyid=d.bdcdyid
+		INNER JOIN BDC_SPXX w ON w.proid=c.proid
+		WHERE 1=1
+    <if test="builder !=null and builder !=''">
+             ${builder}
+         </if>
+    UNION ALL
+    SELECT c.qlrmc qlr,c.qlrzjh,q.bdcdyh,w.zl,k.mc yt,e.fwjg,e.jzmj mj,d.ftjzmj,d.bdcdyid FROM BDC_ZS a
+    INNER JOIN BDC_ZS_QLR_REL b ON a.zsid=b.zsid
+    LEFT JOIN  BDC_QLR c ON b.qlrid=c.qlrid AND c.qlrlx!='ywr'
+    INNER JOIN  BDC_FDCQ_dz d ON c.proid=d.proid AND d.qszt=1
+    LEFT JOIN BDC_BDCDY q ON q.bdcdyid=d.bdcdyid
+    INNER JOIN BDC_SPXX w ON w.proid=c.proid
+    INNER JOIN Bdc_Fwfzxx e ON e.qlid=d.qlid
+    LEFT JOIN Bdc_Zd_Fwyt k ON e.ghyt=k.dm
+    WHERE 1=1
+    <if test="builder !=null and builder !=''">
+             ${builder}
+         </if>
+    UNION ALL
+    SELECT t1.qlr,t1.qlrzjh,t6.bdcdyh,t2.fwzl zl,t2.ghyt yt,t2.fwjg,t2.jzmj mj,t2.ftjzmj,t2.fwid bdcdyid FROM GD_QLR t1
+    INNER JOIN  gd_bdc_ql_rel t5 ON t5.qlid = t1.qlid
+    INNER JOIN  GD_FW t2 ON  t5.bdcid=t2.fwid
+    INNER JOIN  GD_FWSYQ t4 ON t4.qlid=t1.qlid AND nvl(t4.iszx,0)=0
+    LEFT JOIN   GD_DYH_REL t6 ON t6.gdid=t2.fwid
+    WHERE 1=1
+    <if test="gdBuilder !=null and gdBuilder !=''">
+             ${gdBuilder}
+    </if>
+          ) p
+	</select>
+</mapper>

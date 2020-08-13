@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+    <!--<bean id="dataSource" class="cn.gtmap.estateplat.core.support.spring.DataSourceProxy">-->
+        <!--<property name="defaultTransactionIsolation" value="2"/>-->
+        <!--<property name="defaultAutoCommit" value="false"/>-->
+        <!--<property name="targetDataSource">-->
+            <!--<bean class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">-->
+                <!--<property name="driverClassName" value="${bdcdj.db.driver}"/>-->
+                <!--<property name="jdbcUrl" value="${bdcdj.db.url}"/>-->
+                <!--<property name="username" value="${bdcdj.db.username}"/>-->
+                <!--<property name="password" value="${bdcdj.db.password}"/>-->
+                <!--<property name="connectionTimeout" value="30000"/>-->
+                <!--<property name="idleTimeout" value="600000"/>-->
+                <!--<property name="maxLifetime" value="1800000"/>-->
+                <!--<property name="maximumPoolSize" value="100"/>-->
+                <!--<property name="minimumIdle" value="100"/>-->
+            <!--</bean>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${bdcdj.db.url}" />
+        <property name="username" value="${bdcdj.db.username}" />
+        <property name="password" value="${bdcdj.db.password}" />
+
+        <property name="defaultAutoCommit" value="false"/>
+        <property name="defaultTransactionIsolation" value="2"/>
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="10" />
+        <property name="minIdle" value="10" />
+        <property name="maxActive" value="200" />
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="10000" />
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+        <property name="validationQuery" value="SELECT SYSDATE FROM DUAL" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+
+        <property name="removeAbandoned" value="true"/>
+        <property name="removeAbandonedTimeout" value="1800" />
+        <property name="logAbandoned" value="true" />
+
+        <!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->
+        <property name="filters" value="stat" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation"  value="classpath:conf/mybatis/mybatis-configuration.xml" />
+        <property name="plugins">
+            <list>
+                <ref bean="mybatisPaginationInterceptor"/>
+                <ref bean="mybatisPaginationOrderInterceptor"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
+
+
+    <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer" >
+        <property name="basePackage" value="cn.gtmap.estateplat.server.core.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
+    <bean id="mybatisPaginationInterceptor"
+          class="cn.gtmap.estateplat.server.utils.PaginationInterceptor">
+        <property name="properties">
+            <props>
+                <prop key="dialect">oracle</prop>
+                <prop key="stmtIdRegex">*.*ByPage</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="mybatisPaginationOrderInterceptor"
+          class="cn.gtmap.estateplat.server.utils.PaginationInterceptor">
+        <property name="properties">
+            <props>
+                <prop key="dialect">oracleorder</prop>
+                <prop key="stmtIdRegex">*.*ByPageOrder</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

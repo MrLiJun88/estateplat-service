@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcTdMapper">
+
+     <select id="selectBdcTd" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcTd">
+          SELECT * FROM bdc_td  WHERE zdzhh = #{zdzhh}
+     </select>
+
+     <select id="getFsAndDefaultZdLbByZdTzm" parameterType="String" resultType="map">
+          SELECT FS,ZDLB FROM BDC_XT_ZDLB_CONFIG t
+          <where>
+               <if test="zdtzm != null and zdtzm != ''">
+                    t.zdtzm = #{zdtzm}
+               </if>
+          </where>
+     </select>
+     
+     <select id="getZdyt" resultType="map">
+     	SELECT dm,mc FROM DJSJ_ZD_DLDM
+     </select>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--不动产预告-->
+    <mapping map-empty-string="false" map-null="false">
+        <class-a>cn.gtmap.estateplat.model.server.core.DjsjFwxx</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcYg</class-b>
+        <!--分摊土地面积-->
+        <field>
+            <a>fttdmj</a>
+            <b>fttdmj</b>
+        </field>
+        <!--规划用途-->
+        <field>
+            <a>ghyt</a>
+            <b>ghyt</b>
+        </field>
+        <!--名义层-->
+        <field>
+            <a>dycs</a>
+            <b>szmyc</b>
+        </field>
+        <!--房屋性质-->
+        <field>
+            <a>fwxz</a>
+            <b>fwxz</b>
+        </field>
+        <!--建筑面积-->
+        <field>
+            <a>jzmj</a>
+            <b>jzmj</b>
+        </field>
+    </mapping>
+
+</mappings>

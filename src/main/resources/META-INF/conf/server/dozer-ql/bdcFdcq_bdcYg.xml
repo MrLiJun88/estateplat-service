@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--房地产权-->
+    <mapping map-empty-string="false" map-null="false">
+        <class-a>cn.gtmap.estateplat.model.server.core.BdcYg</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcFdcq</class-b>
+        <!--用途-->
+        <field>
+            <a>ghyt</a>
+            <b>ghyt</b>
+        </field>
+        <!--共有情况-->
+        <field>
+            <a>gyqk</a>
+            <b>gyqk</b>
+        </field>
+        <!--交易价格-->
+        <field>
+            <a>qdjg</a>
+            <b>jyjg</b>
+        </field>
+        <!--所在层-->
+        <field>
+            <a>szc</a>
+            <b>szc</b>
+        </field>
+        <!--所在名义层-->
+        <field>
+            <a>szmyc</a>
+            <b>szmyc</b>
+        </field>
+        <!--总层数-->
+        <field>
+            <a>zcs</a>
+            <b>zcs</b>
+        </field>
+        <!--建筑面积-->
+        <field>
+            <a>jzmj</a>
+            <b>jzmj</b>
+        </field>
+        <!--实测面积-->
+        <field>
+            <a>jzmj</a>
+            <b>scmj</b>
+        </field>
+        <!--交易合同号-->
+        <field>
+            <a>jyhth</a>
+            <b>fdcjyhth</b>
+        </field>
+        <!--交易金额-->
+        <field>
+            <a>jyje</a>
+            <b>jyjg</b>
+        </field>
+    </mapping>
+
+</mappings>

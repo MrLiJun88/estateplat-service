@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdTdMapper">
+
+    <select id="getGdTdJsonByPage" parameterType="cn.gtmap.estateplat.model.server.core.GdTd" resultType="map">
+        SELECT rownum xl, t.qlid, t.proid, t.tdzh, t.qlr RF1DWMC, t.tdzl zl, t.djlx, t.zslx, t.djh,t.tdid
+        FROM gd_td_ql t
+        <if test="viewByDwdm == 'true'">
+            LEFT JOIN gd_xm t1 ON t1.proid = t.proid
+        </if>
+        <where>
+            <if test="hhSearch != null and hhSearch !=''">
+                AND (
+                instr(t.tdzh ,#{hhSearch} )>0 OR instr(t.tdzl ,#{hhSearch} )>0 OR instr(t.qlr ,#{hhSearch} )>0 OR
+                instr(t.djh ,#{hhSearch} )>0
+                <if test="qlidsForQlr != null and qlidsForQlr !=''">
+                    OR
+                    <foreach collection="qlidsForQlr" item="item" open="(" separator=" or " close=")">
+                        t.qlid = #{item}
+                    </foreach>
+                </if>
+                )
+            </if>
+            <if test="djhSearch != null and djhSearch != ''">
+                <if test="fuzzyQueryTd == 'true'">
+                    AND instr(t.djh,#{djhSearch}) > 0
+                </if>
+                <if test="fuzzyQueryTd == 'false'">
+                    AND t.djh like  #{djhSearch}||'%'
+                </if>
+            </if>
+            <if test="tdZlSearch != null and tdZlSearch != ''">
+                <if test="fuzzyQueryTd == 'true'">
+                    AND instr(t.tdzl,#{tdZlSearch}) > 0
+                </if>
+                <if test="fuzzyQueryTd == 'false'">
+                    AND t.tdzl like  #{tdZlSearch}||'%'
+                </if>
+            </if>
+            <if test="tdzhSearch != null and tdzhSearch != ''">
+                <if test="fuzzyQueryTd == 'true'">
+                    AND instr(t.tdzh,#{tdzhSearch}) > 0
+                </if>
+                <if test="fuzzyQueryTd == 'false'">
+                    AND t.tdzh like  #{tdzhSearch}||'%'
+                </if>
+            </if>
+            <if test="hhSearchDjh != null and hhSearchDjh !=''">
+                AND
+                <foreach collection="hhSearchDjh" item="item" open="(" separator=" or " close=")">
+                    t.qlid = #{item}
+                </foreach>
+            </if>
+            <if test="hhSearchZl != null and hhSearchZl !=''">
+                AND
+                <foreach collection="hhSearchZl" item="item" open="(" separator=" or " close=")">
+                    t.qlid = #{item}
+                </foreach>
+            </if>
+            <!--<if test="rf1Dwmc != null and rf1Dwmc !=''">-->
+            <!--and a.rf1Dwmc like '%'||#{rf1Dwmc}||'%'-->
+            <!--</if>-->
+            <if test="tdzh != null and tdzh !=''">
+                AND a.tdzh LIKE '%'||#{tdzh}||'%'
+            </if>
+            <if test="jqtdzh != null and jqtdzh !=''">
+                AND t.tdzh=#{jqtdzh}
+            </if>
+            <if test="jqdjh != null and jqdjh !=''">
+                AND t.djh=#{jqdjh}
+            </if>
+            <if test="jqzl != null and jqzl !=''">
+                AND t.tdzl=#{jqzl}
+            </if>
+            <!--<if test="zl != null and zl !=''">-->
+            <!--and t.zl like '%'||#{zl}||'%'-->
+            <!--</if>-->
+
+            <if test="viewByDwdm == 'true'">
+                <if test="dwdm != null and dwdm != ''">
+                    AND t1.dwdm = #{dwdm}
+                </if>
+            </if>
+
+            <if test="djh != null and djh !=''">
+                AND t.djh LIKE '%'||#{djh}||'%'
+            </if>
+            <if test="iszx != null and iszx !=''">
+                AND nvl(a.iszx,0) != #{iszx}
+            </if>
+            <if test="zdmj != null and zdmj !=''">
+                AND t.zdmj = #{zdmj}
+            </if>
+            <if test="yt != null and yt !=''">
+                AND t.yt =#{yt}
+            </if>
+            <if test="qlrzjh != null and qlrzjh !=''">
+                AND t.rf1zjh LIKE '%'||#{qlrzjh}||'%'
+            </if>
+            <if test="qlids != null and qlids !=''">
+                AND
+                <foreach collection="qlids" item="item" open="(" separator=" or " close=")">
+                    t.qlid = #{item}
+                </foreach>
+            </if>
+            <if test="null != sfsh and '' != sfsh">
+                AND t.sfsh = #{sfsh}
+            </if>
+        </where>
+    </select>
+    <select id="getGdTdXmJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT DISTINCT djlx,zl,qlid,proid,tdzh,zslx,ydjh,djh,tdid FROM(
+        SELECT t.djlx djlx,d.zl zl,a.qlid qlid ,a.proid proid ,a.tdzh tdzh ,a.zslx zslx ,d.djh ydjh,s2.dh djh,d.tdid
+        tdid
+        FROM gd_xm t INNER JOIN (
+        SELECT t.qlid,t.proid,t.tdzh,'所有权' zslx
+        FROM gd_tdsyq t
+        UNION ALL
+        SELECT d.dyid,d.proid,d.dydjzmh tdzh,'抵押' zslx
+        FROM gd_dy d
+        UNION ALL
+        SELECT c.cfid,c.proid,c.cfwh tdzh,'查封' zslx
+        FROM gd_cf c
+        UNION ALL
+        SELECT y.ygid,y.proid,y.ygdjzmh tdzh,'预告' zslx
+        FROM gd_yg y
+        UNION ALL
+        SELECT y.yyid,y.proid,'' tdzh,'异议' zslx
+        FROM gd_yy y) a ON a.proid=t.proid
+        LEFT JOIN gd_bdc_ql_rel q ON q.qlid=a.qlid
+        LEFT JOIN gd_td d ON d.tdid=q.bdcid
+        LEFT JOIN gd_dh_dzb s1 ON s1.dh=d.djh
+        LEFT JOIN gd_dh_dzb s2 ON s1.zduniqueid=s2.zduniqueid
+        WHERE t.bdclx='TD') t
+        <where>
+            <if test="hhSearch != null and hhSearch !=''">
+                AND (instr(t.zl,#{hhSearch})>0 OR instr(t.ydjh,#{hhSearch})>0 OR instr(t.djh,#{hhSearch})>0 OR
+                instr(t.tdzh,#{hhSearch})>0)
+            </if>
+            <if test="tdid != null and tdid !=''">
+                AND t.tdid = #{tdid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getGdTdByTdid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdTd">
+        SELECT t.tdid,t.djh,t.zl,t.yt,t.qsxz,t.syqlx,t.qlsdfs,t.rjl,t.jzmj,t.jzxg,t.zdsz,t.gyqk,t.qdjg,t.dwdm,t.tdjg,t.dw,t.sjly,t.ldjh,t.qsrq,t.zzrq,t.gxrq,t.jdh,t.jfh,t.zh,t.dj,t.zdlb,t.yt2,t.yt3,t.qsrq2,t.zzrq2,t.qsrq3,t.zzrq3,t.bsm,t.bz,t.zdmj,t.pzmj,t.yyt,t.yyt2,t.yyt3,t.yqsxz,t.yzl,t.qlsdfs2,t.syqlx2,t.jzmj2,t.qsxz2,t.ybbdcdyh
+        FROM gd_td t
+        WHERE t.tdid=#{tdid}
+    </select>
+    <select id="getqlrBytdid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdQlr">
+        SELECT t.qlrid,t.qlr,t.qlrsfzjzl,t.qlrzjh,t.qlid,t.qlrlx,t.qlrxz,t.qlbl,t.proid,t.sfczr,t.cqzh,t.qlrdlr,t.qlrdlrzjh,t.qlrdlrzjlx,t.qlrdh,t.qlrtxdz,t.qlryb,t.qlrfrmc,t.qlrfrzjlx,t.qlrfrzjh,t.qlrfrdh,t.sshy,t.qlrdlrdh,t.qlrdljg,t.gyfs,t.gyqk,t.dh,t.qlmj,t.bsm,t.sxh,t.kfsfr,t.kfs
+        FROM gd_qlr t
+        WHERE t.qlrlx='qlr' AND t.qlid=#{tdid}
+    </select>
+
+    <select id="getQlrByName" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdQlr">
+        SELECT t.qlrid,t.qlr,t.qlrsfzjzl,t.qlrzjh,t.qlid,t.qlrlx,t.qlrxz,t.qlbl,t.proid,t.sfczr,t.cqzh,t.qlrdlr,t.qlrdlrzjh,t.qlrdlrzjlx,t.qlrdh,t.qlrtxdz,t.qlryb,t.qlrfrmc,t.qlrfrzjlx,t.qlrfrzjh,t.qlrfrdh,t.sshy,t.qlrdlrdh,t.qlrdljg,t.gyfs,t.gyqk,t.dh,t.qlmj,t.bsm,t.sxh,t.kfsfr,t.kfs
+        FROM gd_qlr t
+        WHERE t.qlrlx='qlr' AND instr(qlr,#{qlrname})>0
+    </select>
+    <select id="getGdTdzhTdid" parameterType="String" resultType="String">
+        SELECT q.tdzh
+        FROM gd_td t
+        LEFT JOIN GD_TDSYQ q ON q.tdid=t.tdid
+        WHERE t.tdid=#{tdid}
+    </select>
+
+    <select id="getGdTdSyqx" parameterType="String" resultType="String">
+     SELECT t.syqx
+     FROM bdc_dldm_syqx_rel t
+     WHERE t.dldm=#{dldm}
+    </select>
+
+    <select id="getGdTdSyq" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdTdsyq">
+        SELECT t.qlid,t.tdzh,t.tdid,t.iszx,t.djlx,t.djyy,t.fwid,t.proid,t.dymj,t.ftmj,t.bz,t.issynq,t.tdzmj,t.nyd,t.gd,t.yd,t.ld,t.mcd,t.qtnyd,t.jsyd,t.wlyd,t.cjrid,t.yqzh,t.gxr,t.gxrq,t.fj,t.islogout,t.zzrq,t.zxr,t.zxrq,t.lzrq,t.dbr,t.djsj,t.sffgw,t.daywh,t.syfttdmj,t.syqmj,t.zxyy,t.zxdbr,t.zxdbsj,t.qllx,t.bsm,t.qsrq,t.tdzjs,t.gysyqmj,t.sjsymj,t.djmj,t.fczh,t.fjmsjtsydmj,t.jtysydmj,t.syjslssydmj,t.qtydmj,t.tdzh2
+        FROM gd_tdsyq  t
+        LEFT JOIN gd_td q ON t.tdid=q.tdid
+        WHERE t.tdid=#{tdid}
+    </select>
+    <select id="getGdTdSyqByDjh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdTdsyq">
+     SELECT t.qlid,t.tdzh,t.tdid,t.iszx,t.djlx,t.djyy,t.fwid,t.proid,t.dymj,t.ftmj,t.bz,t.issynq,t.tdzmj,t.nyd,t.gd,t.yd,t.ld,t.mcd,t.qtnyd,t.jsyd,t.wlyd,t.cjrid,t.yqzh,t.gxr,t.gxrq,t.fj,t.islogout,t.zzrq,t.zxr,t.zxrq,t.lzrq,t.dbr,t.djsj,t.sffgw,t.daywh,t.syfttdmj,t.syqmj,t.zxyy,t.zxdbr,t.zxdbsj,t.qllx,t.bsm,t.qsrq,t.tdzjs,t.gysyqmj,t.sjsymj,t.djmj,t.fczh,t.fjmsjtsydmj,t.jtysydmj,t.syjslssydmj,t.qtydmj,t.tdzh2
+     FROM gd_tdsyq  t
+     LEFT JOIN gd_td q ON t.tdid=q.tdid
+     WHERE t.tdid=#{tdid}
+    </select>
+    <select id="getDhDzbDjhByTdid" parameterType="String" resultType="String">
+      SELECT t1.dh
+      FROM (
+      SELECT d.* FROM gd_dh_dzb d INNER JOIN (
+      SELECT  MAX(dhxh) dhxh,zduniqueid
+      FROM gd_dh_dzb
+      GROUP BY zduniqueid) t ON d.dhxh = t.dhxh AND d.zduniqueid = t.zduniqueid) t1
+      INNER JOIN
+      (SELECT d.*
+      FROM gd_dh_dzb d
+      INNER JOIN gd_td t ON d.dh = t.djh
+      WHERE t.tdid = #{tdid}) t2
+      ON t1.zduniqueid = t2.zduniqueid
+    </select>
+
+
+    <select id="getZdDcbDjhByTdid" parameterType="String" resultType="String">
+        SELECT d.djh
+        FROM gd_td t
+        LEFT JOIN djsj_zd_dcb d ON d.ydjh=t.djh
+        WHERE t.tdid=#{tdid}
+    </select>
+
+    <select id="getTdzhByTdid" parameterType="String" resultType="String">
+        SELECT t.tdzh
+        FROM gd_tdsyq t
+        WHERE t.tdid=#{tdid}
+    </select>
+
+    <select id="getGdTdyTdids" parameterType="map" resultType="cn.gtmap.estateplat.model.server.core.GdTd">
+        SELECT t.tdid,t.djh,t.zl,t.yt,t.qsxz,t.syqlx,t.qlsdfs,t.rjl,t.jzmj,t.jzxg,t.zdsz,t.gyqk,t.qdjg,t.dwdm,t.tdjg,t.dw,t.sjly,t.ldjh,t.qsrq,t.zzrq,t.gxrq,t.jdh,t.jfh,t.zh,t.dj,t.zdlb,t.yt2,t.yt3,t.qsrq2,t.zzrq2,t.qsrq3,t.zzrq3,t.bsm,t.bz,t.zdmj,t.pzmj,t.yyt,t.yyt2,t.yyt3,t.yqsxz,t.yzl,t.qlsdfs2,t.syqlx2,t.jzmj2,t.qsxz2,t.ybbdcdyh
+        FROM gd_td t
+        WHERE 1=1
+        <if test="tdids != null and tdids !=''">
+            AND
+            <foreach collection="tdids" item="item" open="(" separator=" or " close=")">
+                t.tdid=#{item}
+            </foreach>
+        </if>
+        <if test="zl != null and zl !=''">
+            AND t.zl=#{zl}
+        </if>
+    </select>
+    <select id="getBdcdyhByTdids" parameterType="map" resultType="String">
+        SELECT replace(strcat(t.bdcdyh),'/',',')
+        FROM gd_dyh_rel t
+        WHERE 1=1
+        <if test="tdids != null and tdids !=''">
+            AND
+            <foreach collection="tdids" item="item" open="(" separator=" or " close=")">
+                t.gdid=#{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getGdFwTdJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT t.qlid tdid,t.qlid, t.proid, t.tdzh, t.qlr, t.tdzl zl, t.djlx, t.zslx, t.djh
+        FROM gd_td_ql t
+--         LEFT JOIN gd_tdsyq q ON t.qlid = q.qlid
+--         LEFT JOIN gd_dy dy ON t.qlid = dy.dyid AND dy.bdclx = 'TD'
+--         LEFT JOIN gd_cf cf ON t.qlid = cf.cfid AND cf.bdclx = 'TD'
+        WHERE 1=1
+        <if test="hhSearch != null and hhSearch !=''">
+            AND (
+            instr(t.tdzh ,#{hhSearch} )>0 OR instr(t.qlr ,#{hhSearch} )>0 OR instr(t.tdzl,#{hhSearch} )>0
+            OR instr(t.djh , #{hhSearch})>0
+            )
+        </if>
+        <if test="hhSearchs != null and hhSearchs !=''">
+            AND
+            <foreach collection="hhSearchs" item="item" open="(" separator=" or " close=")">
+                (
+                instr(t.tdzh ,#{item} )>0 OR instr(t.qlr ,#{item} )>0 OR instr(t.tdzl,#{item} )>0
+                OR instr(t.djh , #{item})>0
+                )
+            </foreach>
+        </if>
+        <if test="tdids != null and tdids !=''">
+            AND
+            <foreach collection="tdids" item="item" open="(" separator=" OR " close=")">
+                t.tdid = #{item}
+            </foreach>
+        </if>
+        <if test="qlids != null and qlids !=''">
+            AND
+            <foreach collection="qlids" item="item" open="(" separator=" or " close=")">
+                t.qlid = #{item}
+            </foreach>
+        </if>
+        <if test="qlid != null and qlid !=''">
+            AND t.qlid = #{qlid}
+        </if>
+        <if test="tdzl != null and tdzl !=''">
+            AND t.tdzl = #{tdzl}
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND instr(t.qlr ,#{qlr} )>0
+        </if>
+        <if test="tdzh != null and tdzh !=''">
+            AND instr(t.tdzh ,#{tdzh} )>0
+        </if>
+        <if test="djh != null and djh !=''">
+            AND instr(t.djh ,#{djh} )>0
+        </if>
+        <if test="tdid != null and tdid !=''">
+            AND t.tdid=#{tdid}
+        </if>
+        /*ORDER BY t.tdzl, nvl(q.iszx, nvl(dy.isjy, cf.isjf))*/
+    </select>
+
+    <select id="getGdTdQlidByZl" parameterType="String" resultType="String">
+       SELECT t.qlid
+       FROM gd_bdc_ql_rel t
+       WHERE EXISTS(
+          SELECT g.tdid
+          FROM gd_td g
+          WHERE g.tdid=t.bdcid AND instr(g.zl,#{zl})>0)
+    </select>
+
+    <select id="getGdTdQlidByFwQlid" parameterType="String" resultType="String">
+        SELECT t.tdqlid
+        FROM gd_ql_dyh_rel t
+        WHERE qlid = #{qlid}
+    </select>
+
+    <select id="getGdTdQlidByDjh" parameterType="String" resultType="String">
+       SELECT t.qlid
+       FROM gd_bdc_ql_rel t
+       WHERE EXISTS(
+          SELECT g.tdid
+          FROM gd_td g
+          WHERE g.tdid=t.bdcid AND g.djh=#{djh})
+    </select>
+
+    <select id="getTdsyqByFczh" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.GdTdsyq">
+        SELECT t.qlid,t.tdzh,t.tdid,t.iszx,t.djlx,t.djyy,t.fwid,t.proid,t.dymj,t.ftmj,t.bz,t.issynq,t.tdzmj,t.nyd,t.gd,t.yd,t.ld,t.mcd,t.qtnyd,t.jsyd,t.wlyd,t.cjrid,t.yqzh,t.gxr,t.gxrq,t.fj,t.islogout,t.zzrq,t.zxr,t.zxrq,t.lzrq,t.dbr,t.djsj,t.sffgw,t.daywh,t.syfttdmj,t.syqmj,t.zxyy,t.zxdbr,t.zxdbsj,t.qllx,t.bsm,t.qsrq,t.tdzjs,t.gysyqmj,t.sjsymj,t.djmj,t.fczh,t.fjmsjtsydmj,t.jtysydmj,t.syjslssydmj,t.qtydmj,t.tdzh2
+        FROM gd_tdsyq  t
+        LEFT JOIN gd_ql_dyh_rel s ON t.qlid=s.tdqlid
+        LEFT JOIN gd_fwsyq q ON s.qlid=q.qlid
+        WHERE 1=1
+        <if test="fczh!=null and fczh!=''">
+            AND q.fczh=#{fczh}
+        </if>
+        <if test="qlid!='' and qlid!=null">
+            AND q.qlid=#{qlid}
+        </if>
+        <if test="bdcdyh!='' and bdcdyh!=null">
+            AND s.bdcdyh=#{bdcdyh}
+        </if>
+    </select>
+
+    <!-- 获得过渡土地信息（匹配过程创建纯土地证项目后，在查看原权利时调用该sql） -->
+    <select id="getGdTdLrJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT DISTINCT t.tdid,t.djh,t.zl,t.yt,t.qsxz,t.syqlx,t.qlsdfs,t.rjl,t.jzmj,t.jzxg,t.zdsz,t.gyqk,t.qdjg,t.dwdm,t.tdjg,t.dw,t.sjly,t.ldjh,t.qsrq,t.zzrq,t.gxrq,t.jdh,t.jfh,t.zh,t.dj,t.zdlb,t.yt2,t.yt3,t.qsrq2,t.zzrq2,t.qsrq3,t.zzrq3,t.bsm,t.bz,t.zdmj,t.pzmj,t.yyt,t.yyt2,t.yyt3,t.yqsxz,t.yzl,t.qlsdfs2,t.syqlx2,t.jzmj2,t.qsxz2,t.ybbdcdyh
+        FROM gd_td t
+        LEFT JOIN gd_bdc_ql_rel r ON r.bdcid=t.tdid
+        LEFT JOIN gd_td_ql m ON m.qlid=r.qlid
+        WHERE 1=1
+        <if test="proid != null and proid !=''">
+            AND m.proid=#{proid}
+        </if>
+        <if test="qlid!='' and qlid!=null">
+            AND m.qlid=#{qlid}
+        </if>
+        <if test="hhSearch != null and hhSearch !=''">
+            AND instr(t.zl ,#{hhSearch} )>0
+        </if>
+        <if test="proids != null and proids !=''">
+            AND
+            <foreach collection="proids" item="proid" open="(" separator=" or " close=")">
+                m.proid = #{proid}
+            </foreach>
+        </if>
+        <if test="tdids != null and tdids != ''">
+            AND
+            <foreach collection="tdids" item="item" open="(" separator=" or " close=")">
+                t.tdid = #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getGdTdQl" parameterType="map" resultType="map">
+        SELECT t.proid,t.qlid,t.zslx qllx,t.tdzh,t.tdzl,t.djh
+        FROM gd_td_ql t
+        <where>
+            <if test="proid != null and proid != ''">
+                t.proid=#{proid}
+            </if>
+            <if test="qlid != null and qlid != ''">
+                t.qlid=#{qlid}
+            </if>
+            <if test="iszx != null and iszx != ''">
+                and nvl(t.iszx,'0')=#{iszx}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTdDyByFczh" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.GdDy">
+        <!--select t.* FROM gd_dy t
+        left join gd_dyh_rel s on t.dyid=s.tdid
+        left join gd_fw r on r.fwid=s.gdid
+        left join gd_bdc_ql_rel l on r.fwid=l.bdcid
+        <if test="fwsyq!='' and fwsyq!=null">
+            left join gd_fwsyq q on l.qlid=q.qlid
+        </if>
+        <where>
+            <if test="fczh!=null and fczh!=''">
+                q.fczh=#{fczh}
+            </if>
+            <if test="qlid!='' and qlid!=null">
+                l.qlid=#{qlid}
+            </if>
+        </where>-->
+        <!--select t.* FROM gd_dy t
+        left join gd_ql_dyh_rel s on t.dyid=s.qlid
+        left join gd_fwsyq q on s.qlid=q.qlid
+        <where>
+            <if test="fczh!=null and fczh!=''">
+                q.fczh=#{fczh}
+            </if>
+            <if test="qlid!='' and qlid!=null">
+                q.qlid=#{qlid}
+            </if>
+        </where>-->
+        SELECT t.dyid,t.dyksrq,t.dyjsrq,t.dyfs,t.zjgczl,t.zjgcdyfw,t.zgzqqdss,t.bdclx,t.dydjzmh,t.isjy,t.dbfw,t.bdbzzqse,t.zgzqqdse,t.gxrq,t.djlx,t.fj,t.bz,t.proid,t.cjrid,t.yqzh,t.gxr,t.zxr,t.zxrq,t.bdcjg,t.dkfs,t.pgjgbz,t.dyhtbh,t.zwr,t.sfgtdb,t.lzrq,t.dbr,t.djsj,t.sydyje,t.sydymj,t.dysx,t.jezl,t.daywh,t.zxdyywh,t.zxdyyy,t.qllx,t.bsm,t.qlsx,t.bdcjg1,t.dymj,t.pgjg,t.zxdbr,t.zxdbsj
+        FROM gd_dy t
+        LEFT JOIN gd_ql_dyh_rel s ON t.dyid=s.tdqlid
+        LEFT JOIN gd_fw_ql q ON s.qlid=q.qlid
+        <where>
+            <if test="fczh!=null and fczh!=''">
+                q.fczh=#{fczh}
+            </if>
+            <if test="qlid!='' and qlid!=null">
+                q.qlid=#{qlid}
+            </if>
+        </where>
+    </select>
+    <!--根据权利ID获取过渡土地对象-->
+    <select id="getGdTdByQlid" parameterType="java.lang.String" resultType="cn.gtmap.estateplat.model.server.core.GdTd">
+        SELECT t.tdid,t.djh,t.zl,t.yt,t.qsxz,t.syqlx,t.qlsdfs,t.rjl,t.jzmj,t.jzxg,t.zdsz,t.gyqk,t.qdjg,t.dwdm,t.tdjg,t.dw,t.sjly,t.ldjh,t.qsrq,t.zzrq,t.gxrq,t.jdh,t.jfh,t.zh,t.dj,t.zdlb,t.yt2,t.yt3,t.qsrq2,t.zzrq2,t.qsrq3,t.zzrq3,t.bsm,t.bz,t.zdmj,t.pzmj,t.yyt,t.yyt2,t.yyt3,t.yqsxz,t.yzl,t.qlsdfs2,t.syqlx2,t.jzmj2,t.qsxz2,t.ybbdcdyh
+        FROM gd_td t
+        LEFT JOIN gd_bdc_ql_rel t1 ON t.tdid=t1.bdcid
+        WHERE t1.qlid= #{value}
+    </select>
+
+    <update id="updateSfsh" parameterType="String">
+        UPDATE gd_td_ql t
+        SET t.sfsh = '1'
+        WHERE qlid = #{qlid}
+    </update>
+
+    <select id="getGdTdsyqByTdid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdTdsyq">
+        SELECT t.qlid,t.tdzh,t.tdid,t.iszx,t.djlx,t.djyy,t.fwid,t.proid,t.dymj,t.ftmj,t.bz,t.issynq,t.tdzmj,t.nyd,t.gd,t.yd,t.ld,t.mcd,t.qtnyd,t.jsyd,t.wlyd,t.cjrid,t.yqzh,t.gxr,t.gxrq,t.fj,t.islogout,t.zzrq,t.zxr,t.zxrq,t.lzrq,t.dbr,t.djsj,t.sffgw,t.daywh,t.syfttdmj,t.syqmj,t.zxyy,t.zxdbr,t.zxdbsj,t.qllx,t.bsm,t.qsrq,t.tdzjs,t.gysyqmj,t.sjsymj,t.djmj,t.fczh,t.fjmsjtsydmj,t.jtysydmj,t.syjslssydmj,t.qtydmj,t.tdzh2
+        FROM gd_tdsyq  t
+        LEFT JOIN gd_bdc_ql_rel r ON r.qlid=t.qlid
+        LEFT JOIN gd_td d ON d.tdid = r.bdcid
+        <where>
+            <if test="tdid !=null and tdid !=''">
+                d.tdid=#{tdid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTdzhByBdcdyh" parameterType="java.lang.String" resultType="String">
+        SELECT wm_concat(tdzh) tdzh FROM (
+          SELECT t.tdzh FROM gd_tdsyq t
+          LEFT JOIN gd_bdc_ql_rel e ON e.qlid = t.qlid
+          LEFT JOIN gd_dyh_rel r ON r.gdid = e.bdcid
+          WHERE r.bdcdyh=#{bdcdyh} AND nvl(t.iszx,0)=0
+          GROUP BY t.tdzh)
+    </select>
+
+    <select id="getGdTdQlidsByFwQlid" parameterType="String" resultType="String">
+        SELECT t.tdqlid
+        FROM gd_ql_dyh_rel t
+        WHERE qlid = #{qlid}
+    </select>
+
+
+    <select id="getTdCfByFczh" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.GdCf">
+        SELECT t.cfid,t.cfjg,t.cflx,t.cfwj,t.cfwh,t.cfksrq,t.cfjsrq,t.cffw,t.bdclx,t.proid,t.isjf,t.gxrq,t.djlx,t.fj,t.fysdr,t.fysdrlxfs,t.cjrid,t.yqzh,t.jfr,t.jfrq,t.gxr,t.zsproid,t.cfqx,t.jfwj,t.jfwh,t.jfjg,t.jfsj,t.bz,t.djsj,t.dbr,t.cfsx,t.cfyy,t.jfywh,t.jfdbr,t.zxsqr,t.bzxr,t.lhcfqx,t.daywh,t.cfsqr,t.issx,t.bsm,t.cfsdsj,t.iscd,t.jfdbsj,t.qlsx,t.jfyy
+        FROM gd_cf t
+        LEFT JOIN gd_ql_dyh_rel s ON t.cfid=s.tdqlid
+        LEFT JOIN gd_fw_ql q ON s.qlid=q.qlid
+        <where>
+            <if test="fczh!=null and fczh!=''">
+                q.fczh=#{fczh}
+            </if>
+            <if test="qlid!='' and qlid!=null">
+                q.qlid=#{qlid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getGdTdDyByTdid" parameterType="String"
+            resultType="cn.gtmap.estateplat.model.server.core.GdDy">
+        SELECT t.dyid,t.dyksrq,t.dyjsrq,t.dyfs,t.zjgczl,t.zjgcdyfw,t.zgzqqdss,t.bdclx,t.dydjzmh,t.isjy,t.dbfw,t.bdbzzqse,t.zgzqqdse,t.gxrq,t.djlx,t.fj,t.bz,t.proid,t.cjrid,t.yqzh,t.gxr,t.zxr,t.zxrq,t.bdcjg,t.dkfs,t.pgjgbz,t.dyhtbh,t.zwr,t.sfgtdb,t.lzrq,t.dbr,t.djsj,t.sydyje,t.sydymj,t.dysx,t.jezl,t.daywh,t.zxdyywh,t.zxdyyy,t.qllx,t.bsm,t.qlsx,t.bdcjg1,t.dymj,t.pgjg,t.zxdbr,t.zxdbsj
+        FROM gd_dy t
+        LEFT JOIN gd_bdc_ql_rel r ON r.qlid=t.dyid
+        LEFT JOIN gd_td d ON r.bdcid=d.tdid
+        WHERE t.bdclx='TD' AND nvl(t.isjy,0)=0 AND d.tdid=#{tdid}
+    </select>
+
+    <select id="selectGdtdNopp" resultType="map">
+        select DISTINCT (t.tdid) from gd_td t
+        inner join gd_bdc_ql_rel r on t.tdid=r.bdcid
+        where r.qlid in (select c.cfid from gd_cf c where nvl(c.isjf,0)=0) and t.tdid not in (select d.gdid from gd_dyh_rel d)
+    </select>
+
+
+    <select id="getGdTdSyqList" parameterType="java.util.HashMap" resultType="cn.gtmap.estateplat.model.server.core.GdTdsyq">
+        SELECT t.qlid,t.tdzh,t.tdid,t.iszx,t.djlx,t.djyy,t.fwid,t.proid,t.dymj,t.ftmj,t.bz,t.issynq,t.tdzmj,t.nyd,t.gd,t.yd,t.ld,t.mcd,t.qtnyd,t.jsyd,t.wlyd,t.cjrid,t.yqzh,t.gxr,t.gxrq,t.fj,t.islogout,t.zzrq,t.zxr,t.zxrq,t.lzrq,t.dbr,t.djsj,t.sffgw,t.daywh,t.syfttdmj,t.syqmj,t.zxyy,t.zxdbr,t.zxdbsj,t.qllx,t.bsm,t.qsrq,t.tdzjs,t.gysyqmj,t.sjsymj,t.djmj,t.fczh,t.fjmsjtsydmj,t.jtysydmj,t.syjslssydmj,t.qtydmj,t.tdzh2,t.cqzhjc
+        FROM gd_tdsyq  t
+        WHERE 1=1
+        <if test="tdzh!='' and tdzh!=null">
+            AND t.tdzh=#{tdzh}
+        </if>
+        <if test="cqzhjc!='' and cqzhjc!=null">
+            AND t.cqzhjc=#{cqzhjc}
+        </if>
+    </select>
+</mapper>

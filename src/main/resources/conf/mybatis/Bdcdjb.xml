@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcdjbMapper">
+    <resultMap id="bdcdjbResult" type="cn.gtmap.estateplat.model.server.core.BdcBdcdjb">
+        <result column="djbid" property="djbid"/>
+        <result column="zdzhh" property="zdzhh"/>
+        <result column="zl" property="zl"/>
+        <result column="djjg" property="djjg"/>
+        <result column="dbr" property="dbr"/>
+        <result column="djsj" property="djsj"/>
+        <result column="fj" property="fj"/>
+        <result column="wzsm" property="wzsm"/>
+    </resultMap>
+
+    <select id="selectBdcdjb" parameterType="String" resultMap="bdcdjbResult">
+          SELECT djbid, zdzhh, zl, djjg, dbr, djsj, fj, wzsm
+          FROM bdc_bdcdjb
+          WHERE zdzhh = #{zdzhh}
+     </select>
+    <!--<select id="getBdcdjb" parameterType="java.util.Map" resultType="BdcBdcdjb">-->
+        <!--select * from BDC_BDCDJB t-->
+        <!--<where>-->
+            <!--<if test="proid != null and proid !=''">-->
+                <!--and t.proid=#{proid}-->
+            <!--</if>-->
+            <!--<if test="zdzhh != null and zdzhh !=''">-->
+                <!--and t.zdzhh=#{zdzhh}-->
+            <!--</if>-->
+        <!--</where>-->
+    <!--</select>-->
+    <select id="getBdcdjbByPage" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcBdcdjb">
+        SELECT  DISTINCT t.djbid,t.zdzhh,t.zl,t.djjg,t.dbr,t.djsj,t.fj,t.wzsm
+        FROM bdc_bdcdjb t
+        INNER JOIN bdc_bdcdy t1 ON t.djbid=t1.djbid
+        INNER JOIN bdc_xm t2 ON t1.bdcdyid=t2.bdcdyid
+        WHERE 1=1
+        <if test="dcxc != null and dcxc !=''">
+            AND (t.zdzhh LIKE '%' || #{dcxc} || '%' or t.zl LIKE '%' || #{dcxc} || '%' or t.dbr LIKE '%' || #{dcxc} ||'%')
+        </if>
+        <if test="zdzhh != null and zdzhh !=''">
+            AND t.zdzhh LIKE '%' || #{zdzhh} || '%'
+        </if>
+        <if test="xzqdm != null and xzqdm !=''">
+            AND t.zdzhh LIKE  #{xzqdm} || '%'
+        </if>
+        <if test="zl != null and zl !=''">
+            AND t.zl LIKE '%' || #{zl} || '%'
+        </if>
+        <if test="dbr != null and dbr !=''">
+            AND t.dbr LIKE '%' || #{dbr} || '%'
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND proid IN(SELECT proid FROM bdc_qlr WHERE qlr LIKE  '%' || #{qlr} || '%')
+        </if>
+        <if test="xmzt != null and xmzt !=''">
+            AND nvl(t2.xmzt,'0')=#{xmzt}
+        </if>
+        <if test="xmzts != null and xmzts !=''">
+            AND
+            <foreach collection="xmzts" item="item" open="(" separator=" or " close=")">
+                nvl(t2.xmzt,'0')=#{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>

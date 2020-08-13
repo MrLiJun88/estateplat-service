@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdTdsyqMapper">
+
+    <select id="getTdsyqByPage" parameterType="java.util.Map" resultType="map">
+        SELECT  s.qlid qlid,
+                s.iszx iszx,
+                s.djlx djlx,
+                s.tdzh tdzh,
+                d.djh djh,
+                d.zl zl,
+                d.zdmj zdmj,
+                d.yt yt,
+                s.proid proid,
+                s.projectid,
+                d.tdid
+        FROM gd_tdsyq s
+        LEFT JOIN gd_bdc_ql_rel r ON s.qlid = r.qlid
+        LEFT JOIN gd_td d ON r.bdcid = d.tdid
+        where 1=1
+        <if test="dcxc != null and dcxc !=''">
+            AND ( instr(d.zl ,#{dcxc} )>0 OR instr(s.tdzh ,#{dcxc} )>0 )
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND s.qlid IN (SELECT qlr.qlid qlid FROM gd_qlr qlr WHERE instr(qlr.qlr ,#{qlr})>0 AND qlr.qlrlx='qlr')
+        </if>
+        <if test="zl != null and zl !=''">
+            AND  instr(d.zl ,#{zl} ) >0
+        </if>
+        <if test="tdzh != null and tdzh !=''">
+            AND  instr(s.tdzh ,#{tdzh} ) >0
+        </if>
+
+    </select>
+    <select id="getTdGdTdsyqListByBdcdyh" resultType="cn.gtmap.estateplat.model.server.core.GdTdsyq" parameterType="java.lang.String">
+        select a.* from GD_TDSYQ a
+         LEFT JOIN GD_QL_DYH_REL b on a.QLID = b.QLID
+         where NVL(a.ISZX, 0) = 0 and b.BDCDYH=#{bdcdyh}
+    </select>
+
+
+</mapper>

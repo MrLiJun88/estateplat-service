@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdFwsyqMapper">
+	<select id="queryGdFwsyqByPage" parameterType="java.util.Map"
+		resultType="map">
+		SELECT DISTINCT a.fczh
+		FROM gd_fwsyq a
+		LEFT JOIN gd_bdc_ql_rel b ON b.qlid = a.qlid
+		<if
+			test="(ghyt !=null and ghyt!='') or (fwzl !=null and fwzl!='') or (fwjg !=null and fwjg!='') or (jzmj != null and jzmj != '' ) or (dcxc !=null and dcxc !='')">
+			LEFT JOIN gd_fw c ON c.fwid = b.bdcid
+		</if>
+		<if test="(qlr !=null and qlr!='') or (dcxc !=null and dcxc !='')">
+			LEFT JOIN gd_qlr d ON d.qlid = b.qlid
+		</if>
+		WHERE 1 = 1 AND a.fczh IS NOT NULL
+		<if test="(dcxc !=null and dcxc !='')">
+			AND ( instr(a.fczh,#{dcxc}) > 0 or instr(d.qlr, #{dcxc}) > 0 or instr(c.fwzl, #{dcxc}) > 0)
+		</if>
+		<if test="(fczh !=null and fczh !='')">
+			AND instr(a.fczh,#{fczh}) > 0
+		</if>
+		<if test="(ghyt !=null and ghyt!='')">
+			AND instr(c.ghyt,#{ghyt}) > 0
+		</if>
+		<if test="(fwzl !=null and fwzl!='')">
+			AND instr(c.fwzl,#{fwzl}) > 0
+		</if>
+		<if test="(fwjg !=null and fwjg !='')">
+			AND instr(c.fwjg,#{fwjg}) > 0
+		</if>
+		<if test="(jzmj !=null and jzmj!='')">
+			AND c.jzmj = #{jzmj}
+		</if>
+		<if test="(qlr !=null and qlr !='')">
+			AND instr(d.qlr, #{qlr}) > 0
+		</if>
+	</select>
+	<select id="getGdFwxxByFczh" parameterType="java.util.Map"
+		resultType="map">
+		  SELECT strcat(d.qlr) qlr,
+		       strcat(a.fczh) fczh,
+		       strcat(c.fwzl) fwzl,
+		       strcat(c.ghyt) ghyt,
+		       strcat(c.fwjg) fwjg,
+		       strcat(c.jzmj) jzmj,
+		       strcat(c.tnjzmj) tnjzmj,
+		       strcat(c.ftjzmj) ftjzmj,
+		       strcat(a.yqzh) yqzh,
+		       strcat(a.iszx) iszx
+		  FROM gd_fwsyq a
+		  LEFT JOIN gd_bdc_ql_rel b ON b.qlid = a.qlid
+		  LEFT JOIN gd_fw c ON c.fwid = b.bdcid
+		  LEFT JOIN gd_qlr d ON d.qlid = b.qlid
+		  WHERE a.fczh = #{fczh}
+	</select>
+	<select id="getGdFwsyqListByBdcdyh" resultType="cn.gtmap.estateplat.model.server.core.GdFwsyq" parameterType="String">
+        SELECT a.*  FROM GD_FWSYQ a
+        LEFT JOIN GD_BDC_QL_REL r ON r.qlid=a.qlid
+        LEFT JOIN GD_DYH_REL b ON b.gdid=r.bdcid
+        WHERE NVL(a.iszx,0)=0 AND b.bdcdyh=#{bdcdyh}
+    </select>
+</mapper>

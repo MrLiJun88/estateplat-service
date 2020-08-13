@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcBydjdjdMapper">
+
+    <select id="getMaxLsh" resultType="java.lang.Integer" parameterType="map">
+        SELECT MAX(to_number(LSH)) FROM bdc_bydj_djd WHERE nf= #{nf}
+    </select>
+
+    <select id="getBdcBydjdjd" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcBydjdjd">
+        SELECT t.jdsid,t.nf,t.lsh,t.jddx,t.jdsj,t.zl,t.sqlxdm,t.bh,t.fjdssj,t.sqr,t.qsrq,t.proid,t.tzyy,t.bz FROM bdc_bydj_djd t
+        <where>
+            <if test="proid != null and proid != ''">
+                AND t.proid = #{proid}
+            </if>
+        </where>
+    </select>
+</mapper>

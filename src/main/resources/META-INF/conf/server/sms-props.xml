@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+node：发短信的节点（转发前的节点名称）
+content：发短信的内容
+delay: 延迟多长时间(单位小时,整型数字)发短信
+-->
+<props>
+    <sms>
+        <node>收件</node>
+        <content>【djjg】您提交的不动产djlx申请已受理，受理编号为slbh。</content>
+        <delay>1</delay>
+    </sms>
+
+    <sms>
+        <node>核定</node>
+        <content>【djjg】受理编号为slbh的djlx已办理完毕，请权利人在szrq之后，带上本人身份证、受理单及不动产收费告知单到不动产登记中心领证。</content>
+        <delay>2</delay>
+    </sms>
+    <unsqlx>110,112</unsqlx>
+</props>

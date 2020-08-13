@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--配置不需要进行验证的流程-->
+<props>
+    <!--解封登记-->
+    <sqlxdm>803</sqlxdm>
+    <sqlxdm>801</sqlxdm>
+    <sqlxdm>706</sqlxdm>
+    <sqlxdm>807</sqlxdm>
+</props>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcdjtjMapper">
+	<select id="getBdcdjtjByPage" parameterType="java.util.Map" resultType="map">
+	    SELECT rownum,t.* FROM (
+		SELECT DISTINCT m.wiid,
+		'办理时限' || e.time_limit || '个工作日' blsx,
+		x.mc sqlx,
+		m.sqlx dm,
+		r.qlrmc,
+		r.qlrlxdh,
+		to_char(m.cjsj, 'yyyy/mm/dd') cjsj,
+		to_char(m.bjsj, 'yyyy/mm/dd') bjsj,
+		CASE WHEN m.bjsj IS NULL AND e.over_time &lt;sysdate
+		THEN  to_char(e.over_time, 'yyyy/mm/dd')
+		WHEN  m.bjsj IS NULL AND e.over_time &gt; sysdate
+		THEN  to_char(m.bjsj, 'yyyy/mm/dd')
+		WHEN  m.bjsj IS NOT NULL AND m.bjsj &lt;e.over_time
+		THEN to_char(m.bjsj, 'yyyy/mm/dd')
+		WHEN m.bjsj IS  NOT NULL AND m.bjsj &gt;e.over_time
+		THEN to_char(e.over_time, 'yyyy/mm/dd')
+		END bjsj1,
+		sysdate,
+		e.over_time,
+		'' wbjyy,
+		'' bz
+		FROM bdc_xm m
+		LEFT JOIN bdc_qlr r
+		ON r.proid = m.proid
+		LEFT JOIN bdc_zd_sqlx x
+		ON x.dm = m.sqlx
+		LEFT JOIN bdcdj_platform.pf_workflow_instance e
+		ON e.workflow_instance_id = m.wiid
+		WHERE 1 = 1  AND nvl(m.xmzt,0)='1'
+		<if test ="cxqssj!=null and cxqssj != ''">
+			<![CDATA[   AND to_char(m.cjsj,'yyyy-mm-dd') >= #{cxqssj} ]]>
+		</if>
+		<if test ="cxjssj !=null and cxjssj != ''">
+			<![CDATA[   AND to_char(m.cjsj,'yyyy-mm-dd') <= #{cxjssj} ]]>
+		</if>
+		<if test="sqlx!= null and sqlx != ''">
+			AND m.sqlx = #{sqlx}
+		</if>
+		UNION ALL
+		SELECT DISTINCT m.wiid,
+		'办理时限' || e.time_limit || '个工作日' blsx,
+		x.mc sqlx,
+		m.sqlx dm,
+		r.qlrmc,
+		r.qlrlxdh,
+		to_char(m.cjsj, 'yyyy/mm/dd') cjsj,
+		to_char(m.bjsj, 'yyyy/mm/dd') bjsj,
+		CASE WHEN m.bjsj IS NULL AND e.over_time &lt; sysdate
+		       THEN  to_char(e.over_time, 'yyyy/mm/dd')
+		      WHEN   m.bjsj IS NULL AND e.over_time &gt; sysdate
+		  	   THEN to_char(m.bjsj, 'yyyy/mm/dd')
+		      WHEN m.bjsj IS NOT NULL  AND m.bjsj &lt; e.over_time
+			   THEN to_char(m.bjsj, 'yyyy/mm/dd')
+			  WHEN m.bjsj IS NOT NULL  AND m.bjsj &gt; e.over_time
+			   THEN to_char(e.over_time, 'yyyy/mm/dd')
+		END bjsj1,
+		sysdate,
+		e.over_time,
+		'' wbjyy,
+		'' bz
+		FROM bdc_xm m
+		LEFT JOIN bdc_qlr r
+		ON r.proid = m.proid
+		LEFT JOIN bdc_zd_sqlx x
+		ON x.dm = m.sqlx
+		LEFT JOIN bdcdj_platform.pf_workflow_instance e
+		ON e.workflow_instance_id = m.wiid
+		WHERE 1 = 1  AND nvl(m.xmzt,0)!='1'
+		<![CDATA[ AND e.over_time>=sysdate]]>
+		 <if test ="cxqssj!=null and cxqssj != ''">
+		 <![CDATA[   AND to_char(m.cjsj,'yyyy-mm-dd') >= #{cxqssj} ]]>
+		</if>
+		<if test ="cxjssj !=null and cxjssj != ''">
+		 <![CDATA[   AND to_char(m.cjsj,'yyyy-mm-dd') <= #{cxjssj} ]]>
+		</if>
+		<if test="sqlx!= null and sqlx != ''">
+		   AND m.sqlx = #{sqlx}
+		</if>
+		) t
+	</select>
+</mapper>       

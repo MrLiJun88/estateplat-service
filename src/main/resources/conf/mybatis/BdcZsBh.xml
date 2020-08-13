@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//不动产单元-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZsbhMapper">
+
+    <select id="getBdcZsBhListByPage" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcZsbh">
+        SELECT t.zsbhid,t.nf,t.dwdm,t.zslx,t.zsbh,t.syqk,t.cjr,t.cjsj,t.lqr,t.lqrid,t.zsid,t.bfyy,t.syrid,t.syr,t.sysj,t.zfr,t.zfrid,t.zfsj,t.xh,t.xhksbh,t.xhjsbh,t.cjrid,t.lqdw,t.lqrq,t.ysczr,t.ysczrid,t.ysrq,t.ysyy,t.xhr,t.xhrid,t.xhjzr,t.qtqksm,t.bz,t.sccs,t.lqsj,t.yssj,t.xhsj,t.qtczr,t.qtczrid,t.qtczsj,t.xhyy
+        FROM bdc_zsbh t
+        <where>
+            <if test="hhSearch != null and hhSearch !=''">
+                AND (t.nf LIKE '%'||#{hhSearch}||'%' OR t.zslx LIKE '%'||#{hhSearch}||'%' OR t.zsbh LIKE
+                '%'||#{hhSearch}||'%' OR t.cjr LIKE '%'||#{hhSearch}||'%' OR t.lqr LIKE '%'||#{hhSearch}||'%')
+            </if>
+            <if test="qsbh != null and qsbh !='' and jsbh != null and jsbh !=''">
+                AND to_number(substr(zsbh,3,9)) between #{qsbh} and #{jsbh}
+            </if>
+            <if test="jsrq != null and jsrq !='' and qsrq != null and qsrq !=''">
+                AND t.cjsj between #{qsrq} and #{jsrq}
+            </if>
+            <if test="cjr != null and cjr !=''">
+                AND t.cjr LIKE '%'||#{cjr}||'%'
+            </if>
+            <if test="lqr != null and lqr !=''">
+                AND t.lqr LIKE '%'||#{lqr}||'%'
+            </if>
+            <if test="zslx != null and zslx !=''">
+                AND t.zslx LIKE '%'||#{zslx}||'%'
+            </if>
+            <if test="bz != null and bz !=''">
+                AND t.bz LIKE '%'||#{bz}||'%'
+            </if>
+            <if test="xzqdm != null and xzqdm !=''">
+                AND t.dwdm LIKE #{xzqdm}||'%'
+            </if>
+            <if test="dwdm != null and dwdm !=''">
+                AND t.dwdm = #{dwdm}
+            </if>
+            <if test="syqk != null and syqk !=''">
+                AND
+                <foreach collection="syqk" item="item" open="(" separator=" or " close=")">
+                    t.syqk = #{item}
+                </foreach>
+            </if>
+            <if test="cjrList != null and cjrList !=''">
+                AND
+                <foreach collection="cjrList" item="item" open="(" separator=" or " close=")">
+                    t.cjr = #{item}
+                </foreach>
+            </if>
+            <if test='isHlwDya != null and isHlwDya =="false"'>
+                AND t.bz is null
+            </if>
+            <if test="zsbhNotLikeList != null and zsbhNotLikeList !=''">
+                AND
+                <foreach collection="zsbhNotLikeList" item="item" open="(" separator=" and " close=")">
+                    t.zsbh  NOT LIKE #{item}
+                </foreach>
+            </if>
+            <if test="zsbhNotEqualList != null and zsbhNotEqualList !=''">
+                AND
+                <foreach collection="zsbhNotEqualList" item="item" open="(" separator=" and " close=")">
+                    t.zsbh != #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY decode(t.zslx, 'zs', 1, 'zms', 2)
+    </select>
+
+    <select id="getBdcZsBhLqqjListByPage" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT x.xzmc,t.lqr,t.lqqj,t.lqsj
+        FROM (
+        SELECT h.dwdm,MAX(zsbh)||'-'||MIN(zsbh) lqqj,h.lqr lqr,h.cjsj lqsj
+        FROM bdc_zsbh h
+        WHERE h.cjsj IN (
+        SELECT t.cjsj
+        FROM bdc_zsbh t
+        GROUP BY t.cjsj)
+        GROUP BY h.dwdm,h.lqr,h.cjsj) t
+        LEFT JOIN djsj_zd_xzdm x ON x.xzdm=t.dwdm
+        <where>
+            <if test="hhSearch != null and hhSearch !=''">
+                AND t.lqr LIKE '%'||#{hhSearch}||'%'
+            </if>
+            <if test="lqr != null and lqr !=''">
+                AND t.lqr = #{lqr}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getBdcZsBhListByBhfw" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcZsbh">
+        SELECT t.zsbhid,t.nf,t.dwdm,t.zslx,t.zsbh,t.syqk,t.cjr,t.cjsj,t.lqr,t.lqrid,t.zsid,t.bfyy,t.syrid,t.syr,t.sysj,t.zfr,t.zfrid,t.zfsj,t.xh,t.xhksbh,t.xhjsbh,t.cjrid,t.lqdw,t.lqrq,t.ysczr,t.ysczrid,t.ysrq,t.ysyy,t.xhr,t.xhrid,t.xhjzr,t.qtqksm,t.bz,t.sccs,t.lqsj,t.yssj,t.xhsj,t.qtczr,t.qtczrid,t.qtczsj,t.xhyy
+        FROM bdc_zsbh t
+        <where>
+            <if test="qsbh != null and qsbh !='' and jsbh != null and jsbh !=''">
+                AND to_number(substr(zsbh,3,9)) BETWEEN #{qsbh} AND #{jsbh}
+            </if>
+            <if test="zslx != null and zslx !=''">
+                AND t.zslx = #{zslx}
+            </if>
+            <if test="zsid != null and zsid !=''">
+                AND t.zsid = #{zsid}
+            </if>
+            <if test="zsbhid != null and zsbhid !=''">
+                AND t.zsbhid = #{zsbhid}
+            </if>
+            <if test="zsbh != null and zsbh !=''">
+                AND t.zsbh = #{zsbh}
+            </if>
+            <if test="syqk != null and syqk !=''">
+                AND t.syqk = #{syqk}
+            </if>
+            <if test="dwdm != null and dwdm !=''">
+                AND t.dwdm = #{dwdm}
+            </if>
+            <if test="bz != null and bz !=''">
+                AND t.bz = #{bz}
+            </if>
+        </where>
+    </select>
+    <select id="getZsbh" parameterType="String" resultType="String">
+      SELECT MIN(to_number(t.zsbh)) zsbh
+      FROM bdc_zsbh t
+      WHERE t.syqk='0' AND t.zslx = #{zslx}
+    </select>
+    <select id="getZsbhByDwdm" parameterType="java.util.Map" resultType="String">
+        SELECT MIN(to_number(t.zsbh)) zsbh
+        FROM bdc_zsbh t
+        WHERE t.syqk='0'
+        <if test="zslx!=null and zslx!=''">
+            AND t.zslx = #{zslx}
+        </if>
+        <if test="dwdm!=null and dwdm!=''">
+            AND t.dwdm = #{dwdm}
+        </if>
+        <if test="lqrid!='' and lqrid!=null">
+            AND t.lqrid=#{lqrid}
+        </if>
+        <if test="lqdw!='' and lqdw!=null">
+            AND t.lqdw=#{lqdw}
+        </if>
+    </select>
+    <select id="getMaxZsbh" parameterType="String" resultType="String">
+      SELECT max(to_number(t.zsbh)) zsbh
+      FROM bdc_zsbh t
+      WHERE t.syqk='0'  AND t.zslx = #{zslx}
+    </select>
+    <select id="getzfbl" parameterType="String" resultType="String">
+     SELECT round(bfsl/zl,4)zfbl
+     FROM (
+     SELECT count(*) bfsl
+     FROM bdc_zsbh t
+     WHERE t.syqk='2' AND t.zslx=#{zslx}),
+     (SELECT count(*) zl
+     FROM bdc_zsbh t
+     WHERE t.zslx=#{zslx})
+    </select>
+    <select id="getZsYjByZslx" parameterType="String" resultType="java.util.Map">
+     SELECT wsy,sy,bf,zs,zs-sy sysl,case when zs=0 then 0 else round(wsy/zs,4) end sybl,case when zs=0 then 0 else round(bf/zs,4) end bfbl FROM
+    (SELECT count(t.zsbh) wsy FROM bdc_zsbh t WHERE t.syqk='0'   AND t.zslx = #{zslx}),
+    (SELECT count(t.zsbh) sy FROM bdc_zsbh t WHERE (t.syqk='1' OR t.syqk='3')   AND t.zslx = #{zslx}),
+    (SELECT count(t.zsbh) bf FROM bdc_zsbh t WHERE t.syqk='2'   AND t.zslx = #{zslx}),
+    (SELECT count(t.zsbh) zs FROM bdc_zsbh t WHERE  t.zslx = #{zslx})
+    </select>
+    <select id="getZsbhByMap" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcZsbh">
+        SELECT t.zsbhid,t.nf,t.dwdm,t.zslx,t.zsbh,t.syqk,t.cjr,t.cjsj,t.lqr,t.lqrid,t.zsid,t.bfyy,t.syrid,t.syr,t.sysj,t.zfr,t.zfrid,t.zfsj,t.xh,t.xhksbh,t.xhjsbh,t.cjrid,t.lqdw,t.lqrq,t.ysczr,t.ysczrid,t.ysrq,t.ysyy,t.xhr,t.xhrid,t.xhjzr,t.qtqksm,t.bz,t.sccs,t.lqsj,t.yssj,t.xhsj,t.qtczr,t.qtczrid,t.qtczsj,t.xhyy
+        FROM bdc_zsbh t
+        LEFT JOIN bdc_xmzs_rel s ON t.zsid=s.zsid
+        LEFT JOIN bdc_xm m ON s.proid=m.proid
+        LEFT JOIN bdc_bdcdy y ON y.bdcdyid=m.bdcdyid
+        <where>
+            <if test="proid!=null and proid!=''">
+                AND m.proid=#{proid}
+            </if>
+            <if test="wiid!=null and wiid!=''">
+                AND m.wiid=#{wiid}
+            </if>
+            <if test="bdcdyh!=null and bdcdyh!=''">
+                AND y.bdcdyh=#{bdcdyh}
+            </if>
+            <if test="syqk!=null and syqk!=''">
+                AND t.syqk=#{syqk}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateZsSyData" parameterType="cn.gtmap.estateplat.model.server.core.BdcZsbh">
+        UPDATE
+        bdc_zsbh
+        SET
+        syqk=#{syqk,jdbcType=VARCHAR},
+        syr=#{syr,jdbcType=VARCHAR},
+        sysj=#{sysj,jdbcType=VARCHAR},
+        syrid=#{syrid,jdbcType=VARCHAR},
+        nf=#{nf,jdbcType=VARCHAR},
+        dwdm=#{dwdm,jdbcType=VARCHAR},
+        zslx=#{zslx,jdbcType=VARCHAR},
+        zsbh=#{zsbh,jdbcType=VARCHAR},
+        cjr=#{cjr,jdbcType=VARCHAR},
+        cjsj=#{cjsj,jdbcType=TIMESTAMP},
+        lqr=#{lqr,jdbcType=VARCHAR},
+        lqrid=#{lqrid,jdbcType=VARCHAR},
+        zsid=#{zsid,jdbcType=VARCHAR},
+        bfyy=#{bfyy,jdbcType=VARCHAR},
+        zfrid=#{zfrid,jdbcType=VARCHAR},
+        zfr=#{zfr,jdbcType=VARCHAR},
+        zfsj=#{zfsj,jdbcType=TIMESTAMP}
+        WHERE
+        zsbhid = #{zsbhid,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getBdcZsbhSyListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT
+        bh.zsbh,
+        zs.bdcqzh,
+        zs.bdcdyh,
+        zs.fzr,
+        zs.fzrq,
+        zs.zsid
+        FROM bdc_zsbh bh
+        LEFT JOIN bdc_zs zs ON bh.zsid=zs.zsid
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (
+                instr(zs.bdcdyh ,#{dcxc} )>0
+                OR instr(zs.bdcqzh ,#{dcxc} )>0
+                OR instr(bh.zsbh ,#{dcxc} )>0
+                OR instr(zs.fzr ,#{dcxc} )>0
+                )
+            </if>
+            <if test="bdcqzh != null and bdcqzh !=''">
+                AND zs.bdcqzh =#{bdcqzh}
+            </if>
+            <if test="zsid != null and zsid !=''">
+                AND zs.zsid =#{zsid}
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND zs.bdcdyh =#{bdcdyh}
+            </if>
+            <if test="dyzt != null and dyzt !=''">
+                AND zs.dyzt =#{dyzt}
+            </if>
+            <if test="fzr != null and fzr !=''">
+                AND zs.fzr =#{fzr}
+            </if>
+            <if test="zsbh != null and zsbh !=''">
+                AND bh.zsbh =#{zsbh}
+            </if>
+        </where>
+        ORDER BY bh.zsbh,zs.fzrq desc
+    </select>
+
+    <select id="getBdcZsBhXhListByPage" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT T.zsbhid,t.zslx,t.zsbh,t.xhrq,t.xhr,t.xhjzr
+        FROM bdc_zsbh t
+        WHERE t.syqk='5'
+            <if test="hhSearch != null and hhSearch !=''">
+                AND (t.xhr LIKE '%'||#{hhSearch}||'%' OR t.zsbh LIKE '%'||#{hhSearch}||'%')
+        </if>
+
+    </select>
+
+    <select id="getBdcZsBhLqListByPage" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT t.zslx,t.xh,t.qzbh,t.lqdw,t.lqr,t.lqrq
+        FROM (
+        SELECT h.zslx,h.xh, h.xhksbh||'-'||h.xhjsbh qzbh,h.lqdw,h.lqr lqr,min(h.lqrq) lqrq
+        FROM bdc_zsbh h
+        WHERE h.syqk ='6'
+        GROUP BY h.xh,h.lqdw,h.lqr,h.zslx,h.xhksbh,h.xhjsbh) t
+        <where>
+        <if test="hhSearch != null and hhSearch !=''">
+            AND (t.lqr LIKE '%'||#{hhSearch}||'%' OR t.lqdw LIKE '%'||#{hhSearch}||'%')
+        </if>
+        </where>
+    </select>
+
+    <select id="getBdcZsBhListByQzBh" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcZsbh">
+        SELECT t.zsbhid,t.nf,t.dwdm,t.zslx,t.zsbh,t.syqk,t.cjr,t.cjsj,t.lqr,t.lqrid,t.zsid,t.bfyy,t.syrid,t.syr,t.sysj,t.zfr,t.zfrid,t.zfsj,t.xh,t.xhksbh,t.xhjsbh,t.cjrid,t.lqdw,t.lqrq,t.ysczr,t.ysczrid,t.ysrq,t.ysyy,t.xhr,t.xhrid,t.xhjzr,t.qtqksm,t.bz,t.sccs,t.lqsj,t.yssj,t.xhsj,t.qtczr,t.qtczrid,t.qtczsj,t.xhyy
+        FROM bdc_zsbh t
+        <where>
+            <if test="qsxh != null and qsxh !='' and jsxh != null and jsxh !=''">
+                AND t.xh BETWEEN #{qsxh} AND #{jsxh}
+            </if>
+            <if test="zslx != null and zslx !=''">
+                AND t.zslx = #{zslx}
+            </if>
+            <if test="xh != null and xh !=''">
+                AND t.xh = #{xh}
+            </if>
+            <if test="zsid != null and zsid !=''">
+                AND t.zsid = #{zsid}
+            </if>
+            <if test="zsbhid != null and zsbhid !=''">
+                AND t.zsbhid = #{zsbhid}
+            </if>
+            <if test="zsbh != null and zsbh !=''">
+                AND t.zsbh = #{zsbh}
+            </if>
+            <if test="syqk != null and syqk !=''">
+                AND t.syqk = #{syqk}
+            </if>
+            <if test="dwdm != null and dwdm !=''">
+                AND t.dwdm = #{dwdm}
+            </if>
+            <if test="nosyqk != null and nosyqk !=''">
+                AND t.syqk != #{nosyqk}
+            </if>
+        </where>
+    </select>
+
+    <select id="getCountBdcZsBhByXh" parameterType="int" resultType="int">
+        SELECT COUNT(zsbhid)
+        FROM bdc_zsbh
+        WHERE xh=#{xh}
+    </select>
+
+    <select id="batchSelectBdcZsbh" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcZsbh">
+        SELECT t.zsbhid,t.nf,t.dwdm,t.zslx,t.zsbh,t.syqk,t.cjr,t.cjsj,t.lqr,t.lqrid,t.zsid,t.bfyy,t.syrid,t.syr,t.sysj,t.zfr,t.zfrid,t.zfsj,t.xh,t.xhksbh,t.xhjsbh,t.cjrid,t.lqdw,t.lqrq,t.ysczr,t.ysczrid,t.ysrq,t.ysyy,t.xhr,t.xhrid,t.xhjzr,t.qtqksm,t.bz,t.sccs,t.lqsj,t.yssj,t.xhsj,t.qtczr,t.qtczrid,t.qtczsj,t.xhyy
+        FROM bdc_zsbh t WHERE t.zsid IN
+        <foreach collection="bdcZsList" index="index" item="item" open="(" separator="," close=")">
+            #{item.zsid}
+        </foreach>
+    </select>
+
+    <update id="batchUpdateBdcZsbh" parameterType="java.util.ArrayList">
+        <foreach collection="bdcZsbhList" item="item" index="index" open="begin" close=";end;" separator=";">
+            UPDATE bdc_zsbh t
+            <set>
+                t.lqr = #{item.lqr,jdbcType=VARCHAR},
+                t.lqrid = #{item.lqrid,jdbcType=VARCHAR},
+                t.zsid = #{item.zsid,jdbcType=VARCHAR},
+                t.syqk = #{item.syqk,jdbcType=VARCHAR}
+            </set>
+            WHERE
+            t.zsbhid = #{item.zsbhid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+</mapper>

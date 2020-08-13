@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.DjSjMapper">
+     <!--临时视图 -->
+
+    <select id="getBdcQszdZdmj" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcQszdZdmj">
+          SELECT djh, nydmj, jsydmj, wlydmj, cdmj, ldmj, gdmj, qtmj
+          FROM djsj_qszd_zdmj
+          WHERE  djh = #{djh}
+    </select>
+    <select id="getDjsjQszdDcb" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjQszdDcb">
+      SELECT t.*
+      FROM djsj_qszd_dcb t
+      WHERE t.djh=#{djh}
+    </select>
+    <select id="getDjsjQszdDcbByQszdDjdcbIndex" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjQszdDcb">
+      SELECT t.*
+      FROM djsj_qszd_dcb t
+      WHERE t.qszd_djdcb_index=#{qszdDjdcbIndex}
+    </select>
+    <select id="getDjsjZdxxByDjh" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdxx">
+    SELECT t.zd_djdcb_index,t.djh,t.tdzl,t.fzmj,t.tdyt,t.tdyt2,t.tdyt3,t.tdjb,t.qdjg,t.qsxz,t.syqlx,t.jzrjl,t.jzmd,t.jzxg,t.qsrq,t.qsrq2,t.qsrq3,t.zzrq,t.zzrq2,t.zzrq3,t.scmj,t.jzzmj,t.pzmj,t.zdzmj,t.gmjjhyfldm,t.sztfh,t.gysyqqk,t.qlsdfs,t.qlrmc,t.qlrzjlx,t.qlrzjh,t.frdbxm,t.frdbzjlx,t.frdbzjh,t.frdbdhhm,t.dlrxm,t.dlrdhhm,t.dwxz,t.txdz,t.issyzd,t.zdsz,t.bz,t.blc,t.pzyt,t.bdcdyh,t.mjdw,t.ydjh,t.zdszd,t.zdszb,t.zdszn,t.zdszx,t.qslx,t.tdsyzmc
+    FROM djsj_zd_dcb t
+    WHERE  t.djh = #{djh}
+    </select>
+
+    <select id="getDjsjZdxxByDjhxx" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdxx">
+     SELECT DISTINCT zd_djdcb_index, djh, tdzl, fzmj, tdyt, tdjb, qdjg, qsxz, syqlx, jzrjl, jzmd, jzxg,
+     qsrq, zzrq, scmj, jzzmj, pzmj, zdzmj, gmjjhyfldm, to_char(sztfh) sztfh, dwxz, txdz, zdsz, bz, blc, pzyt, bdcdyh, mjdw, ydjh
+     FROM djsj_zd_dcb t
+     WHERE  t.djh = #{djh}
+    </select>
+
+
+    <select id="getDjsjZdxx" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.DjsjZdxx">
+    SELECT t.zd_djdcb_index,t.djh,t.tdzl,t.fzmj,t.tdyt,t.tdyt2,t.tdyt3,t.tdjb,t.qdjg,t.qsxz,t.syqlx,t.jzrjl,t.jzmd,t.jzxg,t.qsrq,t.qsrq2,t.qsrq3,t.zzrq,t.zzrq2,t.zzrq3,t.scmj,t.jzzmj,t.pzmj,t.zdzmj,t.gmjjhyfldm,t.sztfh,t.gysyqqk,t.qlsdfs,t.qlrmc,t.qlrzjlx,t.qlrzjh,t.frdbxm,t.frdbzjlx,t.frdbzjh,t.frdbdhhm,t.dlrxm,t.dlrdhhm,t.dwxz,t.txdz,t.issyzd,t.zdsz,t.bz,t.blc,t.pzyt,t.bdcdyh,t.mjdw,t.ydjh,t.zdszd,t.zdszb,t.zdszn,t.zdszx,t.qslx,t.tdsyzmc
+    FROM djsj_zd_dcb t
+    LEFT JOIN bdc_bdcdy a ON substr(a.bdcdyh,0,19)=djh
+    LEFT JOIN bdc_xm b ON b.bdcdyid=a.bdcdyid
+    WHERE b.proid=#{proid}
+    </select>
+
+    <select id="getFbfmcByDjh" parameterType="String" resultType="String">
+        SELECT DISTINCT t.fbfmc
+        FROM djsj_cbzd_fbf t
+        LEFT JOIN djsj_nyd_dcb t1 ON t.zddcb_index=t1.NYD_DJDCB_INDEX
+        WHERE t1.djh=#{djh}
+    </select>
+    <select id="getDjsjCbzdDcbByDjid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjCbzdDcb">
+           SELECT DISTINCT t.*
+           FROM djsj_cbzd_dcb t
+           WHERE t.cbzd_dcb_index=#{cbzdDcbIndex}
+    </select>
+    <select id="getDjsjCbzdDcbByDjh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjCbzdDcb">
+        SELECT distinct t.*
+        FROM djsj_cbzd_dcb t
+        WHERE t.djh=#{djh}
+    </select>
+
+    <select id="getDjsjNydDcbByDjh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjNydDcb">
+         SELECT t.*
+         FROM djsj_nyd_dcb t
+         WHERE t.djh=#{djh}
+    </select>
+    <!--<select id="getDjsjFwxxByProid" parameterType="String" resultType="DjsjFwxx">-->
+         <!--select t.* FROM djsj_fwxx t-->
+         <!--LEFT JOIN bdc_bdcdy a on a.bdcdyh=t.bdcdyh-->
+         <!--LEFT JOIN bdc_xm b on b.bdcdyid=a.bdcdyid-->
+         <!--where b.proid=#{proid}-->
+    <!--</select>-->
+    <select id="getFwlxByProid" parameterType="String" resultType="String">
+        SELECT distinct c.mc FROM djsj_fwhs t
+        LEFT JOIN  bdc_bdcdy a ON a.bdcdyh= t.BDCDYH
+        LEFT JOIN bdc_xm b ON b.bdcdyid=a.bdcdyid
+        LEFT JOIN djsj_zd_fwlx c ON c.dm=t.FWLX
+        WHERE b.proid=#{proid}
+    </select>
+    <select id="getBdcdyfwlxByBdcdyh" parameterType="String" resultType="String">
+        SELECT distinct t.bdcdyfwlx FROM djsj_bdcdy_tdfw t
+        WHERE t.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="getDjsjCbzdTtcyByProid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjCbzdJtcy">
+      SELECT distinct t.xm,t.gx,t.sfzhm,t.bz FROM djsj_nyd_jtcy t
+      LEFT JOIN djsj_cbzd_dcb c ON c.jt_index=t.jt_index
+      LEFT JOIN bdc_bdcdy b ON substr(b.bdcdyh,0,19)=c.djh
+      LEFT JOIN bdc_xm x ON x.bdcdyid=b.bdcdyid
+      WHERE x.proid=#{proid}
+
+    </select>
+
+    <select id="getDjsjCbzdCbfByDcbid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjCbzdCbf">
+        SELECT  t.*
+        FROM djsj_cbzd_cbf t
+        WHERE t.zddcb_index=#{dcbId}
+    </select>
+    <select id="getDjsjCbzdFbfByDcbid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.DjsjCbzdFbf">
+        SELECT  t.*
+        FROM djsj_cbzd_fbf t
+        WHERE t.zddcb_index=#{dcbId}
+    </select>
+</mapper>

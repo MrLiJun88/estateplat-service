@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.WfRecvImgMapper">
+
+    <select id="getImageRoute" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select * from WF_RECVIMG t
+        where t.recvid in (select b.recvid from WF_RECV b
+        where b.oinsid = (select a.oinsid from gd_fw_ql a where a.qlid=#{syqid})
+        )
+    </select>
+    <select id="getFcywid" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select proid,oinsid from gd_fw_ql
+        where qlid=#{syqid}
+    </select>
+
+    <select id="getTdImageRoute" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select t.* from t_fc_node t
+        left join t_fc_node x on x.id = t.parent_id
+        left join gd_tdsyq d on d.projectid=x.node_name
+        where d.projectid=#{projectid}
+    </select>
+</mapper>

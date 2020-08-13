@@ -1,0 +1,378 @@
+*,
+ul,
+li,
+h2,
+div,
+p,
+a,
+span,
+i {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: "Microsoft YaHei", Helvetica, Arial, sans-serif !important;
+    font-size: 14px;
+    background: #FFFFFF;
+}
+
+.sjpp_content,
+.row1 {
+    height: 100%;
+}
+
+.left,
+.right {
+    height: 100%;
+}
+
+.left {
+    border: 1px solid #CCCCCC;
+    /*position: relative;*/
+}
+
+.left h2 {
+    height: 53px;
+    line-height: 53px !important;
+    font-size: 16px;
+    padding-left: 15px;
+    border-bottom: 1px solid #CCCCCC;
+    font-weight: bold !important;
+}
+
+.right {
+    margin-left: 20px !important;
+}
+
+.left ul li {
+    height: 52px;
+    line-height: 52px;
+    background: #eaedf1;
+    color: #1d87d1;
+    font-size: 10px;
+    padding-left: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.left ul li img {
+    width: 16px;
+    height: 14px;
+    vertical-align: inherit;
+}
+
+.left ul li i {
+    display: none;
+}
+
+/*.left .showMore {
+	display: block;
+	width: 14px;
+	height: 38px;
+	line-height: 38px;
+	border: 1px solid #CCCCCC;
+	position: absolute;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	right: -16px;
+}*/
+.right {
+    position: relative;
+}
+
+.right .showMore {
+    display: block;
+    width: 14px;
+    height: 38px;
+    line-height: 38px;
+    border: 1px solid #CCCCCC;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: -20px;
+}
+
+.right .tabbable {
+    height: 100%;
+    position: relative;
+}
+
+.right .nav-tabs {
+    width: 100%;
+    border-bottom: none;
+    height: 40px;
+}
+
+.right .nav {
+    margin-bottom: 0;
+}
+
+.right .nav-tabs > li > a {
+    padding: 0 15px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    color: #000000;
+}
+
+.right .nav-tabs > .active > a {
+    color: #1d87d1;
+    border: none;
+    border-bottom: 2px solid #1d87d1;
+}
+
+.right .tab-content {
+    width: 100%;
+    height: auto;
+    border: 10px solid #eaedf1;
+    padding: 10px 10px 0px 10px;
+    position: absolute;
+    top: 42px;
+    left: 0px;
+    bottom: 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.tab-content .top {
+    height: 45px;
+    font-size: 14px;
+    border-bottom: 1px dashed #CCCCCC;
+}
+
+.tab-content .top > div {
+    text-align: right;
+    margin-left: 0;
+}
+
+.tab-content .top input[type="text"] {
+    padding: 0px 8px;
+}
+
+.tab-content .top input[type="text"],
+.tab-content .top select {
+    width: 62%;
+    height: 34px !important;
+    line-height: 34px;
+    box-sizing: border-box;
+    vertical-align: baseline;
+}
+
+.tab-content .top option {
+    font-size: 14px;
+}
+
+.span3 {
+    margin-left: 0px !important;
+    min-width: 220px;
+    width: auto;
+}
+
+.span3 input {
+    width: 150px !important;
+}
+
+.span4 {
+    margin-left: 0px !important;
+    min-width: 350px;
+    width: auto;
+}
+
+.span4 input {
+    width: 200px !important;
+}
+
+.tab-content .top .help-inline {
+    line-height: 100%;
+    padding-left: 0;
+    vertical-align: middle;
+}
+
+#tab1 .top .query_btn {
+    text-align: left;
+    padding-left: 60px;
+    margin-top: 0px;
+}
+
+.tab-content .top .query_btn .btn {
+    padding: 0 18px;
+    height: 34px;
+    line-height: 34px;
+    margin-right: 10px;
+    box-sizing: border-box;
+    border: none;
+}
+
+.btn-primary {
+    background: #1d87d1;
+    border: none;
+}
+
+.tab-content .bottom {
+    position: absolute;
+    top: 65px;
+    left: 10px;
+    right: 10px;
+    bottom: 30px;
+    border: 1px solid #eaedf1;
+}
+
+.tab-content .bottom .more_btn {
+    background: #eaedf1;
+    text-align: right;
+    height: 50px;
+    line-height: 50px;
+    padding-right: 16px;
+}
+
+.tab-content .bottom .more_btn i {
+    width: 25px;
+    height: 25px;
+    margin-top: 0;
+    background-position: -264px 1px;
+}
+
+.table-bordered {
+    table-layout: fixed;
+}
+
+.tab-content .bottom th {
+    color: #666666;
+    font-weight: normal;
+}
+
+.tab-content .bottom td .btn {
+    padding: 0 5px;
+    line-height: 22px;
+    font-size: 12px;
+    background: #1d87d1;
+}
+
+.tab-content .table-bordered {
+    border-radius: 0px;
+}
+
+.SelectBG {
+    background-color: #5cb85c;
+}
+
+.dy {
+    color: #3a5d99;
+}
+
+.yyg {
+    color: #e5007f;
+}
+
+.zc {
+    color: #10a54a;
+}
+
+.sd {
+    color: #e5379e;
+}
+
+.zdyy {
+    color: #ef8200;
+}
+
+.cf {
+    color: #f54743;
+}
+
+#tab2 .top {
+    height: 90px;
+}
+
+#tab2 .query_btn {
+    text-align: center;
+    margin-top: 10px !important;
+}
+
+#tab2 .bottom {
+    top: 110px;
+}
+
+.page {
+    width: 100%;
+    border-top: 1px solid #eaedf1;;
+    border-bottom: 1px solid #eaedf1;
+    padding: 10px 0;
+    font-size: 12px;
+    position: absolute;
+    bottom: 30px;
+    left: 0px;
+}
+
+.page input,
+.page select,
+.page .btn {
+    border-radius: 2px;
+    height: 26px;
+    line-height: 26px;
+}
+
+.page input {
+    margin-bottom: 0;
+    width: 40px;
+    margin: 0 12px;
+    text-align: center;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.page a {
+    display: inline-block;
+    padding: 0 17px;
+}
+
+.page a i {
+    margin-top: 0;
+}
+
+.page select {
+    width: 84px;
+    margin-bottom: 0;
+    padding: 0;
+    padding-left: 6px;
+    box-sizing: border-box;
+}
+
+.page .btn {
+    background: transparent;
+    padding: 0 12px;
+    margin-left: 10px;
+}
+
+.picTable {
+    border: 1px;
+    margin: 0px 0px 10px 0px;
+}
+
+.UItable table > tbody > tr > td {
+    border: 1px solid #ddd;
+    padding: 5px 10px 5px 10px;
+}
+
+.modal.fade {
+    width: 400px;
+    margin-left: -100px
+}
+
+select {
+    width: auto;
+    padding: 0 15%;
+    margin: 0;
+}
+
+option {
+    text-align: center;
+}

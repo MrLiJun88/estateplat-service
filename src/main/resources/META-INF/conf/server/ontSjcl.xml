@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--配置外网收件项目的收件材料名称字典-->
+<sjcls>
+    <sjcl dm="1">
+        <mc>不动产登记申请书</mc>
+    </sjcl>
+    <sjcl dm="2">
+        <mc>不动产抵押权预告登记约定书</mc>
+    </sjcl>
+    <sjcl dm="3">
+        <mc>不动产抵押权预告约定书</mc>
+    </sjcl>
+	<sjcl dm="4">
+        <mc>不动产预告登记约定书</mc>
+    </sjcl>
+	<sjcl dm="5">
+        <mc>承诺</mc>
+    </sjcl>
+	<sjcl dm="6">
+        <mc>当事人关于预告登记的约定</mc>
+    </sjcl>
+	<sjcl dm="7">
+        <mc>房产分户图、宗地图</mc>
+    </sjcl>
+	<sjcl dm="8">
+        <mc>房产交易告知单</mc>
+    </sjcl>
+	<sjcl dm="9">
+        <mc>房地产抵押合同（按揭）</mc>
+    </sjcl>
+	<sjcl dm="10">
+        <mc>房屋交易与产权管理告知单（抵押）</mc>
+    </sjcl>
+	<sjcl dm="11">
+        <mc>房屋交易与产权管理告知单（预告）</mc>
+    </sjcl>
+	<sjcl dm="12">
+        <mc>个人房产抵押借款合同</mc>
+    </sjcl>
+	<sjcl dm="13">
+        <mc>个人住房公积金反担保合同</mc>
+    </sjcl>
+	<sjcl dm="14">
+        <mc>购房发票</mc>
+    </sjcl>
+	<sjcl dm="15">
+        <mc>婚姻状况说明书</mc>
+    </sjcl>
+	<sjcl dm="16">
+        <mc>交易告知单</mc>
+    </sjcl>
+	<sjcl dm="17">
+        <mc>结婚证</mc>
+    </sjcl>
+	<sjcl dm="18">
+        <mc>契税发票</mc>
+    </sjcl>
+	<sjcl dm="19">
+        <mc>商品房买卖合同</mc>
+    </sjcl>
+	<sjcl dm="20">
+        <mc>申请人身份证明</mc>
+    </sjcl>
+	<sjcl dm="21">
+        <mc>申请人身份资质证明</mc>
+    </sjcl>
+	<sjcl dm="22">
+        <mc>授权委托书</mc>
+    </sjcl>
+	<sjcl dm="23">
+        <mc>土地分摊确认单或分割证</mc>
+    </sjcl>
+	<sjcl dm="24">
+        <mc>询问表及风险告知单</mc>
+    </sjcl>
+	<sjcl dm="25">
+        <mc>已登记备案的商品房预售合同</mc>
+    </sjcl>
+	<sjcl dm="26">
+        <mc>住房公积金政策性借款合同</mc>
+    </sjcl>
+</sjcls>
+

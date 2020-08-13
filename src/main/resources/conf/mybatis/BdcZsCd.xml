@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZsCdMapper">
+    <select id="getBdcZsCdByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.* FROM BDC_ZSCD t
+        <where>
+            <if test="cqzh != null and cqzh !=''">
+                <if test="exactQuery == 'false'">
+                    AND instr(t.cqzh, #{cqzh} )>0
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND t.cqzh =#{cqzh}
+                </if>
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                <if test="exactQuery == 'false'">
+                    AND instr(t.bdcdyh, #{bdcdyh} )>0
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND t.bdcdyh =#{bdcdyh}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcZscdList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcZsCd">
+        SELECT t.* FROM BDC_ZSCD t
+        <where>
+            <if test="cdxmid != null and cdxmid !=''">
+                 AND t.cdxmid =#{cdxmid}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+    <!--不同地区版本的业务实现 -->
+
+    <!-- 项目整体流程事件服务 -->
+    <bean id="projectService" class="cn.gtmap.estateplat.server.service.impl.ProjectServiceImpl"/>
+    <!-- 默认新建项目服务 -->
+    <bean id="creatProjectSfcdjfdjService"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectSfcdjfdjServiceImpl"/>
+    <!-- 默认新建项目服务 -->
+    <bean id="creatProjectDefaultService"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectDefaultServiceImpl"/>
+    <!-- 首次登记新建项目服务 -->
+    <bean id="creatProjectScdjService" class="cn.gtmap.estateplat.server.service.impl.CreatProjectScdjServiceImpl"/>
+    <!-- 转移登记新建项目服务 -->
+    <bean id="creatProjectZydjService" class="cn.gtmap.estateplat.server.service.impl.CreatProjectZydjServiceImpl"/>
+    <!-- 抵押登记新建项目服务 -->
+    <bean id="creatProjectDydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatProjectDydjServiceImpl"/>
+    <!-- 抵押状态下做转移登记新建项目服务 -->
+    <bean id="creatProjectDyZydjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectDyZydjServiceImpl"/>
+    <!-- 多个不动产单元抵押登记新建项目服务 -->
+    <bean id="creatProjectMulDydjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectMulDydjServiceImpl"/>
+    <!-- 匹配多个不动产单元换证登记新建项目服务 -->
+    <bean id="creatProjectMulHzdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectMulHzdjServiceImpl"/>
+    <!-- 变更登记新建项目服务 -->
+    <bean id="creatProjectBgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatProjectBgdjServiceImpl"/>
+    <!-- 分割、合并变更登记新建项目服务 -->
+    <bean id="creatComplexBgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatComplexBgdjServiceImpl"/>
+    <!-- 查封登记新建项目服务 -->
+    <bean id="creatProjectCfdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatProjectCfdjServiceImpl"/>
+    <!-- 注销登记新建项目服务 -->
+    <bean id="creatProjectZxdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatProjectZxdjServiceImpl"/>
+    <!-- 预告登记新建项目服务 -->
+    <bean id="creatProjectYgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatProjectYgdjServiceImpl"/>
+    <!-- 抵押权（地役权）变更登记新建项目服务 -->
+    <bean id="creatProjectDyBgdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectDyBgdjServiceImpl"/>
+    <!--多个不动产单元抵押权（地役权）变更登记新建项目服务 -->
+    <bean id="creatProjectMulBdcdyDyBgdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectMulBdcdyDyBgdjServiceImpl"/>
+    <!-- 异议登记新建项目服务 -->
+    <bean id="creatProjectYydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatProjectYydjServiceImpl"/>
+    <!--更正登记新建项目服务 -->
+    <bean id="creatProjectGzdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatProjectGzdjServiceImpl"/>
+    <!--首次登记(原土地证有抵押)新建项目服务 -->
+    <bean id="createComplexScYtdDyServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreateComplexScYtdDyServiceImpl"/>
+
+    <!--批量抵押和发证服务 -->
+    <bean id="creatComplexProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexProjectServiceImpl"/>
+    <!--批量抵押和发证服务 -->
+    <bean id="creatComplexProjectNewServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexProjectNewServiceImpl"/>
+
+    <!--商品房首次登记线程处理服务 -->
+    <bean id="creatComplexProjectThreadServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexProjectThreadServiceImpl"/>
+
+    <!--批量抵押多抵多线程处理服务 -->
+    <bean id="creatProjectDydjThreadServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectDydjThreadServiceImpl"/>
+
+    <!--预告（抵押预告）合并办理-->
+    <bean id="creatComplexYgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatComplexYgdjServiceImpl"/>
+    <!--注销他项登记  -->
+    <bean id="creatProjectZxTxdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectZxTxdjServiceImpl"/>
+    <!--遗失补发登记新建项目服务 -->
+    <bean id="creatProjectYsbzServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatProjectYsbzServiceImpl"/>
+    <!--遗失补发登记新建项目服务 -->
+    <bean id="creatProjectSfZydjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectSfZydjServiceImpl"/>
+    <!-- 海门转移登记新建项目服务 -->
+    <bean id="creatProjectHmZydjService" class="cn.gtmap.estateplat.server.service.impl.CreatProjectHmZydjServiceImpl"/>
+    <!-- 海门转移登记新建项目服务 -->
+    <bean id="creatProjectMulTddjService"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectMulTddjServiceImpl"/>
+    <!-- 商品房国有业主项目服务 -->
+    <bean id="creatProjectSpfGyyzServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectSpfGyyzServiceImpl"/>
+    <!-- 海域登记新建项目服务 -->
+    <bean id="creatProjectHydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.CreatProjectHydjServiceImpl"/>
+    <!--jyl 盐城纯土地不匹配不动产单元，不传入原权利，注销他项 -->
+    <bean id="creatProjectZxTxdjNoQlServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectZxTxdjNoQlServiceImpl"/>
+    <!--ZX 盐城纯土地不匹配不动产单元，不传入原权利，注销土地所有权 -->
+    <bean id="creatProjectZxTdsyqDjNoQlServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectZxTdsyqDjNoQlServiceImpl"/>
+    <!--jyl 盐城纯土地不匹配不动产单元，不传入原权利，查封 -->
+    <bean id="creatProjectCfdjNoQlServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectCfdjNoQlServiceImpl"/>
+    <!-- 批量查封登记新建项目服务 -->
+    <bean id="creatComplexCfProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexCfProjectServiceImpl"/>
+    <!-- zdd 房屋所有权抵押权预转现创建服务  适用于单个预告登记的预转现  也适用于多个预告登记的预转现 -->
+    <bean id="creatComplexYzxdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexYzxdjServiceImpl"/>
+    <!-- zdd 批量选择证书（多个不动产单元） 进行批量抵押 -->
+    <bean id="creatComplexDydjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexDydjProjectServiceImpl"/>
+    <!-- lst 批量选择证书（多个不动产单元） 进行批量抵押变更 -->
+    <bean id="creatComplexDybgdjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexDybgdjProjectServiceImpl"/>
+    <!-- lj 转移并且抵押合并流程 -->
+    <bean id="creatComplexZyDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexZyDyProjectServiceImpl"/>
+    <!-- lj 带抵押转移合并流程 -->
+    <bean id="CreatComplexZyWithDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexZyWithDyProjectServiceImpl"/>
+    <!--lx 带抵押换证合并流程-->
+    <bean id="CreatComplexHzWithDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexHzWithDyProjectServiceImpl"/>
+    <!--zq 多不动产单元批量转移 -->
+    <bean id="creatComplexZyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexZyProjectServiceImpl"/>
+    <!--换证抵押新建项目服务-->
+    <bean id="creatComplexHzDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexHzDyProjectServiceImpl"/>
+    <!--批量预告抵押-->
+    <bean id="creatComplexYgdjPlProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexYgdjPlProjectServiceImpl"/>
+    <!--多不动产单元批量换证-->
+    <bean id="creatComplexYsbzProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexYsbzProjectServiceImpl"/>
+    <!-- 房屋分割合并变更合并创建逻辑 -->
+    <bean id="creatProjectFwFgHbBgServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectFwFgHbBgServiceImpl"/>
+    <!-- 房屋分割合并转移合并创建逻辑 -->
+    <bean id="creatProjectFwFgHbZyServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectFwFgHbZyServiceImpl"/>
+    <!-- 土地分割合并变更合并创建逻辑 -->
+    <bean id="creatProjectTdFgHbBgServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectTdFgHbBgServiceImpl"/>
+    <!-- 土地分割合并转移合并创建逻辑 -->
+    <bean id="creatProjectTdFgHbZyServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectTdFgHbZyServiceImpl"/>
+    <!--不动产土地逐户解押登记-->
+    <bean id="createProjectZhjydjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreateProjectZhjydjServiceImpl"/>
+    <!--不动产土地逐户注销登记-->
+    <bean id="createProjectZhzxdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreateProjectZhzxdjServiceImpl"/>
+    <!--组合贷款抵押转移登记-->
+    <bean id="creatComplexDyZydjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexDyZydjProjectServiceImpl"/>
+    <!--批量抵押注销-->
+    <bean id="creatComplexZxTxProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexZxTxProjectServiceImpl"/>
+    <!--房屋（构筑物）首次，抵押权首次登记-->
+    <bean id="CreatComplexScWithDyServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexScWithDyServiceImpl"/>
+    <!--变更登记和转移登记-->
+    <bean id="creatProjectBgZyHbServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectBgZyHbServiceImpl"/>
+    <!--转移登记和其他转移登记-->
+    <bean id="CreatProjectZyAndQtzyHbServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectZyAndQtzyHbServiceImpl"/>
+    <!--房屋变更登记（所有权、抵押权）-->
+    <bean id="CreatComplexBgWithDyServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexBgWithDyServiceImpl"/>
+    <!--不动产单元冻结登记 -->
+    <bean id="creatProjectBdcdyDjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectBdcdyDjServiceImpl"/>
+    <!--预购商品房预告变更登记 -->
+    <bean id="creatProjectYgBgdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectYgBgdjServiceImpl"/>
+    <!--商品房分摊土地核减登记(逐户解押+逐户注销) -->
+    <bean id="creatComplexSpfZhjyZhzxProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexSpfZhjyZhzxProjectServiceImpl"/>
+    <!--在建工程抵押权转现抵押-->
+    <bean id="creatComplexScdjAndPldyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexScdjAndPldyProjectServiceImpl"/>
+    <!--土地分割、合并换证登记-->
+    <bean id="creatComplexFgHbHzServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexFgHbHzServiceImpl"/>
+    <!-- 任意组合流程 -->
+    <bean id="creatProjectArbitraryServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectArbitraryServiceImpl"/>
+    <!-- 单个首次+在建工程抵押转现 -->
+    <bean id="creatComplexScDyProjectService"
+          class="cn.gtmap.estateplat.server.service.impl.CreatComplexScDyProjectServiceImpl"/>
+    <!-- 商品房首次+在建工程抵押转现 -->
+    <bean id="creatMulComplexScDyProjectService"
+          class="cn.gtmap.estateplat.server.service.impl.CreatMulComplexScDyProjectServiceImpl"/>
+    <!--混合查封或者抵押流程-->
+    <bean id="creatProjectHhLcdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectHhLcdjServiceImpl"/>
+
+    <!--在建工程抵押注销-->
+    <bean id="createDyZxForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreateDyZxForZjgcServiceImpl"/>
+    <!--在建工程抵押变更-->
+    <bean id="createDyBgForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreateDyBgForZjgcServiceImpl"/>
+    <!--在建工程抵押转移-->
+    <bean id="createDyZyForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatDyZyForZjgcServiceImpl"/>
+    <!--国有水产养殖权变更登记-->
+    <bean id="creatProjectSyTtBgdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.CreatProjectSyTtBgdjServiceImpl"/>
+    <!-- 转发项目服务 -->
+    <bean id="turnProjectDefaultService" class="cn.gtmap.estateplat.server.service.impl.TurnProjectDefaultServiceImpl"/>
+    <!-- 转发项目服务 -->
+    <bean id="turnProjectDydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnProjectDydjServiceImpl"/>
+    <!-- 转发变更项目服务 -->
+    <bean id="turnProjectBgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnProjectBgdjServiceImpl"/>
+    <!-- 转发抵押变更项目服务 -->
+    <bean id="turnProjectDyBgdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectDyBgdjServiceImpl"/>
+    <!-- 转发转移项目服务 -->
+    <bean id="turnProjectZydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnProjectZydjServiceImpl"/>
+    <!-- 转发变更和抵押变更组合登记项目服务 -->
+    <bean id="turnProjectBgdjWithDybgServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnProjectBgdjWithDybgServiceImpl"/>
+    <!-- 抵押状态下做转移转移项目服务 -->
+    <bean id="turnProjectDyZydjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectDyZydjServiceImpl"/>
+    <!-- 转发查封项目服务 -->
+    <bean id="turnProjectCfdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnProjectCfdjServiceImpl"/>
+    <!-- 转发注销项目服务 -->
+    <bean id="turnProjectZxdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnProjectZxdjServiceImpl"/>
+    <!-- 转发预告项目服务 -->
+    <bean id="turnProjectYgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnProjectYgdjServiceImpl"/>
+    <!-- 转发异议项目服务 -->
+    <bean id="turnProjectYydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnProjectYydjServiceImpl"/>
+    <!-- 转发更正项目服务 -->
+    <bean id="turnProjectGzdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnProjectGzdjServiceImpl"/>
+    <!-- 转发复杂项目服务 -->
+    <bean id="turnProjectSpfGyyzServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectSpfGyyzServiceImpl"/>
+    <!-- 批量预告抵押 -->
+    <bean id="turnComplexYgdjPlProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexYgdjPlProjectServiceImpl"/>
+
+    <!-- lq 一个流程  多个不动产单元   权利人与义务人相同  产生多本证书的业务逻辑 -->
+    <bean id="turnComplexZydjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexZydjProjectServiceImpl"/>
+    <!-- lq 一个流程  多个不动产单元   权利人与义务人相同  产生多本证书的业务逻辑 -->
+    <bean id="turnComplexBgdjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexBgdjProjectServiceImpl"/>
+    <!-- 一个流程  多个不动产单元   权利人与义务人相同  产生多本抵押证书的业务逻辑 -->
+    <bean id="turnComplexDydjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexDydjProjectServiceImpl"/>
+    <!-- 一个流程  多个不动产单元  权利人相同  产生多本证书逻辑（商品房首次批量发证） -->
+    <bean id="turnComplexScdjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexScdjProjectServiceImpl"/>
+    <!-- 一个流程  多个不动产单元  权利人相同  产生多本证书逻辑（商品房首次批量发证） -->
+    <bean id="turnComplexScdjCybzProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexScdjCybzProjectServiceImpl"/>
+
+    <!-- 一个流程  多个不动产单元   权利人与义务人相同  产生一本抵押证书的业务逻辑 -->
+    <bean id="turnComplexSigleDydjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexSigleDydjProjectServiceImpl"/>
+    <!--预告、预告抵押登记合并办理登记  权利人不同   不动产单元相同-->
+    <bean id="turnComplexYgdjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexYgdjProjectServiceImpl"/>
+
+    <!--房屋所有权、抵押权同时预转现登记流程-->
+    <bean id="turnComplexYzxdjProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexYzxdjProjectServiceImpl"/>
+    <!-- lj 抵押转移合并流程 -->
+    <bean id="turnComplexZyDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexZyDyProjectServiceImpl"/>
+    <!-- 变更转移合并流程 -->
+    <bean id="turnComplexBgZyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexBgZyProjectServiceImpl"/>
+    <!-- zll 抵押权变更（批量（一房多证产生的他项证））流程 -->
+    <bean id="turnComplexDyBgServiceImpl" class="cn.gtmap.estateplat.server.service.impl.TurnComplexDyBgdjServiceImpl"/>
+    <!--换证抵押合并流程-->
+    <bean id="turnComplexHzDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexHzDyProjectServiceImpl"/>
+    <!--批量换证流程-->
+    <bean id="turnComplexYsbzProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexYsbzProjectServiceImpl"/>
+    <!--组合贷款抵押权登记 生成多本抵押证明-->
+    <bean id="turnProjectZhDydjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectZhDydjServiceImpl"/>
+
+    <bean id="turnProjectDyZxForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectDyZxForZjgcServiceImpl"/>
+    <bean id="turnProjectDyBgForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectDyBgForZjgcServiceImpl"/>
+    <bean id="turnProjectDyZyForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectDyZyForZjgcServiceImpl"/>
+
+    <!--预购商品房预告变更登记 -->
+    <bean id="turnProjectYgBgdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectYgBgdjServiceImpl"/>
+    <!--在建工程抵押权转现抵押 -->
+    <bean id="turnComplexScdjAndPldyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexScdjAndPldyProjectServiceImpl"/>
+    <!--国有水产养殖权变更登记-->
+    <bean id="turnProjectSyTtBgdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectSyTtBgdjServiceImpl"/>
+
+    <!--土地分割、合并换证登记-->
+    <bean id="turnComplexFgHbHzProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexFgHbHzProjectServiceImpl"/>
+
+    <!--任意合并登记-->
+    <bean id="turnProjectArbitraryServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectArbitraryServiceImpl"/>
+    <!--国有建设用地使用权及建筑物、构筑物所有权首次登记（原土地有抵押的项目内多幢）-->
+    <bean id="turnComplexScYtdDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.TurnComplexScYtdDyProjectServiceImpl"/>
+    <!--lj 建设用地量化-->
+    <bean id="turnProjectJsydsyqLhdjService"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectJsydsyqLhdjServiceImpl"/>
+
+    <!--冻结解冻登记-->
+    <bean id="turnProjectNewDjDjService"
+          class="cn.gtmap.estateplat.server.service.impl.TurnProjectNewDjDjServiceImpl"/>
+    <!--不生成权利-->
+    <bean id="bdcNoQlDqServiceImpl"
+          class="cn.gtmap.estateplat.server.sj.ql.impl.BdcNoQlDqServiceImpl"/>
+
+    <!-- 删除项目默认服务 -->
+    <bean id="delProjectDefaultServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.DelProjectDefaultServiceImpl"/>
+    <!-- 首次登记删除项目默认服务 -->
+    <bean id="delProjectScdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectScdjServiceImpl"/>
+    <!-- 转移登记删除项目默认服务 -->
+    <bean id="delProjectZydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectZydjServiceImpl"/>
+    <!-- 抵押登记删除项目默认服务 -->
+    <bean id="delProjectDydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectDydjServiceImpl"/>
+    <!-- 查封登记删除项目默认服务 -->
+    <bean id="delProjectCfdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectCfdjServiceImpl"/>
+    <!-- 注销登记删除项目默认服务 -->
+    <bean id="delProjectZxdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectZxdjServiceImpl"/>
+    <!-- 预告登记删除项目默认服务 -->
+    <bean id="delProjectYgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectYgdjServiceImpl"/>
+    <!-- 异议登记删除项目默认服务 -->
+    <bean id="delProjectYydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectYydjServiceImpl"/>
+    <!-- 更正登记删除项目默认服务 -->
+    <bean id="delProjectGzdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectGzdjServiceImpl"/>
+    <!-- 商品房共有部分删除服务-->
+    <bean id="delProjectSpfGyyzServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.DelProjectSpfGyyzServiceImpl"/>
+    <!-- 证书锁定删除服务-->
+    <bean id="delProjectBdcDjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectBdcDjServiceImpl"/>
+    <!-- 证书解锁删除服务-->
+    <bean id="delProjectJddjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectJddjServiceImpl"/>
+
+    <bean id="delProjectDyZxForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.DelProjectDyZxForZjgcServiceImpl"/>
+    <bean id="delProjectDyBgForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.DelProjectDyBgForZjgcServiceImpl"/>
+    <bean id="delProjectDyZyForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.DelProjectDyZyForZjgcServiceImpl"/>
+    <!--在建工程抵押权转现抵押 -->
+    <bean id="delProjectScdjAndPldyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.DelProjectScdjAndPldyProjectServiceImpl"/>
+    <!--查询申请删除服务-->
+    <bean id="delProjectCxSqServiceImpl" class="cn.gtmap.estateplat.server.service.impl.DelProjectCxSqServiceImpl"/>
+    <!-- 首次登记办结项目默认服务 -->
+    <bean id="endProjectDefaultServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndProjectDefaultServiceImpl"/>
+    <!-- 转移登记办结项目默认服务 -->
+    <bean id="endProjectZydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectZydjServiceImpl"/>
+    <!-- 抵押登记办结项目默认服务 -->
+    <bean id="endProjectDydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectDydjServiceImpl"/>
+    <!-- 查封登记办结项目默认服务 -->
+    <bean id="endProjectCfdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectCfdjServiceImpl"/>
+    <!-- 查封登记办结项目默认服务 -->
+    <bean id="endProjectZxdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectZxdjServiceImpl"/>
+    <!-- 预告登记办结项目默认服务 -->
+    <bean id="endProjectYgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectYgdjServiceImpl"/>
+    <!-- 异议登记办结项目默认服务 -->
+    <bean id="endProjectYydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectYydjServiceImpl"/>
+    <!-- 更正登记办结项目默认服务 -->
+    <bean id="endProjectGzdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectGzdjServiceImpl"/>
+    <!--一个项目多个流程项目办结服务 -->
+    <bean id="endComplexProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndComplexProjectServiceImpl"/>
+    <!-- 预告与预告抵押合并办理-->
+    <bean id="endComplexYgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndComplexYgdjServiceImpl"/>
+    <!-- 解封登记办结项目默认服务 -->
+    <bean id="endProjectJfdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectJfdjServiceImpl"/>
+    <!-- 无匹配不动产单元办结项目 -->
+    <bean id="endProjectWppZxdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndProjectWppZxdjServiceImpl"/>
+    <!-- lst 批量选择证书（多个不动产单元） 进行批量抵押变更 -->
+    <bean id="endComplexDybgdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndComplexDybgdjServiceImpl"/>
+    <!-- lj 抵押转移合并流程 -->
+    <bean id="endComplexZyDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndComplexZyDyProjectServiceImpl"/>
+    <!-- zx 预转现转移合并流程 -->
+    <bean id="endComplexYzxdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndComplexYzxdjServiceImpl"/>
+    <!--换证抵押合并流程-->
+    <bean id="endComplexHzDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndComplexHzDyProjectServiceImpl"/>
+    <!--土地逐户解押-->
+    <bean id="endProjectZhjydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectZhjydjServiceImpl"/>
+    <!--土地逐户注销-->
+    <bean id="endProjectZhzxdjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectZhzxdjServiceImpl"/>
+    <!--在建抵押转现房抵押-->
+    <bean id="endProjectZjdyZxfdydjServiceImpl" class="cn.gtmap.estateplat.server.service.impl.EndProjectZjdyZxfdydjServiceImpl"/>
+    <!-- 司法裁定办结项目默认服务 -->
+    <bean id="endProjectSfcdjfdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndProjectSfcdjfdjServiceImpl"/>
+    <!-- 冻结办结服务-->
+    <bean id="endProjectBdcDjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndProjectBdcDjServiceImpl"/>
+
+    <bean id="endProjectDyZxForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndProjectDyZxForZjgcServiceImpl"/>
+    <bean id="endProjectDyBgForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndProjectDyBgForZjgcServiceImpl"/>
+    <bean id="endProjectDyZyForZjgcServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndProjectDyZyForZjgcServiceImpl"/>
+    <!--在建工程抵押权转现抵押 -->
+    <bean id="endComplexScdjAndPldyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndComplexScdjAndPldyProjectServiceImpl"/>
+    <!-- 首次登记+在建抵押转现 -->
+    <bean id="endComplexScDyProjectServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndComplexScDyProjectServiceImpl"/>
+    <!-- 转移和抵押变更 -->
+    <bean id="endProjectZyDybgServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.EndProjectZyDybgServiceImpl"/>
+
+    <!-- 生成证书的流程登簿 -->
+    <bean id="registerProjectCertificateServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.RegisterProjectCertificateServiceImpl"/>
+    <!-- 不生成证书的流程登簿 -->
+    <bean id="registerProjectNoCertificateServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.RegisterProjectNoCertificateServiceImpl"/>
+    <!-- 注销登记流程登簿 -->
+    <bean id="registerProjectZxdjServiceImpl"
+          class="cn.gtmap.estateplat.server.service.impl.RegisterProjectZxdjServiceImpl"/>
+
+
+
+    <!-- 证书编号服务 -->
+    <bean id="bdczsBhService" class="cn.gtmap.estateplat.server.service.impl.BdczsBhServiceImpl"/>
+
+    <bean id="archivePostService" class="cn.gtmap.estateplat.server.service.impl.ArchivePostServiceImpl"/>
+
+    <bean id="ontService" class="cn.gtmap.estateplat.server.core.service.impl.OntServiceImpl"/>
+
+    <bean id="djServiceContext" class="cn.gtmap.estateplat.server.service.core.impl.ProjectCustomServiceContext">
+        <property name="djServiceMap">
+            <map>
+                <entry>
+                    <key>
+                        <value>123_10</value>
+                    </key>
+                    <ref bean="lqScdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>123_11</value>
+                    </key>
+                    <ref bean="lqScdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>123_12</value>
+                    </key>
+                    <ref bean="lqScdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>123_36</value>
+                    </key>
+                    <ref bean="lqScdjServiceImpl"/>
+                </entry>
+
+                <entry>
+                    <key>
+                        <value>224_10</value>
+                    </key>
+                    <ref bean="lqZydjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>224_11</value>
+                    </key>
+                    <ref bean="lqZydjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>224_12</value>
+                    </key>
+                    <ref bean="lqZydjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>224_36</value>
+                    </key>
+                    <ref bean="lqZydjServiceImpl"/>
+                </entry>
+
+                <entry>
+                    <key>
+                        <value>313_10</value>
+                    </key>
+                    <ref bean="lqBgdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>313_11</value>
+                    </key>
+                    <ref bean="lqBgdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>313_12</value>
+                    </key>
+                    <ref bean="lqBgdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>313_36</value>
+                    </key>
+                    <ref bean="lqBgdjServiceImpl"/>
+                </entry>
+
+                <entry>
+                    <key>
+                        <value>1020_18</value>
+                    </key>
+                    <ref bean="lqDyadjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>1020_12</value>
+                    </key>
+                    <ref bean="lqDyadjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>1020_36</value>
+                    </key>
+                    <ref bean="lqDyadjServiceImpl"/>
+                </entry>
+
+                <entry>
+                    <key>
+                        <value>1021_18</value>
+                    </key>
+                    <ref bean="lqZxdjServiceImpl"/>
+                </entry>
+
+                <entry>
+                    <key>
+                        <value>413_12</value>
+                    </key>
+                    <ref bean="lqZxdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>413_36</value>
+                    </key>
+                    <ref bean="lqZxdjServiceImpl"/>
+                </entry>
+
+                <entry>
+                    <key>
+                        <value>9991202_18</value>
+                    </key>
+                    <ref bean="lqDyaZyServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>9991203_18</value>
+                    </key>
+                    <ref bean="lqDyaBgServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>902</value>
+                    </key>
+                    <ref bean="lqGzdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>901</value>
+                    </key>
+                    <ref bean="lqGzdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>501</value>
+                    </key>
+                    <ref bean="lqGzdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>1001401_9</value>
+                    </key>
+                    <ref bean="ttScServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>1001401_14</value>
+                    </key>
+                    <ref bean="ttScServiceImpl"/>
+                </entry>
+
+                <entry>
+                    <key>
+                        <value>3001401_9</value>
+                    </key>
+                    <ref bean="ttBgdjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>3001401_14</value>
+                    </key>
+                    <ref bean="ttBgdjServiceImpl"/>
+                </entry>
+
+                <entry>
+                    <key>
+                        <value>2001401_9</value>
+                    </key>
+                    <ref bean="ttZydjServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>2001401_14</value>
+                    </key>
+                    <ref bean="ttZydjServiceImpl"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    <bean id="signService" class="cn.gtmap.estateplat.server.core.service.impl.SignServiceImpl">
+        <property name="sysSignService" ref="SysSignService"/>
+        <property name="sysTaskService" ref="TaskService"/>
+        <property name="sysWorkFlowInstanceService" ref="SysWorkFlowInstanceService"/>
+        <property name="sysUserServiceImpl" ref="SysUserServiceImpl"/>
+        <property name="signKeyMap">
+            <map>
+                <entry>
+                    <key>
+                        <value>收件</value>
+                    </key>
+                    <value>slr,csr,fsr,hdr,fw_xwbj</value>
+                </entry>
+                <entry>
+                    <key>
+                        <value>受理（初审）</value>
+                    </key>
+                    <value>csr,fsr,hdr</value>
+                </entry>
+                <entry>
+                    <key>
+                        <value>审核</value>
+                    </key>
+                    <value>fsr,hdr</value>
+                </entry>
+                <entry>
+                    <key>
+                        <value>核定（登簿）</value>
+                    </key>
+                    <value>hdr</value>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="realEstateShareService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+        <property name="serviceInterface">
+            <value>cn.gtmap.estateplat.service.exchange.share.RealEstateShareService</value>
+        </property>
+        <property name="serviceUrl">
+            <value>${exchange.url}/RealEstateShareService</value>
+        </property>
+    </bean>
+
+    <bean id="bdcSlbhServiceContext" class="cn.gtmap.estateplat.server.core.service.impl.BdcSlbhCustomServiceContext">
+        <property name="bdcSlbhServiceMap">
+            <map>
+                <entry>
+                    <key>
+                        <value>yyyymmddlsh</value>
+                    </key>
+                    <ref bean="bdcNoQhSlbhServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>yyyymmqhlsh</value>
+                    </key>
+                    <ref bean="bdcQhSlbhServiceImpl"/>
+                </entry>
+                <entry>
+                    <key>
+                        <value>default</value>
+                    </key>
+                    <ref bean="bdcNoQhSlbhServiceImpl"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>

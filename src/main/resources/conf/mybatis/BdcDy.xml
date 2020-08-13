@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDyMapper">
+
+
+    <select id="queryBdcBdcdy" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcBdcdy">
+        SELECT distinct t.bdcdyh,t.djbid,t.bdclx,t.bz,t.bdcdyid,t.ybdcdyh,t.bdcdyfwlx
+        FROM bdc_bdcdy t
+        LEFT JOIN bdc_xm x ON x.bdcdyid=t.bdcdyid
+        <where>
+            <if test="wiid != null and wiid !=''">
+                AND x.wiid = #{wiid}
+            </if>
+            <if test="filterBdcFwfsss != null and filterBdcFwfsss !=''">
+                AND not exists(SELECT b.fwfsssid FROM bdc_fwfsss b WHERE b.wiid=x.wiid AND b.bdcdyid=x.bdcdyid)
+            </if>
+        </where>
+    </select>
+    <select id="getBdcdyByProid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcBdcdy">
+        SELECT t.bdcdyh,t.djbid,t.bdclx,t.bz,t.bdcdyid,t.ybdcdyh,t.bdcdyfwlx,t.fwbm
+        FROM bdc_xm x
+        LEFT JOIN bdc_bdcdy t ON x.bdcdyid=t.bdcdyid
+        WHERE x.proid = #{proid}
+    </select>
+    <select id="queryBdcdyByZdzhh" parameterType="String"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcDyForQuery">
+        SELECT  t.bdcdyid, t.bdcdyh,  t.djbid, e.zl, e.zdzhmj, e.mj, e.zdzhyt, e.yt, e.yhlx, e.gzwlx, e.lz, x.bz,c.mc qszt,b.mc bdclx
+        FROM bdc_bdcdy t
+        LEFT JOIN bdc_xm x ON x.bdcdyid=t.bdcdyid
+        LEFT JOIN bdc_spxx e ON e.proid=x.proid
+        LEFT JOIN bdc_qlxxlist a ON a.proid=x.proid
+        LEFT JOIN bdc_zd_bdclx b ON  t.bdclx=b.dm
+        LEFT JOIN bdc_zd_qszt c  ON  a.qszt=c.dm
+        WHERE t.djbid = #{djbid}
+    </select>
+    <select id="getBdclxByPorid" parameterType="String" resultType="String">
+      SELECT distinct t.bdclx
+      FROM bdc_bdcdy t
+      LEFT JOIN bdc_xm x ON x.bdcdyid=t.bdcdyid
+      WHERE x.proid=#{proid}
+    </select>
+    <select id="getZhhByProid" parameterType="String" resultType="String">
+     SELECT substr(t.bdcdyh,0,19)
+     FROM bdc_bdcdy t
+     LEFT JOIN bdc_xm x ON x.bdcdyid=t.bdcdyid
+     WHERE x.proid= #{proid}
+    </select>
+
+    <insert id="saveDjBdcdyxx" parameterType="cn.gtmap.estateplat.model.server.core.BdcBdcdy">
+        INSERT INTO bdc_bdcdy(bdcdyid,bdcdyh,djbid,bdclx,ybdcdyh,bdcdyfwlx,bz)
+        VALUES (#{bdcdyid,jdbcType=VARCHAR},#{bdcdyh,jdbcType=VARCHAR},#{djbid,jdbcType=VARCHAR}
+        ,#{bdclx,jdbcType=VARCHAR},#{ybdcdyh,jdbcType=VARCHAR},#{bdcdyfwlx,jdbcType=VARCHAR}
+        ,#{bz,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="queryBdcdyhByDah" parameterType="java.util.Map" resultType="map">
+        SELECT
+        CASE WHEN t1.bdcdyfwlx='1'
+        THEN t2.bdcdyh
+        WHEN t1.bdcdyfwlx='2'
+        THEN t1.bdcdyh
+        ELSE t.bdcdyh
+        END bdcdyh,t.fcdah
+        FROM DJSJ_FWHS t
+        LEFT JOIN djsj_fw_ljz t1 ON t.fw_dcb_index=t1.fw_dcb_index
+        LEFT JOIN djsj_fw_xmxx t2 ON t1.fw_xmxx_index=t2.fw_xmxx_index
+        <where>
+            <if test="fcdah != null and fcdah !=''">
+                AND t.fcdah = #{fcdah}
+            </if>
+            <if test="fcdahs != null and fcdahs !=''">
+                AND
+                <foreach collection="fcdahs" item="item" open="(" separator=" or " close=")">
+                    t.fcdah = #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <!--<select id="getBdcdyhByProid" parameterType="String" resultType="String">-->
+    <!--select t.bdcdyh FROM bdc_bdcdy t-->
+    <!--where t.proid=#{proid}-->
+    <!--</select>-->
+
+    <select id="getBdcdyListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT distinct a.bdcdyh,d.zl,d.mj,d.yt
+        FROM bdc_bdcdy a
+        LEFT JOIN bdc_xm c ON a.bdcdyid=c.bdcdyid AND rownum=1
+        LEFT JOIN bdc_spxx d ON c.proid=c.proid
+        LEFT JOIN bdc_bdcdjb b ON a.djbid=b.djbid
+        <!--LEFT JOIN bdc_xm c ON c.proid=a.proid-->
+        <where>
+            c.xmzt=1
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND a.bdcdyh LIKE '%'||#{bdcdyh}||'%'
+            </if>
+            <if test="djh != null and djh !=''">
+                AND b.zdzhh=#{djh}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcdyhByDyh" resultType="cn.gtmap.estateplat.model.server.core.BdcBdcdy">
+        SELECT * FROM bdc_bdcdy t
+        WHERE t.bdcdyh=#{bdcdyh}
+    </select>
+
+</mapper>

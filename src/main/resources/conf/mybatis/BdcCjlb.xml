@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--统计总量查询-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcCjlbMapper">
+    <select id="queryBdcSelzlByPage"  parameterType="java.util.Map" resultType="map">
+        select CJID,BH,ZL,CYR,to_char(cysj,'yyyy-MM-dd HH24:mm:ss') CYSJ,BZ,SQR,PC from bdc_cjlb t
+        <where>
+          <if test="bh != null and bh !=''">
+              and t.bh like '%'||#{bh}||'%'
+          </if>
+          <if test="zl != null and zl !=''">
+              and t.zl like  '%'||#{zl}||'%'
+          </if>
+          <if test="cyr != null and cyr !=''">
+              and t.cyr like  '%'||#{cyr}||'%'
+          </if>
+          <if test="sqr != null and sqr !=''">
+              and t.sqr like  '%'||#{sqr}||'%'
+          </if>
+          <if test="pc != null and pc !=''">
+              and t.pc like  '%'||#{pc}||'%'
+          </if>
+        </where>
+        order by CYSJ DESC
+    </select>
+
+    <select id="getBdcCjlbByBh"  parameterType="java.util.Map" resultType="map">
+        select CJID,BH,ZL,CYR,to_char(cysj,'yyyy-MM-dd HH24:mm:ss') CYSJ,BZ,SQR,PC from bdc_cjlb t
+        where t.bh=#{bh}
+        order by CYSJ DESC
+    </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--不动产林权-->
+    <mapping map-empty-string="false" map-null="false">
+        <class-a>cn.gtmap.estateplat.model.server.core.DjsjLqxx</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcLq</class-b>
+        <!--林班-->
+        <field>
+            <a>lb</a>
+            <b>lb</b>
+        </field>
+        <!--小班-->
+        <field>
+            <a>xb</a>
+            <b>xb</b>
+        </field>
+        <!--小地名-->
+        <field>
+            <a>xdm</a>
+            <b>xdm</b>
+        </field>
+        <!--造林年度-->
+        <field>
+            <a>zlnd</a>
+            <b>zlnd</b>
+        </field>
+        <!--林种-->
+        <field>
+            <a>lz</a>
+            <b>lz</b>
+        </field>
+        <!--株数-->
+        <field>
+            <a>zs</a>
+            <b>zs</b>
+        </field>
+        <!--起源-->
+        <field>
+            <a>qy</a>
+            <b>qy</b>
+        </field>
+        <!--主要树种-->
+        <field>
+            <a>zysz</a>
+            <b>zysz</b>
+        </field>
+    </mapping>
+
+</mappings>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdCfMapper">
+
+
+    <select id="queryGdFcCfList" parameterType="java.util.Map" resultType="map">
+        select DISTINCT (cfwh),isjf,cflx,cfjg,cfwh,cfksrq,cfjsrq,sdsj,cfsx(
+        select  cf.cfid cfid,
+        cf.isjf isjf,
+        cf.cflx cflx,
+        cf.cfjg cfjg,
+        cf.cfwh cfwh,
+        cf.cfksrq cfksrq,
+        cf.cfjsrq cfjsrq,
+        cf.cfsdsj sdsj,
+        fw.fwzl fwzl,
+        fw.jzmj jzmj,
+        fw.ghyt ghyt,
+        fw.fwid,
+        p.tdid
+        from gd_cf cf
+        left join gd_bdc_ql_rel r on cf.cfid = r.qlid
+        left join gd_fw fw on r.bdcid = fw.fwid
+        left join gd_dyh_rel p on p.gdid=fw.fwid
+        where nvl(cf.isjf,0)=0
+        <if test="bdcdyh!=null and bdcdyh!=''">
+            and p.bdcdyh=#{bdcdyh}
+        </if>
+        <if test="fwid!=null and fwid!=''">
+            and fw.fwid=#{fwid}
+        </if>
+        <if test="cflx!=null and cflx!=''">
+          and cf.cflx !=#{cflx}
+        </if>
+        )
+    </select>
+
+    <select id="queryGdTdCfList" parameterType="java.util.Map" resultType="map">
+        select  cf.cfid cfid,
+        cf.isjf isjf,
+        cf.cflx cflx,
+        cf.cfjg cfjg,
+        cf.cfwh cfwh,
+        cf.cfksrq cfksrq,
+        cf.cfjsrq cfjsrq,
+        cf.cfsdsj sdsj,
+        td.zl zl,
+        td.zdmj zdmj,
+        td.yt yt,
+        td.tdid
+        from gd_cf cf
+        left join gd_bdc_ql_rel r on cf.cfid = r.qlid
+        left join gd_td td on r.bdcid = td.tdid
+        left join gd_dyh_rel p on p.gdid=td.tdid
+        where nvl(cf.isjf,0)=0
+        <if test="bdcdyh!=null and bdcdyh!=''">
+            and p.bdcdyh=#{bdcdyh}
+        </if>
+        <if test="tdid!=null and tdid!=''">
+            and td.tdid=#{tdid}
+        </if>
+        <if test="cflx!=null and cflx!=''">
+            and cf.cflx !=#{cflx}
+        </if>
+    </select>
+
+    <select id="getGdCfListByMap" resultType="map" parameterType="map">
+        select * from gd_Cf c  inner join gd_bdc_ql_rel t on t.qlid=c.cfid where  nvl(c.isjf,0)=0
+        <if test="bdcid!=null and bdcid!=''">
+            and t.bdcid=#{bdcid}
+        </if>
+        <if test="cflx!=null and cflx!=''">
+            and nvl(c.cflx,'查封') !=#{cflx}
+        </if>
+    </select>
+
+
+    <select id="queryGdCfListByQueryMap" resultType="cn.gtmap.estateplat.model.server.core.GdCf" parameterType="map">
+        SELECT t.cfid,t.cfjg,t.cflx,t.cfwj,t.cfwh,t.cfksrq,t.cfjsrq,t.cffw,t.proid,t.lhcfqx,t.isjf FROM gd_cf t
+        WHERE 1=1
+        <if test="isjf!=null and isjf!=''">
+            AND nvl(t.isjf,0) =#{isjf}
+        </if>
+        <if test="cfQlidList != null and cfQlidList !=''">
+            AND
+            <foreach collection="cfQlidList" item="item" open="(" separator=" or " close=")">
+                t.cfid = #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getGdCfByCfwhAndBdcdyh" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.GdCf">
+        SELECT t.* FROM gd_cf t
+        LEFT JOIN gd_ql_dyh_rel r ON r.qlid = t.cfid
+        WHERE nvl(t.isjf,0)!='1'
+        <if test="bdcdyh !=null and bdcdyh !=''">
+            AND r.bdcdyh = #{bdcdyh}
+        </if>
+        <if test="bdcdyh !=null and bdcdyh !=''">
+            AND t.cfwh=  #{cfwh}
+        </if>
+    </select>
+
+
+    <select id="getGdCfAndCfwhByFczh" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.GdCf">
+        SELECT t.* FROM gd_cf t
+        LEFT JOIN gd_bdc_ql_rel r ON r.qlid = t.cfid
+        LEFT JOIN gd_bdc_ql_rel v ON v.bdcid = r.bdcid
+        LEFT JOIN gd_fwsyq f ON f.qlid = v.qlid
+        WHERE t.isjf = 0
+        <if test="fczh !=null and fczh !=''">
+            AND f.fczh = #{fczh}
+        </if>
+        <if test="cfwh !=null and cfwh !=''">
+            AND t.cfwh = #{cfwh}
+        </if>
+    </select>
+
+    <select id="getGdCfAndCfwhByTdzh" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.GdCf">
+        SELECT t.* FROM gd_cf t
+        LEFT JOIN gd_bdc_ql_rel r ON r.qlid = t.cfid
+        LEFT JOIN gd_bdc_ql_rel v ON v.bdcid = r.bdcid
+        LEFT JOIN gd_tdsyq f ON f.qlid = v.qlid
+        WHERE t.isjf = 0
+        <if test="tdzh !=null and tdzh !=''">
+            AND f.tdzh = #{tdzh}
+        </if>
+        <if test="cfwh !=null and cfwh !=''">
+            AND t.cfwh = #{cfwh}
+        </if>
+    </select>
+</mapper>

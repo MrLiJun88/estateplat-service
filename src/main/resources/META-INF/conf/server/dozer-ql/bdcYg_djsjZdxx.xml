@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--不动产预告-->
+    <mapping map-empty-string="false" map-null="false">
+        <class-a>cn.gtmap.estateplat.model.server.core.DjsjZdxx</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcYg</class-b>
+        <!--土地权利人-->
+        <field>
+            <a>qlrmc</a>
+            <b>tdqlr</b>
+        </field>
+        <!--土地使用开始期限-->
+        <field>
+            <a>qsrq</a>
+            <b>tdsyksqx</b>
+        </field>
+        <!--土地使用结束期限-->
+        <field>
+            <a>zzrq</a>
+            <b>tdsyjsqx</b>
+        </field>
+    </mapping>
+
+</mappings>

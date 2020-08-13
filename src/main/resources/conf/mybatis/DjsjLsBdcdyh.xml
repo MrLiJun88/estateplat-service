@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.DjsjLsBdcdyhMapper">
+
+    <select id="getBdcdyhListByBh" parameterType="String" resultType="String">
+       select distinct v.bdcdyh from DJSJ_LS_BDCDYH v
+       start with v.bh = #{bh}
+       CONNECT BY NOCYCLE v.ybh = PRIOR v.bh
+       ORDER BY bdcdyh
+    </select>
+</mapper>

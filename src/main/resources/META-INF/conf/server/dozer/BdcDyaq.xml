@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <mapping map-null="false">
+        <class-a>cn.gtmap.estateplat.model.exchange.transition.QzDyaq</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcDyaq</class-b>
+        <field>
+            <a>dyr</a>
+            <b>zwr</b>
+        </field>
+        <field>
+            <a>dyfs</a>
+            <b>dyfs</b>
+        </field>
+        <field>
+            <a>zjjzwzl</a>
+            <b>zjgczl</b>
+        </field>
+        <field>
+            <a>zjjzwdyfw</a>
+            <b>zjgcdyfw</b>
+        </field>
+        <field>
+            <a>bdbzzqse</a>
+            <b>bdbzzqse</b>
+        </field>
+        <field>
+            <a>zwlxqssj</a>
+            <b>zwlxksqx</b>
+        </field>
+        <field>
+            <a>zwlxjssj</a>
+            <b>zwlxjsqx</b>
+        </field>
+        <field>
+            <a>zgzqse</a>
+            <b>zgzqqdse</b>
+        </field>
+        <field>
+            <a>zgzqqdss</a>
+            <b>zgzqqdss</b>
+        </field>
+        <field>
+            <a>zxdyywh</a>
+            <b>zxdyywh</b>
+        </field>
+        <field>
+            <a>zxdyyy</a>
+            <b>zxdyyy</b>
+        </field>
+        <field>
+            <a>zxsj</a>
+            <b>zxsj</b>
+        </field>
+        <field>
+            <a>bz</a>
+            <b>fj</b>
+        </field>
+    </mapping>
+    <mapping map-null="false">
+        <class-a>cn.gtmap.estateplat.model.exchange.transition.QzYwxx</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcDyaq</class-b>
+        <field>
+            <a>djsj</a>
+            <b>djsj</b>
+        </field>
+    </mapping>
+
+</mappings>

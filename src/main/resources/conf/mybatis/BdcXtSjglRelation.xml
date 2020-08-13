@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcXtSjglRelationMapper">
+
+    <select id="getBdcXtResourcePagesJson" parameterType="java.util.Map" resultType="map">
+        SELECT t.resource_id,t.resource_name,t.resource_url,t.resource_img
+        FROM BDC_XT_SJGL_RESOURCE t
+        ORDER BY t.resource_id DESC
+    </select>
+
+    <select id="getBdcXtRelationPagesJsonByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.relation_id,t.djlx_name,t.djlx_id,t.xh,a.resource_id,a.resource_name,a.resource_url,a.resource_img
+        FROM BDC_XT_SJGL_RELATION t
+        LEFT JOIN BDC_XT_SJGL_RESOURCE a ON a.resource_id=t.resource_id
+        <where>
+            <if test="djlxId != null and djlxId !=''">
+                AND t.djlx_id = #{djlxId}
+            </if>
+            <if test="resourceId != null and resourceId !=''">
+                AND a.resource_id = #{resourceId}
+            </if>
+        </where>
+        ORDER BY t.relation_id DESC
+    </select>
+
+    <select id="getBdcXtCheckinfoJsonByPage" parameterType="cn.gtmap.estateplat.model.server.core.BdcXtCheckinfo" resultType="map">
+        SELECT t.id,t.sqlxdm,t.qllxdm,t.check_code,t.check_model,t.check_msg,t.ysqlxdm,t.check_Type ,
+        a.mc as qllxmc,b.mc as sqlxmc,d.mc as ysqlxmc,c.check_info,e.mc createSqlxdm
+        FROM BDC_XT_CHECKINFO t
+        LEFT JOIN bdc_zd_qllx a ON a.dm=t.qllxdm
+        LEFT JOIN bdc_zd_sqlx b ON b.dm=t.sqlxdm
+        LEFT JOIN bdc_zd_check c ON c.check_code=t.check_code
+        LEFT JOIN bdc_zd_sqlx d ON d.dm=t.ysqlxdm
+        LEFT JOIN bdc_zd_sqlx e ON e.dm=t.CREATE_SQLXDM
+        <where>
+            <if test="sqlxdm != null and sqlxdm !=''">
+                AND t.sqlxdm = #{sqlxdm}
+            </if>
+            <if test="qllxdm != null and qllxdm !=''">
+                AND t.qllxdm = #{qllxdm}
+            </if>
+            <if test="ysqlxdm != null and ysqlxdm !=''">
+                AND t.ysqlxdm = #{ysqlxdm}
+            </if>
+            <if test="checkCode != null and checkCode !=''">
+                AND t.check_code = #{checkCode}
+            </if>
+            <if test="checkModel != null and checkModel !=''">
+                AND t.check_model = #{checkModel}
+            </if>
+            <if test="checkMsg != null and checkMsg !=''">
+                AND t.check_msg like #{checkMsg}
+            </if>
+            <if test="createSqlxdm != null and createSqlxdm !=''">
+                AND t.CREATE_SQLXDM = #{createSqlxdm}
+            </if>
+        </where>
+    </select>
+
+    <select id="getResourceByDjlx"  resultType="cn.gtmap.estateplat.model.server.core.BdcXtSjglResource">
+        SELECT a.resource_id,a.resource_name,a.resource_url,a.resource_img
+        FROM BDC_XT_SJGL_RELATION t
+        LEFT JOIN BDC_XT_SJGL_RESOURCE a ON a.resource_id=t.resource_id
+        <where>
+            <if test="djlxId != null and djlxId !=''">
+                AND t.djlx_id = #{djlxId}
+            </if>
+        </where>
+        ORDER BY t.xh,t.relation_id
+    </select>
+    <select id ="getMaxXh" resultType="java.lang.Integer">
+        SELECT MAX(xh)+1 FROM BDC_XT_SJGL_RELATION WHERE djlx_id=#{djlxId}
+    </select>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDyqMapper">
+
+    <select id="getBdcDyqByProid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcDyq">
+        SELECT * FROM bdc_dyq t  WHERE t.proid=#{proid}
+    </select>
+
+    <insert id="saveBdcDyq" parameterType="cn.gtmap.estateplat.model.server.core.BdcDyq" >
+        INSERT INTO bdc_dyq(qlid,bdcdyid,dyqnr,dyqksqx,dyqjsqx,ywh,qllx,proid,gyqk,djsj,dbr,fj,qszt)
+        VALUES (#{qlid,jdbcType=VARCHAR},#{bdcdyid,jdbcType=VARCHAR},#{dyqnr,jdbcType=VARCHAR}
+        ,#{dyqksqx,jdbcType=DATE},#{dyqjsqx,jdbcType=DATE},#{ywh,jdbcType=VARCHAR}
+        ,#{qllx,jdbcType=VARCHAR},#{proid,jdbcType=VARCHAR},#{gyqk,jdbcType=VARCHAR},#{djsj,jdbcType=DATE}
+        ,#{dbr,jdbcType=VARCHAR},#{fj,jdbcType=VARCHAR},#{qszt,jdbcType=INTEGER})
+    </insert>
+</mapper>

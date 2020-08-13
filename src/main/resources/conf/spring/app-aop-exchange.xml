@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <!--更新共享库-->
+    <bean id="exchange" class="cn.gtmap.estateplat.server.core.aop.Exchange"/>
+    <bean id="swExchange" class="cn.gtmap.estateplat.server.core.aop.SwExchange"/>
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="createXm"
+                      expression="execution(* cn.gtmap.estateplat.server.service.TurnProjectService.saveQllxVo(..))"/>
+        <aop:pointcut id="dbXm"
+                      expression="execution(* cn.gtmap.estateplat.server.service.TurnProjectService.completeZsInfo(..))
+                      or execution(* cn.gtmap.estateplat.server.core.service.BdcXmService.zsAopByBdcXm(..))"/>
+        <aop:pointcut id="endXm"
+                      expression="execution(* cn.gtmap.estateplat.server.service.ProjectService.endProjectEvent(..))
+                      or execution(* cn.gtmap.estateplat.server.service.ProjectService.batchEndProjectEvent(..))"/>
+        <aop:pointcut id="delXm"
+                      expression="execution(* cn.gtmap.estateplat.server.service.ProjectService.delProjectEvent(..))
+                      or execution(* cn.gtmap.estateplat.server.service.ProjectService.batchDelProjectEvent(..))"/>
+        <aop:pointcut id="insertGdFwZx"
+                      expression="execution(* cn.gtmap.estateplat.server.core.service.GdSjglService.zxQl(..)))"/>
+        <aop:pointcut id="changeYqlZtEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.changeYqlZtEvent(..)))"/>
+        <aop:pointcut id="turnProjectEventDbr"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.turnProjectEventDbr(..)))"/>
+        <aop:aspect ref="exchange">
+            <aop:after pointcut-ref="createXm" method="insertYwxxToShare"/>
+            <aop:after pointcut-ref="dbXm" method="insertDbYwxxToShare"/>
+            <aop:after pointcut-ref="endXm" method="insertAllYwxxToShare"/>
+            <aop:before pointcut-ref="delXm" method="updateYwxxToShare"/>
+            <aop:after pointcut-ref="insertGdFwZx" method="insertGdFwZx"/>
+            <aop:after-returning pointcut-ref="changeYqlZtEvent" method="registerReport"/>
+        </aop:aspect>
+
+        <aop:aspect ref="swExchange">
+            <aop:after-returning pointcut-ref="turnProjectEventDbr" method="dbtsxx"/>
+        </aop:aspect>
+
+    </aop:config>
+
+</beans>

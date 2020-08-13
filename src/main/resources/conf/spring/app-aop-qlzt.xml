@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <bean id="qlztGl" class="cn.gtmap.estateplat.server.core.aop.QlztGl"/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <aop:config proxy-target-class="true">
+        <!--QlztGl-->
+        <!--缮证退回事件-->
+        <aop:pointcut id="backProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.workFlowBackZsBh(..)))"/>
+        <!--办结事件-->
+        <aop:pointcut id="endProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.endProjectEvent(..))"/>
+        <!--删除事件-->
+        <aop:pointcut id="delProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.workFlowDel(..)))"/>
+        <!--改变原权利状态为历史-->
+        <aop:pointcut id="changeYqlZtEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.changeYqlZtEvent(..)))"/>
+        <!--改变原权利状态为现势-->
+        <aop:pointcut id="changeYqlZtqhEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.changeYqlZtqhEvent(..)))"/>
+        <!--QlztGl-->
+        <aop:aspect ref="qlztGl">
+            <aop:before pointcut-ref="backProjectEvent" method="updateQlztByDeleteEnvent"/>
+            <aop:after pointcut-ref="backProjectEvent" method="updateQlztByProidForBack"/>
+            <aop:after pointcut-ref="endProjectEvent" method="updateQlztByProid"/>
+            <aop:before pointcut-ref="delProjectEvent" method="updateQlztByDeleteEnvent"/>
+            <aop:after pointcut-ref="changeYqlZtEvent" method="updateQlztByProid"/>
+            <aop:after pointcut-ref="changeYqlZtqhEvent" method="updateQlztByProid"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

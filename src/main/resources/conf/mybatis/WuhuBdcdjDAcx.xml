@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//不动产单元-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.WuhuBdcdjDAcx">
+<select id="WuhuQueryBdcdjDAListByPage" parameterType="java.util.Map"
+		resultType="map">
+		<if test="
+		(wdqlr == null or wdqlr == '') and
+		(wdqlrzjh == null or wdqlrzjh == '' ) and 
+		(qlr == null or qlr == '') and
+		(qlrzjh == null or qlrzjh == '' ) and 
+		(sqlx == null or sqlx == '') and 
+		(dcxc == null or dcxc == '') and 
+		(cqzh == null or cqzh == '') and 
+		(fwzl == null or fwzl == '') ">
+		select distinct bdcdyid,qszt from (
+		    select a.bdcdyid,d.bdcqzh,d.zsid,a.qszt
+                  from bdc_fdcq a
+                  left join bdc_xm b on a.proid = b.proid
+                  left join bdc_xmzs_rel c on c.proid = b.proid 
+                  left join bdc_zs d on d.zsid = c.zsid
+		    union all
+		    select e.bdcdyid,h.bdcqzh,h.zsid,e.qszt
+                  from bdc_fdcq_dz e
+                  left join bdc_xm f on f.proid = e.proid
+                  left join bdc_xmzs_rel g on g.proid = f.proid 
+                  left join bdc_zs h on h.zsid = g.zsid
+		    union all
+		    select i.fwid bdcdyid,k.fczh bdcqzh,k.fczh zsid,(k.iszx+1) qszt
+		          from gd_fw i
+		          inner join gd_bdc_ql_rel j on j.bdcid = i.fwid
+		          inner join GD_FWSYQ k on k.qlid = j.qlid 
+		    union all
+		    select l.bdcdyid,o.bdcqzh,o.zsid,l.qszt
+                  from bdc_yg l
+                  left join bdc_xm m on m.proid = l.proid
+                  left join bdc_xmzs_rel n on n.proid = m.proid 
+                  left join bdc_zs o on n.zsid = o.zsid
+                  where l.ygdjzl in ('1','2') 
+		    union all
+		    select s.fwid bdcdyid,u.ygdjzmh bdcqzh,u.ygdjzmh zsid,(u.iszx+1) qszt
+                  from gd_fw s
+                  inner join gd_bdc_ql_rel t on t.bdcid = s.fwid
+                  inner join gd_yg u on u.ygid = t.qlid 
+                  where u.ygdjzl in ('1','2') 
+		)where bdcdyid is not null
+		</if>
+		<if test="
+		 (wdqlr != null and wdqlr != '') or
+		 (wdqlrzjh != null and wdqlrzjh != '' ) or 
+		 (qlr != null and qlr != '') or
+		 (fwzl != null and fwzl != '' ) or 
+		 (qlrzjh != null and qlrzjh != '' ) or 
+		 (cqzh != null and cqzh != '' )or
+		 (sqlx != null and sqlx != '')or 
+		 (dcxc != null and dcxc != '')
+		">
+		 select distinct bdcdyid,qszt from (
+         			select a.bdcdyid,d.bdcqzh,d.zsid,a.qszt
+                              from bdc_fdcq a
+                              left join bdc_xm b on a.proid = b.proid
+                              left join bdc_xmzs_rel c on c.proid = b.proid 
+                              left join bdc_zs d on d.zsid = c.zsid 
+                              left join bdc_zs_qlr_rel t2 on t2.zsid = d.zsid
+                              left join bdc_qlr t5 on t5.qlrid = t2.qlrid and t5.qlrlx !='ywr'
+                              left join bdc_bdcdy t6 on t6.bdcdyid = a.bdcdyid
+                              left join djsj_fwhs t7 on t7.bdcdyh=t6.bdcdyh
+                              left join bdc_spxx y1 on y1.proid = b.proid
+                              where 1=1
+                              <if test="yg =='no'" >
+                              <if test="wdqlr != null and wdqlr != ''" >and t5.qlrlx !='ywr' and t5.qlrmc = #{wdqlr}</if>
+						      <if test="wdqlrzjh != null and wdqlrzjh != ''" >and (t5.qlrzjh = #{wdqlrzjh} <if test="wdqlrzjh2 != null and wdqlrzjh2 != ''" >or t5.qlrzjh = #{wdqlrzjh2}</if>)</if>
+                              </if>
+                              <if test="sqlx != null and sqlx != ''">and b.sqlx=#{sqlx}</if>
+                              <if test="dcxc != null and dcxc != ''">and t5.qlrlx !='ywr' and ((instr(t5.qlrmc, #{dcxc}) > 0) or instr(d.bdcqzh, #{dcxc}) > 0
+                              or instr(t7.zl, #{dcxc}) > 0 or instr(t5.qlrzjh, #{dcxc}) > 0 
+                              or instr(t5.qlrzjh,Decode(length(#{dcxc}),18,substr(#{dcxc},0,6)||substr(#{dcxc},9,9)))>0
+                              )</if>
+                              <if test="qlr != null and qlr != '' "> and t5.qlrlx !='ywr' and instr(t5.qlrmc, #{qlr}) > 0</if>
+                              <if test="cqzh != null and cqzh != '' ">and instr(d.bdcqzh, #{cqzh}) > 0</if>
+                              <if test="fwzl != null and fwzl != '' ">and instr(y1.zl, #{fwzl}) > 0</if>
+                              <if test="qlrzjh != null and qlrzjh != '' ">and t5.qlrlx !='ywr' and (instr(t5.qlrzjh, #{qlrzjh}) > 0 <if test="qlrzjh2 != null and qlrzjh2 != '' ">or instr(t5.qlrzjh, #{qlrzjh2}) > 0</if>)</if>
+                    union all
+                    select e.bdcdyid,h.bdcqzh,h.zsid,e.qszt
+                              from bdc_fdcq_dz e
+                              left join bdc_xm f on f.proid = e.proid
+                              left join bdc_xmzs_rel g on g.proid = f.proid 
+                              left join bdc_zs h on h.zsid = g.zsid
+                              left join bdc_zs_qlr_rel t11 on t11.zsid = h.zsid
+                              left join bdc_qlr t12 on t12.qlrid = t11.qlrid and t12.qlrlx !='ywr' 
+                              left join bdc_bdcdy t13 on t13.bdcdyid = e.bdcdyid
+                              left join djsj_fw_xmxx t14 on t14.bdcdyh=t13.bdcdyh
+                              left join djsj_fw_ljz t19 on t19.fw_xmxx_index = t14.fw_xmxx_index
+                              where 1=1 
+                              <if test="yg =='no'" >
+                              <if test="wdqlr != null and wdqlr != ''" >and t12.qlrlx !='ywr' and t12.qlrmc=#{wdqlr}</if>
+						       <if test="wdqlrzjh != null and wdqlrzjh != ''" >and ( t12.qlrzjh=#{wdqlrzjh} <if test="wdqlrzjh2 != null and wdqlrzjh2 != ''" >or t12.qlrzjh = #{wdqlrzjh2}</if>)</if>
+                              </if>
+                              <if test="sqlx != null and sqlx != ''">and f.sqlx=#{sqlx}</if>
+                              <if test="dcxc != null and dcxc != ''">and t12.qlrlx !='ywr' and  ((instr(t12.qlrmc, #{dcxc}) > 0) or instr(h.bdcqzh, #{dcxc}) > 0 
+                              or instr(t19.zldz, #{dcxc}) > 0 or instr(t12.qlrzjh, #{dcxc}) > 0
+                              or instr(t12.qlrzjh,Decode(length(#{dcxc}),18,substr(#{dcxc},0,6)||substr(#{dcxc},9,9)))>0
+                              )</if>
+                              <if test="qlr != null and qlr != '' ">and t12.qlrlx !='ywr' and instr(t12.qlrmc, #{qlr}) > 0</if>
+                              <if test="cqzh != null and cqzh != '' ">and instr(h.bdcqzh, #{cqzh}) > 0</if>
+                              <if test="fwzl != null and fwzl != '' ">and instr(t19.zldz, #{fwzl}) > 0</if>
+                              <if test="qlrzjh != null and qlrzjh != '' ">and t12.qlrlx !='ywr' and (instr(t12.qlrzjh, #{qlrzjh}) > 0 <if test="qlrzjh2 != null and qlrzjh2 != '' ">or instr(t12.qlrzjh, #{qlrzjh2}) > 0</if>)</if>
+                    union all
+                    select i.fwid bdcdyid,k.fczh bdcqzh,k.fczh zsid,(k.iszx+1) qszt
+						      from gd_fw i
+						      inner join gd_bdc_ql_rel j on j.bdcid = i.fwid
+						      inner join GD_FWSYQ k on k.qlid = j.qlid 
+						      left join gd_qlr t18 on t18.qlid = k.qlid 
+						      inner join gd_xm t30 on t30.proid = k.proid
+						      where 1=1 
+						      <if test="yg =='no'" >
+						      <if test="wdqlr != null and wdqlr != ''" >and t18.qlrlx !='ywr' and ( t18.qlr = #{wdqlr})</if>
+						      <if test="wdqlrzjh != null and wdqlrzjh != ''" >and (t18.qlrzjh = #{wdqlrzjh}  <if test="wdqlrzjh2 != null and wdqlrzjh2 != ''" >or t18.qlrzjh = #{wdqlrzjh2}</if>) </if>
+						      </if>
+						      <if test="sqlx != null and sqlx != ''">and t30.djlx=#{sqlx}</if>
+                              <if test="dcxc != null and dcxc != ''">and t18.qlrlx !='ywr' and (( instr(t18.qlr,#{dcxc}) > 0 ) or instr(k.fczh,#{dcxc}) > 0
+                              or instr(i.fwzl,#{dcxc}) > 0 or instr(t18.qlrzjh, #{dcxc}) > 0
+                              or instr(t18.qlrzjh,Decode(length(#{dcxc}),18,substr(#{dcxc},0,6)||substr(#{dcxc},9,9)))>0
+                              )</if>
+                              <if test="qlr != null and qlr != '' "> and t18.qlrlx !='ywr' and instr(t18.qlr,#{qlr}) > 0 </if>
+                              <if test="cqzh != null and cqzh != '' ">and instr(k.fczh,#{cqzh}) > 0 </if>
+                              <if test="fwzl != null and fwzl != '' ">and instr(i.fwzl,#{fwzl}) > 0 </if>
+                              <if test="qlrzjh != null and qlrzjh != '' ">and t18.qlrlx !='ywr' and (instr(t18.qlrzjh, #{qlrzjh}) > 0 <if test="qlrzjh2 != null and qlrzjh2 != '' ">or instr(t18.qlrzjh, #{qlrzjh2}) > 0</if>)</if>
+                    <if test="yg !='no' ">
+                    union all
+                    select l.bdcdyid,o.bdcqzh,o.zsid,l.qszt
+                              from bdc_yg l
+                              left join bdc_xm m on m.proid = l.proid
+                              left join bdc_xmzs_rel n on n.proid = m.proid 
+                              left join bdc_zs o on n.zsid = o.zsid
+                              left join bdc_zs_qlr_rel t19 on t19.zsid = o.zsid
+                              left join bdc_qlr t20 on t20.qlrid = t19.qlrid 
+                              left join bdc_spxx y2 on y2.proid = m.proid
+                              where l.ygdjzl in ('1','2') 
+                              <if test="sqlx != null and sqlx != ''">and m.sqlx=#{sqlx}</if>
+                              <if test="dcxc != null and dcxc != ''">and t20.qlrlx !='ywr' and ((instr(t20.qlrmc,#{dcxc})>0) or instr(o.bdcqzh,#{dcxc})>0 
+                              or instr(m.zl,#{dcxc})>0 or instr(t20.qlrzjh, #{dcxc}) > 0
+                              or instr(t20.qlrzjh,Decode(length(#{dcxc}),18,substr(#{dcxc},0,6)||substr(#{dcxc},9,9)))>0
+                              )</if>
+                              <if test="qlr != null and qlr != '' "> and t20.qlrlx !='ywr' and instr(t20.qlrmc,#{qlr})>0</if>
+                              <if test="cqzh != null and cqzh != '' ">and instr(o.bdcqzh,#{cqzh})>0</if>
+                              <if test="fwzl != null and fwzl != '' ">and instr(y2.zl,#{fwzl})>0</if>
+                              <if test="qlrzjh != null and qlrzjh != '' ">and t20.qlrlx !='ywr' and (instr(t20.qlrzjh, #{qlrzjh}) > 0 <if test="qlrzjh2 != null and qlrzjh2 != '' ">or instr(t20.qlrzjh, #{qlrzjh2}) > 0</if>)</if>
+                    union all
+                    select s.fwid bdcdyid,u.ygdjzmh bdcqzh,u.ygdjzmh zsid,(u.iszx) qszt
+                              from gd_fw s
+                              inner join gd_bdc_ql_rel t on t.bdcid = s.fwid
+                              inner join gd_yg u on u.ygid = t.qlid 
+                              left join gd_qlr t24 on t24.qlid = u.ygid 
+                              inner join gd_xm t31 on t31.proid = u.proid
+                              where u.ygdjzl in ('1','2') 
+                              <if test="sqlx != null and sqlx != ''">and t31.djlx=#{sqlx}</if>
+                              <if test="dcxc != null and dcxc != ''">and t24.qlrlx !='ywr' and (( instr(t24.qlr,#{dcxc})>0) or instr(u.ygdjzmh,#{dcxc})>0 
+                              or instr(s.fwzl,#{dcxc})>0 or instr(t24.qlrzjh, #{dcxc}) > 0
+                              or instr(t24.qlrzjh,Decode(length(#{dcxc}),18,substr(#{dcxc},0,6)||substr(#{dcxc},9,9)))>0
+                              )</if>
+                              <if test="qlr != null and qlr != '' ">and t24.qlrlx !='ywr' and instr(t24.qlr,#{qlr})>0</if>
+                              <if test="cqzh != null and cqzh != '' ">and instr(u.ygdjzmh,#{cqzh})>0</if>
+                              <if test="fwzl != null and fwzl != '' ">and instr(s.fwzl,#{fwzl})>0</if>
+                              <if test="qlrzjh != null and qlrzjh != '' ">and t24.qlrlx !='ywr' and (instr(t24.qlrzjh, #{qlrzjh}) > 0 <if test="qlrzjh2 != null and qlrzjh2 != '' ">or instr(t24.qlrzjh, #{qlrzjh2}) > 0</if>)</if>
+                              
+                    </if>
+     	)where bdcdyid is not null
+		 </if> 
+	</select>
+	<select id="getWuhuBdcdjDAxxByBdcqzh" parameterType="java.util.Map"
+		resultType="map">
+		select strcat(bdcqzh) bdcqzh,strcat(bdcdyh) bdcdyh,strcat(sjdh) sjdh,strcat(sqlx) sqlxmc,strcat(djsj) djsj,strcat(qlrmc) qlrmc,strcat(qlrzjh) qlrzjh,strcat(fwzl) fwzl,strcat(qszt) qszt from(
+		    select a.bdcqzh,t6.bdcdyh,to_char(s1.bh) sjdh, to_char(c.mc) sqlx, to_char(d.djsj, 'yyyy-mm-dd') djsj,  to_char(t5.qlrmc) qlrmc, to_char(t5.qlrzjh) qlrzjh, to_char(y1.zl) fwzl,d.qszt
+		          from bdc_zs a
+		          left join bdc_xmzs_rel b on b.zsid = a.zsid
+		          left join bdc_xm s1 on s1.proid = b.proid
+		          left join bdc_zd_sqlx c  on c.dm = s1.sqlx
+		          inner join bdc_fdcq d  on d.proid = b.proid
+		          left join bdc_zs_qlr_rel t2 on t2.zsid = a.zsid
+		          left join bdc_qlr t5  on t5.qlrid = t2.qlrid
+		          left join bdc_bdcdy t6  on t6.bdcdyid = d.bdcdyid
+		          left join djsj_fwhs t7  on t7.bdcdyh = t6.bdcdyh
+		          left join bdc_spxx y1 on y1.proid = b.proid
+		         where  t5.qlrlx in ('qlr', '')
+		           <if test = "bdcdyid != null and bdcdyid != '' " > and d.bdcdyid = #{bdcdyid} </if>
+			union all
+			select e.bdcqzh,t13.bdcdyh,to_char(s2.bh) sjdh,to_char(g.mc) sqlx,to_char(h.djsj, 'yyyy-mm-dd') djsj,to_char(t12.qlrmc) qlrmc,to_char(t12.qlrzjh) qlrzjh,to_char(t19.zldz) fwzl,h.qszt
+		          from bdc_zs e
+		          left join bdc_xmzs_rel f on f.zsid = e.zsid
+		          left join bdc_xm s2 on s2.proid = f.proid
+		          left join bdc_zd_sqlx g on g.dm = s2.sqlx
+		          left join bdc_fdcq_dz h on h.proid = f.proid
+		          left join bdc_zs_qlr_rel t11 on t11.zsid = e.zsid
+		          left join bdc_qlr t12 on t12.qlrid = t11.qlrid
+		          left join bdc_bdcdy t13 on t13.bdcdyid = h.bdcdyid
+		          left join djsj_fw_xmxx t14 on t14.bdcdyh = t13.bdcdyh
+		          left join djsj_fw_ljz t19 on t19.fw_xmxx_index = t14.fw_xmxx_index
+		         where t12.qlrlx in ('qlr', '')
+		           <if test = "bdcdyid != null and bdcdyid != '' "> and h.bdcdyid = #{bdcdyid} </if>
+	        union all
+	  		select i.fczh bdcqzh,b1.bdcdyh, to_char(p1.slbh) sjdh, to_char(p1.djlx) sqlx, to_char(p1.gxrq, 'yyyy-mm-dd') djsj,  to_char(t18.qlr) qlrmc, to_char(t18.qlrzjh) qlrzjh, to_char(k.fwzl) fwzl,(i.iszx+1) qszt
+		          from GD_FWSYQ i
+		          inner join gd_bdc_ql_rel j  on j.qlid = i.qlid
+		          inner join gd_fw k  on k.fwid = j.bdcid
+		          left join GD_XM p1  on p1.proid = i.proid
+		          left join gd_qlr t18 on t18.qlid = i.qlid
+		          left join gd_dyh_rel b1 on b1.gdid = k.fwid
+		         where t18.qlrlx in ('qlr', '')
+		    <if test = "bdcdyid != null and bdcdyid != '' "> and k.fwid = #{bdcdyid} </if>
+			<if test="yg !='no' ">
+			union all
+			select l.bdcqzh,b2.bdcdyh, to_char(n.bh) sjdh,to_char(s3.mc) sqlx,to_char(q.djsj, 'yyyy-mm-dd') djsj,to_char(t20.qlrmc) qlrmc,to_char(t20.qlrzjh) qlrzjh,to_char(n.zl) fwzl,q.qszt
+		          from bdc_zs l
+		          inner join bdc_xmzs_rel m on m.zsid = l.zsid
+		          left join bdc_xm n on n.proid = m.proid
+		          left join bdc_zd_sqlx s3 on s3.dm = n.sqlx
+		          inner join bdc_yg q on q.proid = m.proid
+		          left join bdc_qlr t20 on t20.proid = q.proid
+		          left join bdc_bdcdy b2 on b2.bdcdyid=q.bdcdyid
+		          left join bdc_spxx y2 on y2.proid = n.proid
+		         where q.ygdjzl in ('1', '2') and t20.qlrlx != 'ywr'
+		    <if test = "bdcdyid != null and bdcdyid != '' " > and q.bdcdyid = #{bdcdyid} </if>
+			union all
+			select s.ygdjzmh bdcqzh, b3.bdcdyh,to_char(p3.slbh) sjdh, to_char(p3.djlx) sqlx, to_char(p3.gxrq, 'yyyy-mm-dd') djsj, to_char(t24.qlr) qlrmc, to_char(t24.qlrzjh) qlrzjh, to_char(u.fwzl) fwzl,(s.iszx+1) qszt
+		          from gd_yg s
+		          inner join gd_bdc_ql_rel t on t.qlid = s.ygid
+		          inner join gd_fw u  on u.fwid = t.bdcid
+		          left join GD_XM p3 on p3.proid = s.proid
+		          left join gd_qlr t24 on t24.qlid = s.ygid
+		          left join gd_dyh_rel b3 on b3.gdid = u.fwid
+		         where s.ygdjzl in ('1', '2') and t24.qlrlx in ('qlr', '')
+		           <if test = "bdcdyid != null and bdcdyid != '' " > and u.fwid = #{bdcdyid} </if>
+			</if>
+     	)t  
+	</select>
+	<select id="getBdcdyidNumByBdcqzh" parameterType="String" resultType="map">
+	select ((select count(distinct c.bdcdyid)
+           from bdc_zs a
+           left join bdc_xmzs_rel b
+             on b.zsid = a.zsid
+           left join bdc_xm c
+             on c.proid = b.proid
+          inner join bdc_fdcq d
+             on d.proid = c.proid
+          <if test= " bdcqzh != null and bdcqzh != '' ">where a.bdcqzh = #{bdcqzh}) </if>+
+       (select count(distinct c.bdcdyid)
+           from bdc_zs a
+           left join bdc_xmzs_rel b
+             on b.zsid = a.zsid
+           left join bdc_xm c
+             on c.proid = b.proid
+          inner join bdc_fdcq_dz d
+             on d.proid = c.proid
+          <if test= " bdcqzh != null and bdcqzh != '' ">where a.bdcqzh = #{bdcqzh})</if> +
+       (select count(distinct b.bdcid)
+           from gd_fwsyq a
+          inner join gd_bdc_ql_rel b
+             on b.qlid = a.qlid
+          <if test= " bdcqzh != null and bdcqzh != '' ">where a.fczh = #{bdcqzh})</if>) nums
+  from dual
+	</select>
+</mapper>

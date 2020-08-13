@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcGdxxMapper">
+
+    <!--苏州档案页面展示sql-->
+    <select id="getGdxxByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT  x.bh,x.jjdbh,x.xmzt,x.wiid,x.wiid AS awiid,x.bjsj FROM(
+        SELECT DISTINCT t.bh, t.jjdbh, t.xmzt,t.wiid,t.bjsj bjsj
+        FROM bdc_xm t
+        WHERE 1=1
+        <if test="searchText != null and searchText !=''">
+            AND T.BH = #{searchText}
+        </if>
+        <if test="Gd != null and Gd != ''">
+            AND EXISTS
+            (SELECT 1 FROM BDC_GDXX D WHERE D.XMID=t.PROID
+            AND D.DAID IS NOT NULL
+            AND nvl(D.sjly,'0') = '0'
+            <if test="gdr != null and gdr != ''">
+              AND D.GDR = #{gdr}
+            </if>
+            <if test="mlh != null and mlh != ''">
+              AND D.MLH = #{mlh}
+            </if>
+            <if test="gdrq !=null and gdrq !=''">
+              AND TO_CHAR(D.GDRQ,'yyyy-MM-dd') = #{gdrq}
+            </if>
+            )
+        </if>
+        <if test="proidList != null and proidList !=''">
+            AND T.SQLX NOT IN
+            <foreach collection="proidList" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="notGd != null and notGd != ''">
+          AND NOT EXISTS
+          (SELECT wiid FROM (SELECT wiid FROM bdc_xm t1 WHERE EXISTS
+          (SELECT xmid FROM bdc_gdxx t2 WHERE t1.proid = t2.xmid)) t3
+          WHERE t3.wiid = t.wiid)
+        </if>
+        <if test="tbh != null and tbh !=''">
+            AND T.jjdbh = #{tbh}
+        </if>
+        AND NOT EXISTS (SELECT 1 FROM BDC_XM WHERE wiid = t.WIID AND bjsj <![CDATA[<]]> t.bjsj)
+        )X
+        <!--按办结时间升序排列-->
+        ORDER BY X.BJSJ
+    </select>
+    <!--苏州过渡归档信息展示页面-->
+    <select id="getGdxxGdByPage" parameterType="java.util.HashMap" resultType="map">
+        select a.gdxxid,a.gdxxid agdxxid, a.xmid, a.daid, a.mlh, a.ajh, a.gdrq, a.gdr, a.gdxx, a.bz, a.ajys, a.ajjs, a.hh, a.dah, a.gdlx, a.gxzt, b.tdzh, d.zl
+        from bdc_gdxx a
+        left join gd_tdsyq b on a.xmid = b.daywh
+        left join gd_bdc_ql_rel c on c.qlid = b.qlid
+        left join gd_td d on d.tdid = c.bdcid
+        <where>
+            and nvl(a.sjly,'0') != '0'
+            <if test="mlh != null and mlh != ''">
+               and a.mlh = #{mlh}
+            </if>
+            <if test="ajhKs != null and ajhKs != ''">
+                <![CDATA[ and a.ajh > #{ajhKs} ]]>
+            </if>
+            <if test="ajhJs != null and ajhJs != ''">
+                <![CDATA[ and a.ajh < #{ajhJs} ]]>
+            </if>
+        </where>
+        order by a.ajh
+    </select>
+    <!--苏州档案页面展示sqlmul-->
+    <select id="getGdxxMulByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT x.proid,x.bh,x.jjdbh,x.xmzt,x.wiid,x.proid AS aproid,x.bjsj FROM(
+        SELECT DISTINCT t.proid,t.bh, t.jjdbh, t.xmzt,t.wiid,t.bjsj
+        FROM bdc_xm t
+        WHERE 1=1
+        <if test="searchText != null and searchText !=''">
+            AND T.BH = #{searchText}
+        </if>
+        <if test="Gd != null and Gd != ''">
+            AND EXISTS
+            (SELECT 1 FROM BDC_GDXX D WHERE D.XMID=t.PROID
+            AND D.DAID IS NOT NULL
+            AND nvl(D.sjly,'0') = '0'
+            <if test="gdr != null and gdr != ''">
+                AND D.GDR = #{gdr}
+            </if>
+            <if test="mlh != null and mlh != ''">
+                AND D.MLH = #{mlh}
+            </if>
+            <if test="gdrq !=null and gdrq !=''">
+                AND TO_CHAR(D.GDRQ,'yyyy-MM-dd') = #{gdrq}
+            </if>
+            )
+        </if>
+        <if test="proidList != null and proidList !=''">
+            AND T.SQLX IN
+            <foreach collection="proidList" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="notGd != null and notGd != ''">
+            AND NOT EXISTS
+            (SELECT wiid FROM (SELECT wiid FROM bdc_xm t1 WHERE EXISTS
+            (SELECT xmid FROM bdc_gdxx t2 WHERE t1.proid = t2.xmid)) t3
+            WHERE t3.wiid = t.wiid)
+        </if>
+        <if test="tbh != null and tbh !=''">
+            AND T.jjdbh = #{tbh}
+        </if>
+        )X
+        <!--按办结时间升序排列-->
+        ORDER BY X.BJSJ
+    </select>
+    <!--吴江页面展示sql-->
+    <select id="getWjGdxxByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT t.wiid,t.xmmc,t.bh,t.djlx,t.proid,t.jjdbh,a.gdxxid, a.xmid, a.daid, a.mlh, a.ajh, a.gdrq,
+        a.gdr, a.gdxx, a.bz FROM bdc_xm t
+        LEFT JOIN (SELECT max(t.gdxxid) gdxxid,xmid FROM bdc_gdxx t GROUP BY xmid) e ON e.xmid=t.proid
+        LEFT JOIN bdc_gdxx a ON a.gdxxid=e.gdxxid
+        WHERE (nvl(t.xmzt,0)=1 or nvl(t.xmzt,0)=0)
+        AND nvl(a.sjly,'0') = '0'
+        <if test="searchText != null and searchText !=''">
+            AND t.bh = #{searchText}
+        </if>
+        <!--<if test="bh != null and bh !=''">-->
+        <!--and t.bh LIKE '%'||#{bh}||'%'-->
+        <!--</if>-->
+        <if test="tbh != null and tbh !=''">
+            AND t.jjdbh = #{tbh}
+        </if>
+        <if test="xmmc != null and xmmc !=''">
+            AND t.xmmc LIKE '%'||#{xmmc}||'%'
+        </if>
+        <!--isgd 的值为0时 查找未归档的数据即daid为空 -->
+        <if test="isgd != null and isgd=='a'.toString()">
+            AND a.daid is null
+        </if>
+        <if test="isgd != null and isgd=='b'.toString()">
+            AND a.daid is not null
+        </if>
+    </select>
+    
+    <select id="countXmid" parameterType="String" resultType="int">
+        SELECT count(daid) FROM bdc_gdxx  WHERE xmid=#{xmid}
+    </select>
+    <!--根据归档xxid判断是否存在-->
+    <select id="countXmidByWiid" parameterType="String" resultType="int">
+        SELECT COUNT(x.daid) FROM bdc_gdxx x LEFT JOIN bdc_xm m ON x.xmid=m.proid
+        WHERE m.wiid = #{wiid}
+    </select>
+
+    <select id="getDafpxxMapByProid" parameterType="java.util.HashMap" resultType="java.util.Map">
+        select distinct t.djlx,t.proid,c.zl,e.bdcdyh,x.qlrmc,y.qlrmc as ywrmc,a.mlh,a.ajh,a.mlh||'C4'||a.ajh as txmh,d.sjrq,a.ajjs,a.ajys from bdc_xm t
+        LEFT JOIN bdc_qlr x ON x.proid = t.proid  AND x.qlrlx='qlr'
+        LEFT JOIN bdc_qlr y ON y.proid = t.proid AND y.qlrlx='ywr'
+        LEFT JOIN bdc_gdxx a ON a.xmid = t.proid
+        LEFT JOIN bdc_spxx c ON c.proid = t.proid
+        LEFT JOIN bdc_sjxx d ON t.proid = d.proid
+        LEFT JOIN bdc_bdcdy e ON t.bdcdyid = e.bdcdyid
+        WHERE 1=1
+        <if test="proids != null and proids != ''">
+            AND t.proid IN
+            <foreach collection="proids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="proid != null and proid != ''">
+            AND t.proid = #{proid}
+        </if>
+        order by a.ajh asc
+    </select>
+
+    <select id="getSzyjdbh" resultType="java.lang.String">
+        SELECT BDC_SZYJD_LSH_SEQ.nextval lsh FROM dual
+    </select>
+
+    <select id="getGdxxXmidListByMap" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT X.XMID from BDC_GDXX X
+        WHERE 1=1
+        <if test="gdr != null and gdr != ''">
+            AND X.GDR = #{gdr}
+        </if>
+        <if test="mlh != null and mlh != ''">
+            AND X.MLH = #{mlh}
+        </if>
+        <if test="gdrq !=null and gdrq !=''">
+            AND TO_CHAR(X.GDRQ,'yyyy-MM-dd') = #{gdrq}
+        </if>
+    </select>
+
+    <select id="getCurrentMaxAjhByMlh" parameterType="java.lang.String" resultType="int">
+        select max(to_number(x.ajh)) from bdc_gdxx x where x.mlh = #{mlh}
+    </select>
+
+    <select id="getCurrentMaxAjhByMlhGd" parameterType="java.lang.String" resultType="int">
+        select max(to_number(x.ajh))
+        from bdc_gdxx x
+        where x.mlh = #{mlh}
+    </select>
+
+    <select id="getBdcGdxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.wiid FROM BDC_XM t
+        LEFT JOIN BDC_GDXX g ON t.proid = g.xmid
+        LEFT JOIN BDC_XMZS_REL k ON t.proid = k.proid
+        LEFT JOIN BDC_ZS l ON k.zsid = l.zsid
+        <if test="pfUserName != null and pfUserName != ''">
+            LEFT JOIN ${pfUserName}.pf_workflow_instance p ON p.workflow_instance_id = t.wiid
+            LEFT JOIN BDC_ZD_SQLX zd ON zd.wdid = p.workflow_definition_id
+        </if>
+        WHERE t.xmzt = 1
+        AND nvl(g.sjly,'0') = '0'
+        <if test="cqzh != null and cqzh != ''">
+            AND l.bdcqzh = #{cqzh}
+        </if>
+        <if test="dyzmh != null and dyzmh != ''">
+            AND l.bdcqzh = #{dyzmh}
+        </if>
+        <if test="gdlx != null and gdlx != ''">
+            AND g.gdlx = #{gdlx}
+        </if>
+        <if test="dah != null and dah != ''">
+            AND instr(g.dah,#{dah}) > 0
+        </if>
+        <if test="slbhArray != null and slbhArray != ''">
+            AND
+            <foreach collection="slbhArray" item="item" open="(" separator=" or " close=")">
+                t.bh=#{item}
+            </foreach>
+        </if>
+        <if test="sqlxArray != null and sqlxArray != ''">
+            AND zd.dm NOT IN
+            <foreach collection="sqlxArray" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY t.wiid
+        <if test="slbhDecodeSortArray != null and slbhDecodeSortArray != ''">
+            ORDER BY DECODE(wiid,
+            <foreach collection="slbhDecodeSortArray" item="item" index="index" separator=" , ">
+                #{item},#{index}
+            </foreach>)
+        </if>
+    </select>
+
+    <select id="getMaxDah" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT max(to_number(t.DAH)) FROM BDC_GDXX t
+        WHERE 1=1
+        <if test="gdlx != null and gdlx !=''">
+            AND t.gdlx = #{gdlx}
+        </if>
+    </select>
+
+    <select id="getMaxLsh" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT max(to_number(SUBSTR((t.DAH),2))) FROM BDC_GDXX t
+        WHERE 1=1
+        <if test="gdlx != null and gdlx !=''">
+            AND t.gdlx = #{gdlx}
+        </if>
+    </select>
+
+    <select id="getMaxHh" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT max(to_number(t.hh)) FROM BDC_GDXX t
+        WHERE 1=1
+        <if test="gdlx != null and gdlx !=''">
+            AND t.gdlx = #{gdlx}
+        </if>
+    </select>
+
+    <select id="getBdcCqGdQdByProids" parameterType="java.util.Arrays" resultType="cn.gtmap.estateplat.server.model.BdcCqGdQd">
+      SELECT a.*,rownum xh FROM (SELECT t.dah,t.hh,t.xmid proid,s.zl,m.bdcqzh cqzh FROM BDC_GDXX t
+      LEFT JOIN BDC_SPXX s ON t.xmid = s.proid
+      LEFT JOIN BDC_XMZS_REL n ON t.xmid = n.proid
+      LEFT JOIN BDC_ZS m ON n.zsid = m.zsid
+      WHERE 1=1
+        <if test="proidArray != null and proidArray != ''">
+            AND
+            <foreach collection="proidArray" item="item" open="(" separator=" or " close=")">
+                t.xmid=#{item}
+            </foreach>
+        </if>
+      ORDER BY t.dah ASC )a
+    </select>
+
+    <select id="getBdcDyGdQdByProids" parameterType="java.util.Arrays" resultType="cn.gtmap.estateplat.server.model.BdcCqGdQd">
+        SELECT a.*,rownum xh FROM (SELECT t.dah,t.hh,t.xmid proid,s.zl,m.bdcqzh cqzh FROM BDC_GDXX t
+        LEFT JOIN BDC_SPXX s ON t.xmid = s.proid
+        LEFT JOIN BDC_XMZS_REL n ON t.xmid = n.proid
+        LEFT JOIN BDC_ZS m ON n.zsid = m.zsid
+        WHERE 1=1
+        <if test="proidArray != null and proidArray != ''">
+            AND
+            <foreach collection="proidArray" item="item" open="(" separator=" or " close=")">
+                t.xmid=#{item}
+            </foreach>
+        </if>
+        ORDER BY t.dah ASC )a
+    </select>
+
+    <select id="delGdxxByXmid" parameterType="java.util.Arrays">
+        DELETE FROM BDC_GDXX t
+        WHERE 1=1
+        <if test="xmidArray != null and xmidArray != ''">
+            AND
+            <foreach collection="xmidArray" item="item" open="(" separator=" or " close=")">
+                t.xmid = #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getBdcGdxxDahList" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT t.dah FROM BDC_GDXX t
+        WHERE 1=1
+        <if test="xmidArray != null and xmidArray != ''">
+            AND
+            <foreach collection="xmidArray" item="item" open="(" separator=" or " close=")">
+                t.xmid = #{item}
+            </foreach>
+        </if>
+        <if test="gdlx != null and gdlx !=''">
+            AND t.gdlx = #{gdlx}
+        </if>
+            ORDER BY to_number(t.dah) ASC
+    </select>
+
+    <select id="getBdcGdxxMulByPage" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        SELECT t.proid FROM BDC_XM t
+        LEFT JOIN BDC_GDXX g ON t.proid = g.xmid
+        LEFT JOIN BDC_XMZS_REL k ON t.proid = k.proid
+        LEFT JOIN BDC_ZS l ON k.zsid = l.zsid
+        <if test="pfUserName != null and pfUserName != ''">
+            LEFT JOIN ${pfUserName}.pf_workflow_instance p ON p.workflow_instance_id = t.wiid
+            LEFT JOIN BDC_ZD_SQLX zd ON zd.wdid = p.workflow_definition_id
+        </if>
+        WHERE t.xmzt = 1
+        <if test="cqzh != null and cqzh != ''">
+            AND l.bdcqzh = #{cqzh}
+        </if>
+        <if test="dyzmh != null and dyzmh != ''">
+            AND l.bdcqzh = #{dyzmh}
+        </if>
+        <if test="gdlx != null and gdlx != ''">
+            AND g.gdlx = #{gdlx}
+        </if>
+        <if test="dah != null and dah != ''">
+            AND instr(g.dah,#{dah}) > 0
+        </if>
+        <if test="cxlx != null and cxlx != ''">
+            AND t.qllx IN
+            <foreach collection="cxlx" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="slbhArray != null and slbhArray != ''">
+            AND t.bh IN
+            <foreach collection="slbhArray" item="item" open="(" separator=" , " close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="sqlxArray != null and sqlxArray != ''">
+            AND
+            <foreach collection="sqlxArray" item="item" open="(" separator=" or " close=")">
+                zd.dm = #{item}
+            </foreach>
+        </if>
+        GROUP BY t.proid
+        <if test="slbhDecodeSortArray != null and slbhDecodeSortArray != ''">
+            ORDER BY DECODE(proid,
+            <foreach collection="slbhDecodeSortArray" item="item" index="index" separator=" , ">
+                #{item},#{index}
+            </foreach>)
+        </if>
+
+    </select>
+
+    <select id="getBdcGdxxWiidByPage" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        SELECT t.wiid FROM BDC_XM t
+        LEFT JOIN BDC_GDXX g ON t.proid = g.xmid
+        LEFT JOIN BDC_XMZS_REL k ON t.proid = k.proid
+        LEFT JOIN BDC_ZS l ON k.zsid = l.zsid
+        <if test="pfUserName != null and pfUserName != ''">
+            LEFT JOIN ${pfUserName}.pf_workflow_instance p ON p.workflow_instance_id = t.wiid
+            LEFT JOIN BDC_ZD_SQLX zd ON zd.wdid = p.workflow_definition_id
+        </if>
+        WHERE t.xmzt = 1
+        <if test="cqzh != null and cqzh != ''">
+            AND instr(l.bdcqzh,#{cqzh}) > 0
+        </if>
+        <if test="gdlx != null and gdlx != ''">
+            AND g.gdlx = #{gdlx}
+        </if>
+        <if test="slbhArray != null and slbhArray != ''">
+            AND
+            <foreach collection="slbhArray" item="item" open="(" separator=" or " close=")">
+                instr(t.bh,#{item}) > 0
+            </foreach>
+        </if>
+        <if test="sqlxArray != null and sqlxArray != ''">
+            AND zd.dm NOT IN
+            <foreach collection="sqlxArray" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY t.wiid
+    </select>
+    <select id="getBdcGdxxProidByPage" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        SELECT t.proid FROM BDC_XM t
+        LEFT JOIN BDC_GDXX g ON t.proid = g.xmid
+        LEFT JOIN BDC_XMZS_REL k ON t.proid = k.proid
+        LEFT JOIN BDC_ZS l ON k.zsid = l.zsid
+        <if test="pfUserName != null and pfUserName != ''">
+            LEFT JOIN ${pfUserName}.pf_workflow_instance p ON p.workflow_instance_id = t.wiid
+            LEFT JOIN BDC_ZD_SQLX zd ON zd.wdid = p.workflow_definition_id
+        </if>
+        WHERE t.xmzt = 1
+        AND nvl(D.sjly,'0') = '0'
+        <if test="cqzh != null and cqzh != ''">
+            AND instr(l.bdcqzh,#{cqzh}) > 0
+        </if>
+        <if test="gdlx != null and gdlx != ''">
+            AND g.gdlx = #{gdlx}
+        </if>
+        <if test="slbhArray != null and slbhArray != ''">
+            AND
+            <foreach collection="slbhArray" item="item" open="(" separator=" or " close=")">
+                instr(t.bh,#{item}) > 0
+            </foreach>
+        </if>
+        <if test="sqlxArray != null and sqlxArray != ''">
+            AND
+            <foreach collection="sqlxArray" item="item" open="(" separator="or" close=")">
+                zd.dm = #{item}
+            </foreach>
+        </if>
+        GROUP BY t.proid
+    </select>
+
+
+    <select id="getMaxAjhByGdlx" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT max(to_number(t.ajh)) FROM BDC_GDXX t
+        WHERE 1=1
+        <if test="gdlx != null and gdlx !=''">
+            AND t.mlh = #{gdlx}
+        </if>
+    </select>
+
+    <update id="changeMlh" parameterType="java.util.Map">
+        UPDATE bdc_zd_gdlx t SET t.dm = #{dm} WHERE
+        1=1 AND
+        t.mc = #{mc}
+    </update>
+
+
+    <select id="getGdDafpxxMapByGdxxid" parameterType="java.util.HashMap" resultType="java.util.Map">
+        SELECT g.gdxxid,t.proid,t1.zl,r.bdcdyh,q.qlr qlrmc,g.mlh,g.ajh,g.mlh||'C4'||g.ajh as txmh,x.cjsj sjrq,g.ajjs,g.ajys from gd_tdsyq t
+        LEFT JOIN gd_ql_dyh_rel r on r.qlid = t.qlid
+        LEFT JOIN gd_bdc_ql_rel r1 on r1.qlid = t.qlid
+        LEFT JOIN gd_td t1 on t1.tdid = r1.bdcid
+        LEFT JOIN gd_qlr q on q.qlid = t.qlid
+        LEFT JOIN gd_xm x on x.proid = t.proid
+        LEFT JOIN bdc_gdxx g on g.xmid = t.daywh
+        WHERE q.qlrlx = 'qlr' AND nvl(g.sjly,'0') != '0'
+        <if test="gdxxids != null and gdxxids != ''">
+            AND g.gdxxid IN
+            <foreach collection="gdxxids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="gdxxid != null and gdxxid != ''">
+            AND g.gdxxid = #{gdxxid}
+        </if>
+        order by g.ajh asc
+    </select>
+</mapper>

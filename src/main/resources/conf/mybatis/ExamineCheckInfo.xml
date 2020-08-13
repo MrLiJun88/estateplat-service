@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.ExamineCheckInfoMapper">
+
+    <select id="queryBdcdyhByWiid" parameterType="map" resultType="map">
+        SELECT B.BDCDYH,T.PROID FROM BDC_XM T
+        INNER JOIN BDC_BDCDY B ON T.BDCDYID = B.BDCDYID
+        WHERE T.WIID IS NOT NULL
+        <if test="wiid != '' and wiid != null">
+            AND T.WIID = #{wiid}
+        </if>
+        <if test="proid != '' and proid != null">
+            AND T.PROID = #{proid}
+        </if>
+    </select>
+
+    <select id="queryYproidByWiid" parameterType="map" resultType="map">
+        SELECT R.YPROID,R.YQLID,t.PROID FROM BDC_XM T
+        INNER JOIN BDC_XM_REL R ON R.PROID = T.PROID
+        WHERE T.WIID IS NOT NULL
+        <if test="wiid != '' and wiid != null">
+            AND T.WIID = #{wiid}
+        </if>
+        <if test="proid != '' and proid != null">
+            AND T.PROID = #{proid}
+        </if>
+    </select>
+
+    <select id="queryFwHsInfoByBdcdyh" parameterType="map" resultType="map">
+        SELECT T.FCDAH,T.BDCDYH FROM DJSJ_FWHS T
+        WHERE T.BDCDYH IS NOT NULL
+        <if test="bdcdyhs != '' and bdcdyhs != null">
+            AND
+            <foreach collection="bdcdyhs" item="item" open="(" separator=" or " close=")">
+                T.BDCDYH = #{item}
+            </foreach>
+        </if>
+        <if test="djids != '' and djids != null">
+            AND
+            <foreach collection="djids" item="item" open="(" separator=" or " close=")">
+                T.FW_HS_INDEX = #{item}
+            </foreach>
+        </if>
+        <if test="djid != '' and djid != null">
+            AND T.FW_HS_INDEX = #{djid}
+        </if>
+        <if test="fwdcbindexs != '' and fwdcbindexs != null">
+            AND
+            <foreach collection="fwdcbindexs" item="item" open="(" separator=" or " close=")">
+                T.FW_DCB_INDEX = #{item}
+            </foreach>
+        </if>
+        <if test="fwdcbindex != '' and fwdcbindex != null">
+            AND T.FW_DCB_INDEX = #{fwdcbindex}
+        </if>
+    </select>
+
+    <select id="queryGdproidByProject" parameterType="map" resultType="map">
+        SELECT T.QLID,T.PROID FROM (
+        SELECT T.QLID,T.PROID FROM GD_FWSYQ T
+        UNION ALL
+        SELECT T.CFID QLID,T.PROID FROM GD_CF T
+        UNION ALL
+        SELECT T.DYID QLID,T.PROID FROM GD_DY T
+        UNION ALL
+        SELECT T.YGID QLID,T.PROID FROM GD_YG T
+        UNION ALL
+        SELECT T.YYID QLID,T.PROID FROM GD_YY T
+        UNION ALL
+        SELECT T.QLID QLID,T.PROID FROM GD_TDSYQ T ) T
+        WHERE T.QLID IS NOT NULL
+        <if test="gdproids != '' and gdproids != null">
+          AND
+          <foreach collection="gdproids" item="item" open="(" separator=" or " close=")">
+              T.PROID = #{item}
+          </foreach>
+      </if>
+    </select>
+
+    <select id="queryDahByGdQlid" parameterType="map" resultType="map">
+        SELECT F.DAH FROM GD_BDC_QL_REL T
+        INNER JOIN GD_FW F ON F.FWID = T.BDCID
+        WHERE F.FWID IS NOT NULL
+        <if test="gdqlids != '' and gdqlids != null">
+            AND
+            <foreach collection="gdqlids" item="item" open="(" separator=" or " close=")">
+                T.QLID = #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="queryBdcdyhByGdQlid" parameterType="map" resultType="map">
+        SELECT R.BDCDYH FROM GD_BDC_QL_REL T
+        INNER JOIN GD_DYH_REL R ON R.GDID = T.BDCID
+        WHERE R.BDCDYH IS NOT NULL
+        <if test="gdqlids != '' and gdqlids != null">
+            AND
+            <foreach collection="gdqlids" item="item" open="(" separator=" or " close=")">
+                T.QLID = #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="queryBdcQlidByProid" parameterType="map" resultType="map">
+        SELECT QLID,PROID FROM (
+        SELECT QLID,PROID FROM BDC_TDSYQ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_JSYDZJDSYQ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_FDCQ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_JZWGY
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_FDCQ_DZ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_TDCBNYDSYQ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_LQ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_HYSYQ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_JZWSYQ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_QTXGQL
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_DYQ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_DYAQ
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_CF
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_YG
+        UNION ALL
+        SELECT QLID,PROID FROM BDC_YY
+        ) T
+        WHERE T.PROID IS NOT NULL AND T.QLID IS NOT NULL
+        <if test="proids != '' and proids != null">
+            AND
+            <foreach collection="proids" item="item" open="(" separator=" or " close=")">
+                T.PROID = #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>

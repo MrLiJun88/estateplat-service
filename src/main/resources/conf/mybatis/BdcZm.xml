@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZmMapper">
+    <select id="getZmListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT a.zmid,b.dm,b.mc,a.zmslsj,a.zmslr,a.zmsqr
+        FROM bdc_zm a
+        LEFT JOIN bdc_zd_zmlx b ON a.zmlx=b.dm
+        <where> a.zmcode=1
+            <if test="zmid != null and zmid !=''">
+                AND a.zmid like '%' || #{zmid} || '%'
+            </if>
+            <if test="zmlx != null and zmlx !=''">
+                AND a.zmlx like '%' || #{zmlx} || '%'
+            </if>
+            <if test="zmslr != null and zmslr !=''">
+                AND a.zmslr like '%' || #{zmslr} || '%'
+            </if>
+            <if test="zmsqr != null and zmsqr !=''">
+                AND a.zmsqr like '%' || #{zmsqr} || '%'
+            </if>
+            <if test="zmjsrq != null and zmjsrq !='' and zmqsrq != null and zmqsrq !=''">
+                AND a.zmslsj BETWEEN #{zmqsrq} AND #{zmjsrq}
+            </if>
+        </where>
+        ORDER BY a.zmslsj DESC
+    </select>
+    <select id="getZmMc"  resultType="map">
+        SELECT t.dm,t.mc
+        FROM bdc_zd_zmlx t
+        ORDER BY t.mc
+    </select>
+    <update id="delBdcZmByZmid" parameterType="String">
+        UPDATE bdc_zm set zmcode=0
+        WHERE zmid = #{zmid}
+    </update>
+    <insert id="creatZm" parameterType="java.util.Map">
+        INSERT INTO bdc_zm(zmid,zmslr,zmslsj,zmlx,zmcode)
+        VALUE (#{zmid},#{zmslr},#{date},#{zmlx},1)
+    </insert>
+</mapper>

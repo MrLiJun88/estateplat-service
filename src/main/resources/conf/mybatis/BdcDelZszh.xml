@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDelZszhMapper">
+
+    <select id="getBdcDelZszhList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcDelZszh">
+        SELECT zszhid, bdcqzh, zhlsh, nf, zslx, dwdm, sqsjc, szsxqc, zstype, gxrq,isuse
+        FROM bdc_del_zszh
+        <where>
+            <if test="bdcqzh != null and bdcqzh !=''">
+                AND bdcqzh =  #{bdcqzh}
+            </if>
+            <if test="isuse != null and isuse !=''">
+                AND nvl(isuse,'0')=#{isuse}
+            </if>
+            <if test="zstype != null and zstype !=''">
+                AND zstype =  #{zstype}
+            </if>
+            <if test="nf != null and nf !=''">
+                AND nf =  #{nf}
+            </if>
+            <if test="dwdm != null and dwdm !=''">
+                AND dwdm =  #{dwdm}
+            </if>
+        </where>
+        ORDER  BY bdcqzh
+    </select>
+
+    <select id="getBdcDelZszhMinBdcqzh" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcDelZszh">
+        SELECT zszhid, bdcqzh, zhlsh, nf, zslx, dwdm, sqsjc, szsxqc, zstype, gxrq,isuse
+        FROM bdc_del_zszh WHERE bdcqzh=(SELECT MIN(bdcqzh) FROM bdc_del_zszh
+        <where>
+            <if test="bdcqzh != null and bdcqzh !=''">
+                AND bdcqzh =  #{bdcqzh}
+            </if>
+            <if test="isuse != null and isuse !=''">
+                AND nvl(isuse,'0')=#{isuse}
+            </if>
+            <if test="zstype != null and zstype !=''">
+                AND zstype =  #{zstype}
+            </if>
+            <if test="nf != null and nf !=''">
+                AND nf =  #{nf}
+            </if>
+            <if test="dwdm != null and dwdm !=''">
+                AND dwdm =  #{dwdm}
+            </if>
+        </where>
+        ) AND rownum='1'
+    </select>
+</mapper>

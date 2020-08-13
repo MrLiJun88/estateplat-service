@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZsQlrRelMapper">
+
+    <select id ="queryBdcZsQlrRelByQlrid" parameterType="java.lang.String" resultType="cn.gtmap.estateplat.model.server.core.BdcZsQlrRel" >
+          SELECT gxid,zsid,qlrid
+          FROM BDC_ZS_QLR_REL
+          WHERE QLRID = #{qlrid}
+    </select>
+
+    <select id="queryBdcZsQlrRelByProid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcZsQlrRel">
+        SELECT t.gxid,t.zsid,t.qlrid
+        FROM bdc_zs_qlr_rel t
+        LEFT JOIN bdc_xmzs_rel a ON t.zsid=a.zsid
+        WHERE a.proid=#{proid}
+    </select>
+
+    <delete id="batchDelBdcZsQlrRelByBdcZsList" parameterType="java.util.List">
+        DELETE FROM BDC_ZS_QLR_REL t WHERE t.zsid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item.zsid}
+        </foreach>
+    </delete>
+
+    <delete id="batchDelBdcZsQlrRelByBdcQlrList" parameterType="java.util.List">
+        DELETE FROM BDC_ZS_QLR_REL t WHERE t.qlrid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item.qlrid}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,8 @@
+[
+  {
+    "totalNodeName": "受理（初审）,复审,核定,受理,核定（登簿）,审核",
+    "csNodeName":"受理（初审）,受理",
+    "fsNodeName": "复审,审核",
+    "hdNodeName": "核定,核定（登簿）"
+  }
+]

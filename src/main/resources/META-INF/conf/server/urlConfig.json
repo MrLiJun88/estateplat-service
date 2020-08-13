@@ -1,0 +1,19 @@
+/*
+ * 不动产单元操作按钮url配置
+ * dayxUrl：档案影像地址
+ * djbxxUrl:登记簿信息地址
+*/
+{
+  "dayxUrl": [
+    {
+      "name": "url",
+      "value": "1"
+    }
+  ],
+  "djbxxUrl": [
+    {
+      "name": "url",
+      "value": "http://127.0.0.1/estateplat-analysis/jyZdCx"
+    }
+  ]
+}

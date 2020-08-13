@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+
+    <security:http entry-point-ref="casProcessingFilterEntryPoint">
+        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+        <security:intercept-url pattern="/static/**" filters="none"/>
+        <security:intercept-url pattern="/static/print/**" filters="none"/>
+        <security:intercept-url pattern="/createSjdcl/**" filters="none"/>
+        <security:intercept-url pattern="/wfProject/creatProjectEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/beforeTurnProjectEventEnd" filters="none"/>
+        <security:intercept-url pattern="/wfProject/updateWorkFlow" filters="none"/>
+        <security:intercept-url pattern="/wfProject/workFlowDel" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEventDbr" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectChangeBdcdy" filters="none"/>
+        <security:intercept-url pattern="/bdcJtzf/**" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectBackBdcdy" filters="none"/>
+        <security:intercept-url pattern="/wfProject/wwCreateWfProject" filters="none"/>
+        <security:intercept-url pattern="/wfProject/wwCheckXmByProject" filters="none"/>
+        <security:intercept-url pattern="/wfProject/wwCheckBdcXm" filters="none"/>
+        <security:intercept-url pattern="/wfProject/wwGetBdcXtConfigQlqtzkAndFj" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEventDyZxDbr" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEventSzr" filters="none"/>
+        <security:intercept-url pattern="/wfProject/beforeTurnProjectEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/beforeTurnRegisterProjectEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/postBdcXmToArchive" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEventFz" filters="none"/>
+        <security:intercept-url pattern="/wfProject/workFlowTurnAutoSignBySignkeys" filters="none"/>
+        <security:intercept-url pattern="/wfProject/redundantFieldHandle" filters="none"/>
+        <security:intercept-url pattern="/dcxx/getTp" filters="none"/>
+        <security:intercept-url pattern="/wfProject/creatZs" filters="none"/>
+        <security:intercept-url pattern="/wfProject/workFlowBackZsBh" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEventXmzt" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEventSign" filters="none"/>
+        <security:intercept-url pattern="/wfProject/workFlowBackXmzt" filters="none"/>
+        <security:intercept-url pattern="/wfProject/workFlowBackHandleSign" filters="none"/>
+        <security:intercept-url pattern="/wfProject/workFlowBackFz" filters="none"/>
+        <security:intercept-url pattern="/wfProject/endProjectEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/changeYqlZtEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/backYqlZtEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/changeYqlZtqhEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/reSaveZs" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEventBysl" filters="none"/>
+        <security:intercept-url pattern="/wfProject/backByslEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEventBydj" filters="none"/>
+        <security:intercept-url pattern="/wfProject/backBydjEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/turnProjectEventBqbz" filters="none"/>
+        <security:intercept-url pattern="/wfProject/backBqbzEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/sendSmsProjectEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/changeSdZtEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/creatPreviewZsEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/completeZsInfoEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/dbTsJyzt" filters="none"/>
+        <security:intercept-url pattern="/wfProject/delPreviewZsEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/backZsEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/workFlowBackHandleJcpt" filters="none"/>
+        <security:intercept-url pattern="/wfProject/registerProjectEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/unlockQtxzql" filters="none"/>
+        <security:intercept-url pattern="/wfProject/endProjectZx" filters="none"/>
+        <security:intercept-url pattern="/sign/updateSignOpinon" filters="none"/>
+        <security:intercept-url pattern="/static/js/**" filters="none"/>
+        <security:intercept-url pattern="/queryLpbFromMap" filters="none"/>
+        <security:intercept-url pattern="/index/errorMsg" filters="none"/>
+        <security:intercept-url pattern="/lpb/lpb" filters="none"/>
+        <security:intercept-url pattern="/bdcDjb/showQL" filters="none"/>
+        <security:intercept-url pattern="/bdcDjb/getQlJson" filters="none"/>
+        <security:intercept-url pattern="/bdcDjb/getQlPageJson" filters="none"/>
+        <security:intercept-url pattern="/bdcDjb/getAllPrintQlJson" filters="none"/>
+        <security:intercept-url pattern="/yztQuery/getOutfields" filters="none"/>
+        <security:intercept-url pattern="/cqfx" filters="none"/>
+        <security:intercept-url pattern="/BdcRequiredFieldsService" filters="none"/>
+        <security:intercept-url pattern="/fcExchangeService.service" filters="none"/>
+        <security:intercept-url pattern="/archiveReceiveSecivce.service" filters="none"/>
+        <security:intercept-url pattern="/sysBdcqzService.service" filters="none"/>
+        <security:intercept-url pattern="/sysBdcDoStateService.service" filters="none"/>
+        <security:intercept-url pattern="/BdcSlbhService" filters="none"/>
+        <security:intercept-url pattern="/BdcXmxxService" filters="none"/>
+        <security:intercept-url pattern="/auditLogService" filters="none"/>
+        <security:intercept-url pattern="/dcxx/*" filters="none"/>
+        <security:intercept-url pattern="/bdcPrint/**" filters="none"/>
+        <security:intercept-url pattern="/message/**" filters="none"/>
+        <security:intercept-url pattern="/rest/**" filters="none"/>
+        <!--        查封失效必须走cas-->
+        <!--security:intercept-url pattern="/bdcCfIssx/**" filters="none"/>-->
+        <security:intercept-url pattern="/register/createProject" filters="none"/>
+        <security:intercept-url pattern="/register/checkExcel" filters="none"/>
+        <security:intercept-url pattern="/projectManageService" filters="none"/>
+        <security:intercept-url pattern="/register/**" filters="none"/>
+        <security:intercept-url pattern="/ompData/getTdSfDyInfo" filters="none"/>
+        <security:intercept-url pattern="/bdcSfxx/updateBdcSfxx" filters="none"/>
+        <security:intercept-url pattern="/evaluation/triggerEvaluation" filters="none"/>
+        <security:intercept-url pattern="/selfHelpPrint/*" filters="none"/>
+        <security:intercept-url pattern="/bdcarchives/*" filters="none"/>
+        <security:intercept-url pattern="/bdcArchivesMul/*" filters="none"/>
+        <security:intercept-url pattern="/bdcGdByWiid/*" filters="none"/>
+        <security:intercept-url pattern="/bdcArchivesMul/*" filters="none"/>
+        <security:intercept-url pattern="/wfProject/getConfirmMsg" filters="none"/>
+        <security:intercept-url pattern="/tradingStatus/validate" filters="none"/>
+        <security:intercept-url pattern="/externalLogin" filters="none"/>
+        <security:intercept-url pattern="/wfProject/inheritXzzrnxInfo" filters="none"/>
+        <security:intercept-url pattern="/wfProject/gxYhValidateEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/completeZsRelatedInfoEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/doSzEvent" filters="none"/>
+        <security:intercept-url pattern="/wfProject/workFlowDel" filters="none"/>
+        <security:intercept-url pattern="/bdcJgSjgl/wwCheckGdXm" filters="none"/>
+        <security:intercept-url pattern="/bdcJgSjgl/wwCreateGdProject" filters="none"/>
+        <security:intercept-url pattern="/portalCheck/**" filters="none"/>
+        <security:intercept-url pattern="/bdcCfxx/changeLhcfToCf" filters="none"/>
+        <security:intercept-url pattern="/xqwSjgx/**" filters="none"/>
+        <security:intercept-url pattern="/bdcpic/showPpgx" filters="none"/>
+        <security:intercept-url pattern="/bdcpic/showBdcdyhPpjg" filters="none"/>
+        <security:intercept-url pattern="/bdcpic/getPpzt" filters="none"/>
+        <security:intercept-url pattern="/wfProject/updateSlzt" filters="none"/>
+        <security:logout invalidate-session="true" logout-url="/logout.action"
+                         logout-success-url="${cas.url}/logout?service=${bdcdj.url}/index"/>
+    </security:http>
+
+    <bean id="casProcessingFilterEntryPoint" class="org.springframework.security.ui.cas.CasProcessingFilterEntryPoint">
+        <property name="loginUrl" value="${cas.url}/login"/>
+        <property name="serviceProperties" ref="serviceProperties"/>
+    </bean>
+
+    <bean id="casProcessingFilter" class="org.springframework.security.ui.cas.CasProcessingFilter">
+        <security:custom-filter after="CAS_PROCESSING_FILTER"/>
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationFailureUrl" value="/"/>
+        <property name="defaultTargetUrl" value="/"/>
+        <property name="filterProcessesUrl" value="/casCheck.action"/>
+    </bean>
+
+    <bean id="casAuthenticationProvider" class="org.springframework.security.providers.cas.CasAuthenticationProvider">
+        <security:custom-authentication-provider/>
+        <property name="userDetailsService" ref="userDetailsService"/>
+        <property name="serviceProperties" ref="serviceProperties"/>
+        <property name="ticketValidator">
+            <bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
+                <constructor-arg index="0" value="${cas.url}"/>
+            </bean>
+        </property>
+        <property name="key" value="an_id_for_this_auth_provider_only"/>
+    </bean>
+
+    <security:authentication-manager alias="authenticationManager"/>
+
+    <bean id="userDetailsService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="${platform.url}/userDetailsService.service"/>
+        <property name="serviceInterface" value="org.springframework.security.userdetails.UserDetailsService"/>
+    </bean>
+
+    <bean id="serviceProperties" class="org.springframework.security.ui.cas.ServiceProperties">
+        <property name="service" value="${bdcdj.url}/casCheck.action"/>
+        <property name="sendRenew" value="false"/>
+    </bean>
+
+</beans>

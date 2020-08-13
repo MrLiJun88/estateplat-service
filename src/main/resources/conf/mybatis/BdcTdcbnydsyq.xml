@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcTdcbnydsyqMapper">
+
+    <select id="getBdcTdcbnydsyq" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcTdcbnydsyq">
+       SELECT qlid, bdcdyid, syksqx, syjsqx, syttlx, yzyfs, cyzl, syzcl, syqmj, tdsyqxz, ywh, qllx, proid,
+       CASE WHEN  a.mc IS NOT NULL THEN a.mc ELSE t.gyqk END gyqk,
+      djsj, dbr, fj,  qszt, qlqssj, qljssj, fbfmc, qdcbfs
+      FROM bdc_tdcbnydsyq t
+      LEFT JOIN BDC_ZD_GYFS a ON a.dm=t.gyqk
+      WHERE t.proid=#{proid}
+    </select>
+
+</mapper>

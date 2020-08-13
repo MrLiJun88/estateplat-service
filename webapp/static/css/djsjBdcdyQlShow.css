@@ -1,0 +1,189 @@
+a {
+    color: #428bca;
+}
+
+.tab-content {
+    overflow-y: auto;
+    height: auto;
+}
+
+/*移动modal样式*/
+#djsjSearchPop .modal-dialog {
+    width: 650px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+/*移动modal样式*/
+#tipPop .modal-dialog {
+    width: 650px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+.alert {
+    font-size: 12px;
+    border-radius: 4px;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+/*移动modal样式*/
+#ywsjSearchPop .modal-dialog {
+    width: 650px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+/*移动modal样式*/
+#fcsjSearchPop .modal-dialog {
+    width: 650px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+/*移动modal样式*/
+#tdsjSearchPop .modal-dialog {
+    width: 650px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+/*高级搜索的样式修改*/
+.btn01:hover {
+    background-color: #c7c7c7;
+    text-decoration: none;
+    color: #333;
+}
+
+.btn01 {
+    display: inline-block;
+    padding: 4px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    color: #333333;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #f2f2f2;
+    border: 1px solid #aaa;
+    webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+}
+
+/*去掉表格横向滚动条*/
+/*.ui-jqgrid-bdiv{
+    overflow-x: hidden!important;
+}*/
+
+/*表单样式重写*/
+form input[type='text'], select, textarea {
+    border-radius: 4px !important;
+    width:100% !important;
+}
+
+.modelFooter {
+    background: none;
+    border-top: 1px solid #e5e5e5;
+    padding: 10px;
+    text-align: center;
+}
+
+.form .row {
+    margin: 10px 0px 10px 0px;
+}
+
+.form .row .col-xs-2 {
+    padding-left: 0px;
+    padding-right: 4px;
+    text-align: right;
+}
+
+.form .row .col-xs-4 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.tooltips {
+    border-width: 1px;
+    border-style: solid;
+    position: absolute;
+    display: none;
+    border-radius: 3px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 999;
+}
+
+.tooltips p.content {
+    padding: 5px;
+}
+
+.tooltips .triangle-front, .tooltips .triangle-back {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    border-width: 8px;
+    border-style: solid;
+    position: absolute;
+    border-color: transparent;
+    top: 100%;
+    left: 50%;
+    margin-left: -8px;
+}
+
+.tooltips .triangle-back {
+    margin-top: -1px;
+}
+
+.yellow {
+    border-color: #c7c08d;
+    background-color: #fffac3;
+}
+
+.yellow .triangle-front {
+    border-top-color: #c7c08d;
+}
+
+.yellow .triangle-back {
+    border-top-color: #fffac3;
+}
+
+.SelectXnDyh {
+    background-color: #FFFFCC;
+}

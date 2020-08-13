@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcSjxxMapper">
+
+    <select id="getSjxxidlistByBdcXmList" parameterType="java.util.List" resultType="String">
+        SELECT t.sjxxid FROM bdc_sjxx t WHERE t.proid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item.proid}
+        </foreach>
+    </select>
+
+    <delete id="batchDelSjclListBySjxxidList" parameterType="java.util.List">
+        DELETE FROM bdc_sjcl t WHERE t.sjxxid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDelSjxxListBySjxxidList" parameterType="java.util.List">
+        DELETE FROM bdc_sjxx t WHERE t.sjxxid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

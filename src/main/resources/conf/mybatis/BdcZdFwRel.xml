@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZdFwRelMapper">
+    <update id="updateJeAndMj" parameterType="java.util.Map">
+        UPDATE bdc_spf_zd_hjgx
+        SET
+       fwhjdyje    = #{fwhjdyje,
+       jdbcType = DOUBLE },
+       fwhjtdmj     = #{fwhjtdmj,
+       jdbcType = DOUBLE},
+       bz     = #{bz,
+       jdbcType = VARCHAR},
+       xmhjdyje     = #{xmhjdyje,
+       jdbcType = DOUBLE}
+      WHERE proid = #{proid}
+
+    </update>
+
+    <select id="getBdcdyhNums" parameterType="String" resultType="map">
+        SELECT COUNT (*) FROM bdc_spf_zd_hjgx  WHERE proid=#{proid}
+    </select>
+
+    <select id="getSumFwhjje" parameterType="String" resultType="map">
+        SELECT SUM (FWHJDYJE) FROM bdc_spf_zd_hjgx WHERE proid=#{proid}
+    </select>
+
+    <select id="getSumXmhjje" parameterType="String" resultType="map">
+        SELECT SUM (XMHJDYJE) FROM bdc_spf_zd_hjgx WHERE proid=#{proid}
+    </select>
+
+    <select id="getSumhjjeTdmj" parameterType="String" resultType="map">
+        SELECT SUM (FWHJTDMJ) FROM bdc_spf_zd_hjgx WHERE proid=#{proid}
+    </select>
+
+    <select id="getBdcZdFwRelList" parameterType="cn.gtmap.estateplat.model.server.core.BdcSpfZdHjgx" resultType="map">
+        SELECT x.* FROM bdc_spf_zd_hjgx x
+        <where>
+            <if test="proid != null and proid !=''">
+               AND proid=#{proid}
+            </if>
+            <if test="djh != null and djh !=''">
+                AND x.djh =#{dih}
+            </if>
+            <if test="zdbdcdyh != null and zdbdcdyh !=''">
+                AND x.zdbdcdyh =#{zdbdcdyh}
+            </if>
+            <if test="fwbdcdyh != null and fwbdcdyh !=''">
+                AND x.fwbdcdyh =#{fwbdcdyh}
+            </if>
+        </where>
+
+
+    </select>
+</mapper>

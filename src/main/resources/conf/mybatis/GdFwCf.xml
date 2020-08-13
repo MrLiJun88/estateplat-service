@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdFwCfMapper">
+    <!-- 获取房屋查封信息 -->
+    <select id="getFcCfxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT  cf.cfid cfid,
+        cf.isjf isjf,
+        cf.cflx cflx,
+        cf.cfjg cfjg,
+        cf.cfwh cfwh,
+        cf.cfksrq cfksrq,
+        cf.cfjsrq cfjsrq,
+        s.fczh fczh,
+        fw.fwzl fwzl,
+        fw.jzmj jzmj,
+        fw.ghyt ghyt,
+        fw.fwid
+        FROM gd_cf cf
+        LEFT JOIN gd_bdc_ql_rel r ON cf.cfid = r.qlid
+        LEFT JOIN gd_fw fw ON r.bdcid = fw.fwid
+        INNER JOIN
+        (SELECT s.fczh,s1.bdcid FROM gd_fwsyq s
+        INNER JOIN gd_bdc_ql_rel s1 ON s.qlid=s1.qlid)s ON r.bdcid=s.bdcid
+        <where>
+            fw.fwid IS NOT NULL AND cf.bdclx='TDFW'
+            <if test="dcxc != null and dcxc !=''">
+                AND (
+                    instr(cf.cfjg ,#{dcxc} )>0 OR
+                    instr(fw.fwzl ,#{dcxc} )>0 OR
+                    instr(s.fczh ,#{dcxc} )>0
+                )
+            </if>
+            <if test="cfjg != null and cfjg !=''">
+                AND instr(cf.cfjg ,#{dcxc} )>0
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND cf.cfid IN (
+                SELECT qlr.qlid qlid
+                FROM gd_qlr qlr
+                WHERE instr(qlr.qlr ,#{qlr})>0 AND qlr.qlrlx='qlr')
+            </if>
+            <if test="fczh != null and fczh !=''">
+                AND  instr(s.fczh ,#{fczh} ) >0
+            </if>
+            <if test="zl != null and zl !=''">
+                AND  instr(fw.fwzl ,#{zl} ) >0
+            </if>
+        </where>
+    </select>
+
+    <select id="getTdcfByPage" parameterType="java.util.Map" resultType="map">
+        select  cf.cfid cfid,
+        cf.isjf isjf,
+        cf.cflx cflx,
+        cf.cfjg cfjg,
+        cf.cfwh cfwh,
+        cf.cfksrq cfksrq,
+        cf.cfjsrq cfjsrq,
+        s.tdzh tdzh,
+        td.zl zl,
+        td.zdmj zdmj,
+        td.yt yt
+        from gd_cf cf
+        left join gd_bdc_ql_rel r on cf.cfid = r.qlid
+        left join gd_td td on r.bdcid = td.tdid
+        left join gd_tdsyq s on td.tdid = s.tdid
+        <where>
+            td.tdid is not null  and cf.bdclx='TD'
+            <if test="dcxc != null and dcxc !=''">
+                and (
+                instr(cf.cfjg ,#{dcxc} )>0 or
+                instr(s.tdzh ,#{dcxc} )>0 or
+                instr(td.zl ,#{dcxc} )>0
+                )
+            </if>
+            <if test="cfjg != null and cfjg !=''">
+                and instr(cf.cfjg ,#{cfjg} )>0
+            </if>
+            <if test="qlr != null and qlr !=''">
+                and cf.cfid in (select qlr.qlid qlid from gd_qlr qlr where instr(qlr.qlr ,#{qlr})>0 and qlr.qlrlx='qlr')
+            </if>
+            <if test="tdzh != null and tdzh !=''">
+                and  instr(s.tdzh ,#{tdzh} ) >0
+            </if>
+            <if test="zl != null and zl !=''">
+                and  instr(td.zl ,#{zl} ) >0
+            </if>
+        </where>
+    </select>
+</mapper>

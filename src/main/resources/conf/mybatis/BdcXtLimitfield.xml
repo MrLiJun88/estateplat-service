@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcXtLimitfieldMapper">
+
+    <select id="getZyValidates" parameterType="java.util.Map" resultType="map">
+        SELECT t.id,t.workflow_name,t.workflow_id,t.workflow_nodename,t.workflow_nodeid,t.cpt_name,t.cpt_field_name,t.table_field_name,t.table_id,t.table_field_id,t.cpt_desc,t.qllx,t.bz,a.table_xmrel_sql
+        FROM BDC_XT_LIMITFIELD t
+        LEFT JOIN BDC_ZD_TABLES a ON a.id=t.table_id
+        <where>
+            <if test="workflowId != null and workflowId !=''">
+                and t.workflow_id = #{workflowId}
+            </if>
+            <if test="workflowNodeId != null and workflowNodeId !=''">
+                and t.workflow_nodeid = #{workflowNodeId}
+            </if>
+            <if test="tableId != null and tableId !=''">
+                and t.table_id = #{tableId}
+            </if>
+            <if test="removeTableId != null and removeTableId !=''">
+                <![CDATA[
+            and t.table_id <> #{removeTableId}
+                ]]>
+            </if>
+            <if test="cptName != null and cptName !=''">
+                and t.cpt_name != #{cptName}
+            </if>
+            <if test="cpt != null and cpt !=''">
+                and t.cpt_name = #{cpt}
+            </if>
+        </where>
+        order by a.table_id
+    </select>
+    <select id="runSql" resultType="map">
+        ${sql}
+    </select>
+
+    <select id="checkGdFwZdsjByFwid" resultType="map">
+        SELECT t.fwid,t.dah,t.gyqk,t.jyjg,t.ghyt,t.fwxz,t.fwjg,t.szc,t.tnjzmj,t.fwzl,t.dw,t.jzmj,t.ftjzmj,t.cqly,t.fwlx,t.sjly,t.fw_dcb_index,t.gxrq,t.qlid,t.jgsj,t.dwdm,t.bz,t.zrzh,t.isfsss,t.myzcs,t.cg,t.jz,t.cqqid,t.fjh,t.pth,t.sjc,t.xmmc,t.zts,t.qqh,t.bsm,t.zcs,t.yghyt,t.yfwxz,t.yfwzl,
+        CASE WHEN a1.dm IS NULL THEN a.dm ELSE a1.dm END AS gyqkdm,
+        CASE WHEN b1.dm IS NULL THEN b.dm ELSE b1.dm END AS ghytdm,
+        CASE WHEN c1.dm IS NULL THEN c.dm ELSE c1.dm END AS fwxzdm,
+        CASE WHEN d1.dm IS NULL THEN d.dm ELSE d1.dm END AS fwjgdm,
+        CASE WHEN e1.dm IS NULL THEN e.dm ELSE e1.dm END AS fwlxdm,
+        CASE WHEN f1.dm IS NULL THEN f.dm ELSE f1.dm END AS mjdm FROM GD_FW t
+        LEFT JOIN BDC_ZD_GYFS a ON a.mc = t.gyqk
+        LEFT JOIN BDC_ZD_FWYT b ON b.mc = t.ghyt
+        LEFT JOIN DJSJ_ZD_FWXZ c ON c.mc = t.fwxz
+        LEFT JOIN DJSJ_ZD_FWJG d ON d.mc = t.fwjg
+        LEFT JOIN DJSJ_ZD_FWLX e ON e.mc = t.fwlx
+        LEFT JOIN BDC_ZD_MJDW f ON f.mc = t.dw
+        LEFT JOIN BDC_ZD_GYFS a1 ON a1.dm = t.gyqk
+        LEFT JOIN BDC_ZD_FWYT b1 ON b1.dm = t.ghyt
+        LEFT JOIN DJSJ_ZD_FWXZ c1 ON c1.dm = t.fwxz
+        LEFT JOIN DJSJ_ZD_FWJG d1 ON d1.dm = t.fwjg
+        LEFT JOIN DJSJ_ZD_FWLX e1 ON e1.dm = t.fwlx
+        LEFT JOIN BDC_ZD_MJDW f1 ON f1.dm =t.dw
+        WHERE t.fwid=#{fwid}
+    </select>
+
+    <select id="checkBdcdyByFcdah" resultType="map">
+      SELECT f.mc ghyt
+      FROM djsj_fwhs t
+      LEFT JOIN bdc_zd_fwyt f ON f.dm=t.ghyt
+      WHERE t.fcdah=#{fcdah}
+    </select>
+
+    <select id="getOpinionPage" parameterType="cn.gtmap.estateplat.model.server.core.BdcXtOpinion" resultType="map">
+        SELECT t.opinid, t.workflowid, t.workflowname,t.userid,
+        CASE WHEN t.isuse='1' THEN '是' ELSE '否' end isuse,
+        t.activitytype,
+        CASE WHEN t.isrightclick='1' then '是' ELSE '否' end isrightclick,
+        content FROM bdc_xt_opinion t
+        <where>
+            <if test="workflowid != null and workflowid !=''">
+                and t.workflowid = #{workflowid}
+            </if>
+            <if test="activitytype != null and activitytype !=''">
+                and t.activitytype = #{activitytype}
+            </if>
+        </where>
+    </select>
+
+    <select id="getLimitFieldByPage" parameterType="cn.gtmap.estateplat.model.server.core.BdcXtLimitfield" resultType="map">
+        SELECT t.id,t.workflow_name,t.workflow_id,t.workflow_nodename,t.workflow_nodeid,
+        t.cpt_name,t.cpt_field_name,t.table_field_name,t.table_id,t.cpt_desc,t.table_field_id,nvl(t.qllx,'0') qllx ,a.table_xmrel_sql
+        FROM BDC_XT_LIMITFIELD t
+        LEFT JOIN BDC_ZD_TABLES a ON a.id=t.table_id
+
+        <where>
+            <if test="workflowId != null and workflowId !=''">
+                AND t.workflow_id = #{workflowId}
+            </if>
+            <if test="workflowNodeid != null and workflowNodeid !=''">
+                AND t.workflow_nodeid = #{workflowNodeid}
+            </if>
+        </where>
+        ORDER BY a.table_id
+    </select>
+
+    <select id="checkGdTdZdsjByTdid" resultType="map">
+          SELECT t.*,a.dm as mjdm,b.dm ytdm,c.DM syqlxdm,d.dm gyqkdm FROM GD_TD t
+          LEFT JOIN BDC_ZD_MJDW a ON a.mc=t.dw
+          LEFT JOIN djsj_zd_dldm b ON b.mc=t.yt
+          LEFT JOIN djsj_zd_tdsyqlx c ON c.mc=t.syqlx
+          LEFT JOIN BDC_ZD_GYFS d ON d.mc=t.gyqk
+          WHERE t.tdid=#{tdid}
+    </select>
+    <select id="checkGdLqZdsjByLqid" resultType="map">
+        SELECT t.*,a.dm as mjdm
+        FROM GD_LQ t
+        LEFT JOIN BDC_ZD_MJDW a ON a.mc=t.dw
+        WHERE t.lqid=#{lqid}
+    </select>
+    <select id="checkGdCqZdsjByCqid" resultType="map">
+        SELECT t.*,a.dm as mjdm
+        FROM GD_CQ t
+        LEFT JOIN BDC_ZD_MJDW a ON a.mc=t.dw
+        WHERE t.cqid=#{cqid}
+    </select>
+
+    <select id="checkGdYgZdsjByYgid" resultType="map">
+        SELECT t.*,a.dm as ygdjzldm
+        FROM GD_YG t
+        LEFT JOIN bdc_zd_ygdjlx a ON a.mc=t.ygdjzl
+        WHERE t.ygid=#{ygid}
+    </select>
+    <select id="checkGdCfZdsjByCfid" resultType="map">
+         SELECT t.*,a.dm as cflxdm
+         FROM GD_CF t
+         LEFT JOIN bdc_zd_cflx a ON a.mc=t.cflx
+         WHERE t.cfid=#{cfid}
+    </select>
+    <select id="checkGdDyZdsjByDyid" resultType="map">
+        SELECT t.*,a.dm as dyfsdm
+        FROM GD_DY t
+        LEFT JOIN bdc_zd_dyfs a ON a.mc=t.dyfs
+        WHERE t.dyid=#{dyid}
+    </select>
+
+    <select id="checkGdQlrZdsjByQlrid" resultType="map">
+        SELECT t.*,a.dm as zjlxdm
+        FROM GD_QLR t
+        LEFT JOIN BDC_ZD_ZJLX a ON a.mc=t.qlrsfzjzl
+        WHERE t.qlrid=#{qlrid}
+    </select>
+
+    <select id="getTableIdGroupTable" parameterType="String" resultType="String">
+        SELECT t.table_id FROM BDC_XT_LIMITFIELD t
+        <where>
+            <if test="workflowId != null and workflowId !=''">
+                and t.workflow_id = #{workflowId}
+            </if>
+            <if test="workflowNodeId != null and workflowNodeId !=''">
+                and t.workflow_nodeid = #{workflowNodeId}
+            </if>
+        </where>
+        GROUP BY t.table_id
+    </select>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcHysyqMapper">
+
+    <select id="getBdcHysyq" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcHysyq">
+        SELECT * FROM bdc_hysyq t WHERE 1=1
+        <if test="Bdcdyid != null and Bdcdyid !=''">
+            AND t.Bdcdyid =#{Bdcdyid}
+        </if>
+        <if test="zdzhh != null and zdzhh !=''">
+            AND t.zdzhh LIKE '%'||#{zdzhh}||'%'
+        </if>
+    </select>
+
+    <insert id="saveBdcHysyq" parameterType="cn.gtmap.estateplat.model.server.core.BdcHysyq" >
+        INSERT INTO bdc_hysyq(qlid,bdcdyid,syksqx,syjsqx,syzje,syjyj,syjjnqk,syqmj,ywh,qllx,proid,gyqk,djsj,dbr,fj,qszt)
+        VALUES(#{qlid,jdbcType=VARCHAR},#{bdcdyid,jdbcType=VARCHAR},#{syksqx,jdbcType=VARCHAR},#{syjsqx,jdbcType=DOUBLE}
+        ,#{syzje,jdbcType=VARCHAR},#{syjyj,jdbcType=VARCHAR},#{syjjnqk,jdbcType=DATE}
+        ,#{syqmj,jdbcType=VARCHAR},#{ywh,jdbcType=VARCHAR},#{qllx,jdbcType=VARCHAR},#{proid,jdbcType=VARCHAR}
+        ,#{gyqk,jdbcType=VARCHAR},#{djsj,jdbcType=DATE},#{dbr,jdbcType=VARCHAR},#{fj,jdbcType=VARCHAR}
+        ,#{qszt,jdbcType=INTEGER})
+    </insert>
+</mapper>

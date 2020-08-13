@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcJsydzjdsyqMapper">
+
+    <select id="getBdcJsydzjdsyq" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcJsydzjdsyq">
+        SELECT
+        t.qlid,t.bdcdyid,t.qdjg,t.syksqx,t.syjsqx,t.syqmj,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.qlqssj,t.qljssj,t.syksqx2,t.syjsqx2,t.syksqx3,t.syjsqx3,t.syfttdmj,t.crhtbh,t.zrqyh,t.zrjg,t.zxyy,t.zxdbr,t.zxdbsj,t.bz,t.dytdmj,t.fttdmj
+        FROM bdc_jsydzjdsyq t
+        WHERE 1=1
+        <if test="proid != null and proid !=''">
+            AND t.proid = #{proid}
+        </if>
+    </select>
+
+    <select id="getBdcJsydzjdsyqList" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcJsydzjdsyq">
+        SELECT
+        t.qlid,t.bdcdyid,t.qdjg,t.syksqx,t.syjsqx,t.syqmj,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.qlqssj,t.qljssj,t.syksqx2,t.syjsqx2,t.syksqx3,t.syjsqx3,t.syfttdmj,t.crhtbh,t.zrqyh,t.zrjg,t.zxyy,t.zxdbr,t.zxdbsj,t.bz,t.dytdmj,t.fttdmj
+        FROM bdc_jsydzjdsyq t
+        WHERE 1=1
+        <if test="proid != null and proid !=''">
+            AND t.proid = #{proid}
+        </if>
+        <if test="bdcdyid != null and bdcdyid !=''">
+            AND t.bdcdyid = #{bdcdyid}
+        </if>
+        <if test="qszt != null and qszt !=''">
+            AND t.qszt = #{qszt}
+        </if>
+    </select>
+
+    <select id="getJsyByDjh" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcJsydzjdsyq">
+       SELECT t.qlid,t.bdcdyid,t.qdjg,t.syksqx,t.syjsqx,t.syqmj,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.qlqssj,t.qljssj,t.syksqx2,t.syjsqx2,t.syksqx3,t.syjsqx3,t.syfttdmj,t.crhtbh,t.zrqyh,t.zrjg,t.zxyy,t.zxdbr,t.zxdbsj,t.bz,t.dytdmj,t.fttdmj
+       FROM bdc_jsydzjdsyq t
+       INNER JOIN bdc_bdcdy b ON b.bdcdyid=t.bdcdyid
+       INNER JOIN bdc_xm x ON x.proid=t.proid
+       WHERE x.xmzt='1' AND nvl(t.qszt,'0')!='2' AND instr(b.bdcdyh,#{bdcdyh})>0
+    </select>
+</mapper>

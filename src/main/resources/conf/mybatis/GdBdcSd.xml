@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//不动产单元-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdBdcSdMapper">
+
+
+    <insert id="insertGdBdcSd" parameterType="cn.gtmap.estateplat.model.server.core.GdBdcSd">
+        insert into gd_bdcsd
+        (
+        sdid,
+        cqzh,
+        qlid,
+        bdclx,
+        proid,
+        xzzt,
+        xzyy,
+        xztype,
+        sdr,
+        sdsj,
+        jsr,
+        jssj,
+        wiid
+        )
+        values
+        (
+        #{sdid,jdbcType=VARCHAR},
+        #{cqzh,jdbcType=VARCHAR},
+        #{qlid,jdbcType=VARCHAR},
+        #{bdclx,jdbcType=VARCHAR},
+        #{proid,jdbcType=VARCHAR},
+        #{xzzt,jdbcType=INTEGER},
+        #{xzyy,jdbcType=VARCHAR},
+        #{xztype,jdbcType=VARCHAR},
+        #{sdr,jdbcType=VARCHAR},
+        #{sdsj,jdbcType=TIMESTAMP},
+        #{jsr,jdbcType=VARCHAR},
+        #{jssj,jdbcType=TIMESTAMP},
+        #{wiid,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <select id="findGdBdcSdExsit" parameterType="String" resultType="Integer">
+        select count(*) from gd_bdcsd t where t.qlid=#{qlid}
+    </select>
+
+    <update id="updateGdBdcSd" parameterType="cn.gtmap.estateplat.model.server.core.GdBdcSd">
+        update
+        gd_bdcsd
+        set
+        sdid=#{sdid,jdbcType=VARCHAR},
+        cqzh=#{cqzh,jdbcType=VARCHAR},
+        qlid=#{qlid,jdbcType=VARCHAR},
+        bdclx=#{bdclx,jdbcType=VARCHAR},
+        proid=#{proid,jdbcType=VARCHAR},
+        xzzt=#{xzzt,jdbcType=INTEGER},
+        xzyy=#{xzyy,jdbcType=VARCHAR},
+        xztype=#{xztype,jdbcType=VARCHAR},
+        sdr=#{sdr,jdbcType=VARCHAR},
+        sdsj=#{sdsj,jdbcType=TIMESTAMP},
+        jsr=#{jsr,jdbcType=VARCHAR},
+        jssj=#{jssj,jdbcType=TIMESTAMP},
+        jsyy=#{jsyy,jdbcType=VARCHAR},
+        wiid=#{wiid,jdbcType=VARCHAR}
+        where
+        sdid = #{sdid,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getGdSdByPage" parameterType="java.util.HashMap" resultType="map">
+        select
+        t.sdid,
+        t.cqzh,
+        t.qlid,
+        t.bdclx,
+        t.proid,
+        t.xzzt,
+        t.xzyy,
+        t.xztype,
+        t.sdr,
+        t.sdsj,
+        t.jsr,
+        t.jssj,
+        t.wiid
+        from gd_bdcsd t
+        <where>
+            <if test="qlid != null and qlid !=''">
+                and t.qlid =#{qlid}
+            </if>
+            <if test="proid != null and proid !=''">
+                and t.proid =#{proid}
+            </if>
+            <if test="xzzt != null and xzzt !=''">
+                and t.xzzt =#{xzzt}
+            </if>
+            <if test="sdr != null and sdr !=''">
+                and t.sdr =#{sdr}
+            </if>
+            <if test="jsr != null and jsr !=''">
+                and t.jsr =#{jsr}
+            </if>
+        </where>
+        order by t.sdsj asc
+    </select>
+
+
+    <select id="findGdBdcSd" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdBdcSd">
+        select
+        t.sdid,
+        t.cqzh,
+        t.qlid,
+        t.bdclx,
+        t.proid,
+        t.xzzt,
+        t.xzyy,
+        t.xztype,
+        t.sdr,
+        t.sdsj,
+        t.jsr,
+        t.jssj,
+        t.wiid
+        from gd_bdcsd t
+        where
+        t.qlid =#{qlid,jdbcType=VARCHAR} AND xzzt!='2'
+    </select>
+
+    <select id="getGdTdByPage" parameterType="java.util.Map" resultType="map">
+        select t.qlid, t.proid, t.tdzh, t.qlr, t.tdzl zl, t.djlx, t.zslx, t.djh,t.tdid,r.bdcdyh from gd_td_ql t
+        left join gd_ql_dyh_rel r on r.qlid = t.qlid
+        <where>
+            <if test="hhSearch != null and hhSearch !=''">
+                and (
+                instr(t.tdzh ,#{hhSearch} )>0 or instr(t.tdzl ,#{hhSearch} )>0 or instr(t.qlr ,#{hhSearch} )>0
+                <if test="qlidsForQlr != null and qlidsForQlr !=''">
+                    or
+                    <foreach collection="qlidsForQlr" item="item" open="(" separator=" or " close=")">
+                        t.qlid = #{item}
+                    </foreach>
+                </if>
+                )
+            </if>
+            <if test="hhSearchDjh != null and hhSearchDjh !=''">
+                and
+                <foreach collection="hhSearchDjh" item="item" open="(" separator=" or " close=")">
+                    t.qlid = #{item}
+                </foreach>
+            </if>
+            <if test="hhSearchZl != null and hhSearchZl !=''">
+                and
+                <foreach collection="hhSearchZl" item="item" open="(" separator=" or " close=")">
+                    t.qlid = #{item}
+                </foreach>
+            </if>
+            <if test="tdzh != null and tdzh !=''">
+                and t.tdzh like '%'||#{tdzh}||'%'
+            </if>
+            <if test="djh != null and djh !=''">
+                and t.djh like '%'||#{djh}||'%'
+            </if>
+            <if test="iszx != null and iszx !=''">
+                and nvl(t.iszx,0) != #{iszx}
+            </if>
+            <if test="zdmj != null and zdmj !=''">
+                and t.zdmj = #{zdmj}
+            </if>
+            <if test="yt != null and yt !=''">
+                and t.yt =#{yt}
+            </if>
+            <if test="qlrzjh != null and qlrzjh !=''">
+                and t.rf1zjh like '%'||#{qlrzjh}||'%'
+            </if>
+            <if test="qlid != null and qlid !=''">
+                and t.qlid =#{qlid}
+            </if>
+            <if test="qlids != null and qlids !=''">
+                and
+                <foreach collection="qlids" item="item" open="(" separator=" or " close=")">
+                    t.qlid = #{item}
+                </foreach>
+            </if>
+            <if test="ppBdcdyh != null and ppBdcdyh !=''">
+                and r.bdcdyh is not null
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getFwIdByQlid" parameterType="String" resultType="String">
+        select t.bdcid from GD_BDC_QL_REL t where t.qlid=#{qlid}
+    </select>
+
+    <select id="getXzztBySdid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdBdcSd">
+        select * from gd_bdcsd t where t.qlid=#{qlid,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="getGdTdHighLevelSearchByPage" parameterType="Map" resultType="Map">
+        select
+        t.qlid,
+        t.proid,
+        t.tdzh,
+        t.qlr,
+        t.tdzl zl,
+        t.djlx,
+        t.zslx,
+        t.djh,
+        t.tdid，
+        s.xzzt,
+        s.jsr,
+        s.sdr
+        from gd_td_ql t left join gd_bdcsd s on t.qlid=s.qlid
+        <where>
+            <if test="xzzt != null and xzzt ==0">
+                and s.xzzt =#{xzzt}
+            </if>
+            <if test="sdr != null and sdr !=''">
+                and s.sdr =#{sdr}
+            </if>
+            <if test="jsr != null and jsr !=''">
+                and s.jsr =#{jsr}
+            </if>
+            <if test="proid != null and proid !=''">
+                and s.proid =#{proid}
+            </if>
+            <if test="qlid != null and qlid !=''">
+                and s.qlid =#{qlid}
+            </if>
+            <if test="xzzt != null and xzzt ==1">
+                and not exists(select g.sdid from gd_bdcsd g where g.sdid=t.tdid and g.xzzt='0')
+            </if>
+
+        </where>
+    </select>
+
+
+    <select id="getGdFwHighLevelSearchByPage" parameterType="Map" resultType="Map">
+        select
+        t.qlid,
+        t.proid,
+        t.fczh,
+        t.qlr RF1DWMC,
+        t.fwzl,
+        t.djlx,
+        t.zslx,
+        s.xzzt xzzt,
+        s.sdr,
+        s.jsr
+        from gd_fw_ql t
+        left join gd_bdcsd s
+        on t.qlid =s.qlid
+        <where>
+            <if test="xzzt != null and xzzt ==0">
+                and s.xzzt =#{xzzt}
+            </if>
+            <if test="sdr != null and sdr !=''">
+                and s.sdr =#{sdr}
+            </if>
+            <if test="jsr != null and jsr !=''">
+                and s.jsr =#{jsr}
+            </if>
+            <if test="proid != null and proid !=''">
+                and s.proid =#{proid}
+            </if>
+            <if test="qlid != null and qlid !=''">
+                and s.qlid =#{qlid}
+            </if>
+            <if test="xzzt != null and xzzt ==1">
+                and not exists(select g.sdid from gd_bdcsd g where g.qlid=t.qlid and g.xzzt='0')
+            </if>
+        </where>
+    </select>
+
+    <select id="getGdFwSdJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        select t.qlid,t.proid,t.fczh,t.qlr RF1DWMC,t.fwzl,t.djlx,t.zslx,r.bdcdyh from gd_fw_ql t
+        left join gd_ql_dyh_rel r on r.qlid = t.qlid
+        <where>
+            <if test="hhSearch != null and hhSearch !=''">
+                and (instr(t.fczh ,#{hhSearch})>0 or instr(t.fwzl ,#{hhSearch})>0 or instr(t.qlr ,#{hhSearch})>0
+                <if test="hhSearchQlids != null and hhSearchQlids !=''">
+                    or
+                    <foreach collection="hhSearchQlids" item="item" open="(" separator=" or " close=")">
+                        t.qlid = #{item}
+                    </foreach>
+                </if>
+                )
+            </if>
+            <if test="fwzl != null and fwzl !=''">
+                and t.fwzl=#{fwzl}
+            </if>
+            <if test="fczh != null and fczh !=''">
+                and instr(t.fczh ,#{fczh} )>0
+            </if>
+
+            <if test="zslx != null and zslx !=''">
+                and instr(t.zslx,#{zslx})>0
+            </if>
+            <if test="qlidsIn != null and qlidsIn !=''">
+                and t.qlid in
+                <foreach item="item" collection="qlidsIn" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="qlids != null and qlids !=''">
+                and
+                <foreach collection="qlids" item="item" open="(" separator=" or " close=")">
+                    t.qlid = #{item}
+                </foreach>
+            </if>
+            <if test="iszx != null and iszx !=''">
+                and nvl(t.iszx,0) != #{iszx}
+            </if>
+            <if test="ppBdcdyh != null and ppBdcdyh !=''">
+                and r.bdcdyh is not null
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

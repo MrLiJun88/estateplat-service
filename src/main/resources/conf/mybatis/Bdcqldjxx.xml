@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcdjbMapper">
+
+    <select id="getQldjByPage" parameterType="java.util.Map" resultType="map">
+        SELECT rownum xh,bdcdyid,bdcdyh,bdclx,djbid ,rownum szbs,c, bz FROM(
+        SELECT a.bdcdyid bdcdyid,a.bdcdyh bdcdyh,a.bdclx bdclx,a.djbid ,b.c,
+        CASE WHEN b.c>1 AND a.bdclx='土地' THEN '已替换' ELSE a.bz END bz
+        FROM (
+        SELECT t.djbid,t.bdcdyid bdcdyid,t.bdcdyh,n.mc bdclx,t.bz bz FROM bdc_bdcdy t
+        LEFT JOIN bdc_zd_bdclx n ON t.bdclx=n.dm)a,(SELECT count(*) c FROM bdc_bdcdy t
+        INNER JOIN bdc_xm m ON m.bdcdyid=t.bdcdyid
+        LEFT JOIN bdc_zd_bdclx n ON t.bdclx=n.dm
+        <where>
+            <if test="djbid != null and djbid !=''">
+                AND t.djbid = #{djbid}
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND t.bdcdyh LIKE  '%'||#{bdcdyh}||'%'
+            </if>
+        </where>
+        ORDER BY  m.cjsj DESC ) b
+
+        <where>
+            <if test="djbid != null and djbid !=''">
+                AND a.djbid = #{djbid}
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND a.bdcdyh LIKE '%'||#{bdcdyh}||'%'
+            </if>
+        </where>
+
+        ORDER BY bdclx ASC,bdcdyh
+        )
+
+    </select>
+
+</mapper>

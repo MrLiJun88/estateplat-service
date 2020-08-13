@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//不动产单元-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcBdcdysdMapper">
+
+    <insert id="insertBdcbdcdySd" parameterType="cn.gtmap.estateplat.model.server.core.BdcBdcdySd">
+        INSERT INTO bdc_bdcdysd
+        (
+        bdcdyid,
+        bdcdyh,
+        zl,
+        bdclx,
+        qlr,
+        xzzt,
+        xzyy,
+        xztype,
+        sdr,
+        sdsj,
+        jsr,
+        jssj,
+        proid,
+        wiid
+        )
+        VALUES
+        (
+        #{bdcdyid,jdbcType=VARCHAR},
+        #{bdcdyh,jdbcType=VARCHAR},
+        #{zl,jdbcType=VARCHAR},
+        #{bdclx,jdbcType=VARCHAR},
+        #{qlr,jdbcType=VARCHAR},
+        #{xzzt,jdbcType=INTEGER},
+        #{xzyy,jdbcType=VARCHAR},
+        #{xztype,jdbcType=VARCHAR},
+        #{sdr,jdbcType=VARCHAR},
+        #{sdsj,jdbcType=TIMESTAMP},
+        #{jsr,jdbcType=VARCHAR},
+        #{jssj,jdbcType=TIMESTAMP},
+        #{proid,jdbcType=VARCHAR},
+        #{wiid,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="findBdcbcddySdExsit" parameterType="String" resultType="Integer">
+        SELECT COUNT(*)
+        FROM bdc_bdcdysd t
+        WHERE   t.bdcdyid=#{bdcdyid}
+    </select>
+
+    <update id="updateBdcbdcdySd" parameterType="cn.gtmap.estateplat.model.server.core.BdcBdcdySd">
+        UPDATE
+        bdc_bdcdysd
+        SET
+        bdcdyid=#{bdcdyid,jdbcType=VARCHAR},
+        bdcdyh=#{bdcdyh,jdbcType=VARCHAR},
+        zl=#{zl,jdbcType=VARCHAR},
+        bdclx=#{bdclx,jdbcType=VARCHAR},
+        qlr=#{qlr,jdbcType=VARCHAR},
+        xzzt=#{xzzt,jdbcType=INTEGER},
+        xzyy=#{xzyy,jdbcType=VARCHAR},
+        xztype=#{xztype,jdbcType=VARCHAR},
+        sdr=#{sdr,jdbcType=VARCHAR},
+        sdsj=#{sdsj,jdbcType=TIMESTAMP},
+        jsr=#{jsr,jdbcType=VARCHAR},
+        jssj=#{jssj,jdbcType=TIMESTAMP},
+        proid=#{proid,jdbcType=VARCHAR},
+        wiid=#{wiid,jdbcType=VARCHAR}
+        WHERE
+        bdcdyh = #{bdcdyh,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getBdcdySdListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT
+        t.bdcdyid,
+        t.bdcdyh,
+        t.zl,
+        t.bdclx,
+        t.qlr,
+        t.xzzt,
+        t.xzyy,
+        t.xztype,
+        t.sdr,
+        t.sdsj,
+        t.jsr,
+        t.jssj,
+        t.proid,
+        t.wiid,
+        t.bh
+        FROM bdc_bdcdysd t
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (instr(t.bdcdyh ,#{dcxc} )>0 OR instr(t.zl ,#{dcxc} )>0 OR instr(t.qlr ,#{dcxc} )>0 )
+            </if>
+            <if test="bdcdyid != null and bdcdyid !=''">
+                AND t.bdcdyid =#{bdcdyid}
+            </if>
+            <if test="proid != null and proid !=''">
+                AND t.proid =#{proid}
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND t.bdcdyh =#{bdcdyh}
+            </if>
+            <if test="xzzt != null and xzzt !=''">
+                AND t.xzzt =#{xzzt}
+            </if>
+            <if test="sdr != null and sdr !=''">
+                AND t.sdr =#{sdr}
+            </if>
+            <if test="jsr != null and jsr !=''">
+                AND t.jsr =#{jsr}
+            </if>
+            <if test="bh != null and bh !=''">
+                AND t.bh =#{bh}
+            </if>
+        </where>
+        ORDER BY t.sdsj DESC
+    </select>
+
+
+    <select id="getBdcdySdListByMap" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcBdcdySd">
+        SELECT t.bdcdyid,t.bdcdyh,t.zl,t.bdclx,t.qlr,t.xzzt,t.xzyy,t.xztype,t.sdr,t.sdsj,t.jsr,t.jssj,t.proid,t.wiid,t.jsyy,t.bh
+        FROM bdc_bdcdysd t
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (instr(t.bdcdyh ,#{dcxc} )>0 OR instr(t.zl ,#{dcxc} )>0 OR instr(t.qlr ,#{dcxc} )>0 )
+            </if>
+            <if test="bdcdyid != null and bdcdyid !=''">
+                AND t.bdcdyid =#{bdcdyid}
+            </if>
+            <if test="proid != null and proid !=''">
+                AND t.proid =#{proid}
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND t.bdcdyh =#{bdcdyh}
+            </if>
+            <if test="xzzt != null and xzzt !=''">
+                AND t.xzzt =#{xzzt}
+            </if>
+            <if test="sdr != null and sdr !=''">
+                AND t.sdr =#{sdr}
+            </if>
+            <if test="jsr != null and jsr !=''">
+                AND t.jsr =#{jsr}
+            </if>
+            <if test="bh != null and bh !=''">
+                AND t.bh =#{bh}
+            </if>
+        </where>
+        ORDER BY t.sdsj DESC
+    </select>
+
+    <select id="getBdcqzSdByPage" parameterType="java.util.Map" resultType="map">
+        SELECT cqzh,sdid,xzyy,qlid,xzzt,sdr,jsr,proid,sdsj,jssj,ly FROM (
+        SELECT DISTINCT s.cqzh,s.sdid,s.xzyy,'' qlid,s.xzzt xzzt,s.sdr,s.jsr,s.proid,s.sdsj,s.jssj,'BDC' ly
+        FROM bdc_bdczssd s
+        LEFT JOIN bdc_xmzs_rel r ON r.zsid=s.zsid
+        LEFT JOIN bdc_xm x ON x.proid=r.proid
+        LEFT JOIN bdc_spxx p ON p.proid=x.proid
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (instr(p.zl ,#{dcxc} )>0 OR instr(s.cqzh ,#{dcxc} )>0 )
+            </if>
+            <if test="zl != null and zl !=''">
+                AND p.zl =#{zl}
+            </if>
+        </where>
+        Union all
+        SELECT DISTINCT t.cqzh,t.sdid,t.xzyy,t.qlid,to_char(t.xzzt),t.sdr,t.jsr,t.proid,t.sdsj,t.jssj,'GD' ly from GD_BDCSD t
+        left join gd_bdc_ql_rel re on re.qlid=t.qlid
+        left join gd_td e on re.bdcid = e.tdid
+        left join gd_fw w on w.fwid = re.bdcid
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (instr(e.zl ,#{dcxc} )>0 OR instr(w.fwzl ,#{dcxc} )>0 OR instr(t.cqzh ,#{dcxc} )>0)
+            </if>
+            <if test="zl != null and zl !=''">
+                AND (e.zl =#{zl} OR w.fwzl =#{zl})
+            </if>
+        </where>
+        ) z
+        <where>
+            <if test="bdcqzh != null and bdcqzh !=''">
+                AND z.cqzh =#{bdcqzh}
+            </if>
+            <if test="xzzt != null and xzzt !=''">
+                AND z.xzzt =#{xzzt}
+            </if>
+            <if test="sdr != null and sdr !=''">
+                AND z.sdr =#{sdr}
+            </if>
+            <if test="jsr != null and jsr !=''">
+                AND z.jsr =#{jsr}
+            </if>
+        </where>
+        ORDER BY z.sdsj DESC
+    </select>
+
+    <select id="getBdcqzSdOptimizeByPage" parameterType="java.util.Map" resultType="map">
+        SELECT cqzh,sdid,xzyy,qlid,xzzt,sdr,jsr,proid,sdsj,jssj,ly FROM (
+        SELECT DISTINCT s.cqzh,s.sdid,s.xzyy,'' qlid,s.xzzt xzzt,s.sdr,s.jsr,s.proid,s.sdsj,s.jssj,'BDC' ly
+        FROM bdc_bdczssd s
+        LEFT JOIN bdc_xmzs_rel r ON r.zsid=s.zsid
+        LEFT JOIN bdc_xm x ON x.proid=r.proid
+        LEFT JOIN bdc_spxx p ON p.proid=x.proid
+        <where>
+            <if test="bdcqzh != null and bdcqzh !=''">
+                <if test="exactQuery == 'false'">
+                    AND instr(s.cqzh, #{bdcqzh} )>0
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND s.cqzh =#{bdcqzh}
+                </if>
+            </if>
+            <if test="zl != null and zl !=''">
+                <if test="exactQuery == 'false'">
+                    AND instr(p.zl, #{zl} )>0
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND p.zl =#{zl}
+                </if>
+            </if>
+        </where>
+        Union all
+        SELECT DISTINCT t.cqzh,t.sdid,t.xzyy,t.qlid,to_char(t.xzzt),t.sdr,t.jsr,t.proid,t.sdsj,t.jssj,'GD' ly from GD_BDCSD t
+        left join gd_bdc_ql_rel re on re.qlid=t.qlid
+        left join gd_fw w on w.fwid = re.bdcid
+        <where>
+            <if test="bdcqzh != null and bdcqzh !=''">
+                <if test="exactQuery == 'false'">
+                    AND instr(t.cqzh, #{bdcqzh} )>0
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND t.cqzh =#{bdcqzh}
+                </if>
+            </if>
+            <if test="zl != null and zl !=''">
+                <if test="exactQuery == 'false'">
+                    AND instr(w.fwzl, #{zl} )>0
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND w.fwzl =#{zl}
+                </if>
+            </if>
+        </where>
+        UNION ALL
+        SELECT DISTINCT t.cqzh,t.sdid,t.xzyy,t.qlid,to_char(t.xzzt),t.sdr,t.jsr,t.proid,t.sdsj,t.jssj,'GD' ly from GD_BDCSD t
+        left join gd_bdc_ql_rel re on re.qlid=t.qlid
+        left join gd_td e on re.bdcid = e.tdid
+        <where>
+            <if test="bdcqzh != null and bdcqzh !=''">
+                <if test="exactQuery == 'false'">
+                    AND instr(t.cqzh, #{bdcqzh} )>0
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND t.cqzh =#{bdcqzh}
+                </if>
+            </if>
+            <if test="zl != null and zl !=''">
+                <if test="exactQuery == 'false'">
+                    AND instr(e.zl, #{zl} )>0
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND e.zl =#{zl}
+                </if>
+            </if>
+        </where>
+        ) z
+        <where>
+            <if test="xzzt != null and xzzt !=''">
+                AND z.xzzt =#{xzzt}
+            </if>
+            <if test="sdr != null and sdr !=''">
+                AND z.sdr =#{sdr}
+            </if>
+            <if test="jsr != null and jsr !=''">
+                AND z.jsr =#{jsr}
+            </if>
+        </where>
+    </select>
+
+    <select id="findBdcBdcdySdByBdcdyh" parameterType="String"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcBdcdySd">
+          SELECT
+        t.bdcdyid,
+        t.bdcdyh,
+        t.zl,
+        t.bdclx,
+        t.qlr,
+        t.xzzt,
+        t.xzyy,
+        t.xztype,
+        t.sdr,
+        t.sdsj,
+        t.jsr,
+        t.jssj,
+        t.proid,
+        t.wiid
+        FROM bdc_bdcdysd t
+        WHERE t.bdcdyh=#{bdcdyh,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findBdcBdcdySd" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcBdcdySd">
+        SELECT
+        t.bdcdyid,
+        t.bdcdyh,
+        t.zl,
+        t.bdclx,
+        t.qlr,
+        t.xzzt,
+        t.xzyy,
+        t.xztype,
+        t.sdr,
+        t.sdsj,
+        t.jsr,
+        t.jssj,
+        t.proid,
+        t.wiid
+        FROM bdc_bdcdysd t
+        WHERE
+        t.bdcdyid =#{bdcdyid,jdbcType=VARCHAR}
+
+    </select>
+
+    <select id="getBdcSdZsByPage" parameterType="java.util.Map" resultType="map">
+        SELECT
+        proid,bdcqzh,zsid,bdcdyh,zl
+        FROM (
+        SELECT DISTINCT t.proid,c.bdcqzh,c.zsid,y.bdcdyh,t.zl
+        FROM mergedjh_qlxxlist m
+        LEFT JOIN BDC_XM t ON m.proid=t.proid
+        LEFT JOIN bdc_spxx a ON a.proid=m.proid
+        LEFT JOIN bdc_xmzs_rel t1 ON t.proid=t1.proid
+        LEFT JOIN bdc_zs c ON t1.zsid = c.zsid
+        LEFT JOIN bdc_qlr b ON t.proid=b.proid AND b.qlrlx='qlr'
+        LEFT JOIN bdc_bdcdy y ON y.bdcdyid=m.bdcdyid
+        <if test="dyfs != null and dyfs !=''">
+            LEFT JOIN bdc_dyaq d ON d.proid=t.proid
+        </if>
+        WHERE t.xmzt !=0 AND m.qszt=1
+        <if test="dcxc != null and dcxc !=''">
+            AND ( instr(c.bdcqzh, #{dcxc} )>0 OR instr(a.bdcdyh ,#{dcxc} )>0
+            OR instr(a.zl ,#{dcxc} )>0 OR instr(b.qlrmc ,#{dcxc} )>0 )
+        </if>
+        <if test="qszt != null and qszt !=''">
+            AND nvl(m.qszt,'0')!=#{qszt}
+        </if>
+        <if test="bdcqzh != null and bdcqzh !=''">
+            AND c.bdcqzh LIKE '%' || #{bdcqzh} || '%'
+        </if>
+        <if test="dyfs != null and dyfs !=''">
+            AND d.dyfs=#{dyfs}
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND a.bdcdyh LIKE '%' || #{bdcdyh} || '%'
+        </if>
+        <if test="zl != null and zl !=''">
+            AND instr(a.zl ,#{zl} )>0
+        </if>
+        <if test="zstype != null and zstype !=''">
+            AND c.zstype = #{zstype}
+        </if>
+        <if test="disSpfsc != null and disSpfsc !=''">
+            AND c.zstype in ('不动产证明','不动产权')
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND instr( b.qlrmc ,#{qlr} )>0
+        </if>
+        <if test="bdclx != null and bdclx !=''">
+            AND instr( a.bdclx ,#{bdclx} )>0
+        </if>
+        <if test="qllx != null and qllx !=''">
+            AND t.qllx IN
+            <foreach collection="qllx" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="bdcdyhs !=null and bdcdyhs !=''">
+            AND
+            <foreach collection="bdcdyhs" item="bdcdyh" open="(" separator=" or " close=")">
+                a.bdcdyh = #{bdcdyh}
+            </foreach>
+        </if>
+        <!--substr(a.bdcdyh,13,4) 正常是2 客户端是UTF-8编码的会占3个字节 -->
+        <if test="zdtzm != null and zdtzm !=''">
+            AND
+            <foreach collection="zdtzm" item="item" open="(" separator=" or " close=")">
+                substr(a.bdcdyh,13,4) LIKE #{item} || '%'
+            </foreach>
+        </if>
+        <if test="bdclxdm != null and bdclxdm !=''">
+            AND
+            <foreach collection="bdclxdm" item="item" open="(" separator=" or " close=")">
+                substr(a.bdcdyh,20,1) = #{item}
+            </foreach>
+        </if>
+
+        <if test="qlxzdm != null and qlxzdm !=''">
+            AND
+            <foreach collection="qlxzdm" item="item" open="(" separator=" or " close=")">
+                a.zdzhqlxz = #{item}
+            </foreach>
+        </if>
+        <if test="ysqlxdm != null and ysqlxdm !=''">
+            AND
+            <foreach collection="ysqlxdm" item="item" open="(" separator=" or " close=")">
+                t.sqlx = #{item}
+            </foreach>
+        </if>
+        <if test="filterNullBdcqzh != null and filterNullBdcqzh !=''">
+            AND c.bdcqzh IS NOT NULL
+        </if>
+        <if test="xzqdm != null and xzqdm !=''">
+            AND a.bdcdyh LIKE #{xzqdm} || '%'
+        </if>
+        <if test="fzqssj != null and fzqssj !=''">
+            <![CDATA[   AND c.fzrq >= #{fzqssj} ]]>
+        </if>
+        <if test="fzjssj != null and fzjssj !=''">
+            <![CDATA[  AND c.fzrq <= #{fzjssj} ]]>
+        </if>
+        ORDER BY c.bdcqzh
+        )
+        GROUP BY proid,bdcqzh,zsid,bdcdyh,zl
+    </select>
+</mapper>

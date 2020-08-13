@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcJzwsyqMapper">
+
+    <select id="getBdcJzwsyq" parameterType="java.lang.String" resultType="cn.gtmap.estateplat.model.server.core.BdcJzwsyq">
+        SELECT * FROM bdc_jzwsyq t
+        WHERE t.proid=#{proid}
+    </select>
+
+    <insert id="saveBdcJzwsyq" parameterType="cn.gtmap.estateplat.model.server.core.BdcJzwsyq" >
+        INSERT INTO bdc_jzwsyq(qlid,bdcdyid,jzwsyqr,syqmj,tdhysyqr,tdhysymj,syksqx,syjsqx,gzwlx,jzwghyt,gzwmj,jgsj,
+        ywh,qllx,proid,gyqk,djsj,dbr,fj,qszt)
+        VALUES(#{qlid,jdbcType=VARCHAR},#{bdcdyid,jdbcType=VARCHAR},#{jzwsyqr,jdbcType=VARCHAR},#{syqmj,jdbcType=DOUBLE}
+        ,#{tdhysyqr,jdbcType=VARCHAR},#{tdhysymj,jdbcType=VARCHAR},#{syksqx,jdbcType=DATE},#{syjsqx,jdbcType=DATE}
+        ,#{gzwlx,jdbcType=VARCHAR},#{jzwghyt,jdbcType=VARCHAR},#{gzwmj,jdbcType=DOUBLE},#{jgsj,jdbcType=DATE}
+        ,#{ywh,jdbcType=VARCHAR},#{qllx,jdbcType=VARCHAR},#{proid,jdbcType=VARCHAR}
+        ,#{gyqk,jdbcType=VARCHAR},#{djsj,jdbcType=DATE},#{dbr,jdbcType=VARCHAR},#{fj,jdbcType=VARCHAR}
+        ,#{qszt,jdbcType=INTEGER})
+    </insert>
+</mapper>

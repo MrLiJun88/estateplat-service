@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="estateplat-server:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>estateplat-server</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="estateplat-server-2.5-SNAPSHOT-20200811170013.war">
+      <element id="artifact" artifact-name="estateplat-server:war exploded" />
+    </root>
+  </artifact>
+</component>

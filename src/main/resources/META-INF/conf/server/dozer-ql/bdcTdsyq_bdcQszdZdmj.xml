@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--土地所有权-->
+    <mapping map-empty-string="false" map-null="false">
+        <class-a>cn.gtmap.estateplat.model.server.core.BdcQszdZdmj</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcTdsyq</class-b>
+        <!--农用地面积-->
+        <field>
+            <a>nydmj</a>
+            <b>nydmj</b>
+        </field>
+        <!--耕地面积-->
+        <field>
+            <a>gdmj</a>
+            <b>gdmj</b>
+        </field>
+        <!--林地面积-->
+        <field>
+            <a>ldmj</a>
+            <b>ldmj</b>
+        </field>
+        <!--草地面积-->
+        <field>
+            <a>cdmj</a>
+            <b>cdmj</b>
+        </field>
+        <!--其他面积-->
+        <field>
+            <a>qtmj</a>
+            <b>qtmj</b>
+        </field>
+        <!--建设用地面积-->
+        <field>
+            <a>jsydmj</a>
+            <b>jsydmj</b>
+        </field>
+        <!--未利用地面积-->
+        <field>
+            <a>wlydmj</a>
+            <b>wlydmj</b>
+        </field>
+    </mapping>
+
+</mappings>

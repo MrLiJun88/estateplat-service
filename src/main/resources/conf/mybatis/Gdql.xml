@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdqlMapper">
+
+    <select id="getGdfwqlQlid" parameterType="java.util.Map" resultType="String">
+        SELECT t.qlid
+        FROM gd_fw_ql t
+        WHERE 1=1
+        <if test="hhSearch != null and hhSearch != ''">
+            AND (instr(t.fczh ,#{hhSearch})>0 OR instr(t.fwzl ,#{hhSearch})>0 OR instr(t.qlr ,#{hhSearch})>0)
+        </if>
+        <if test="fczh != null and fczh != ''">
+            AND instr(t.fczh ,#{fczh})>0
+        </if>
+        <if test="zslx != null and zslx != ''">
+            AND instr(t.zslx ,#{zslx})>0
+        </if>
+        <if test="qlr != null and qlr != ''">
+            AND instr(t.qlr ,#{qlr})>0
+        </if>
+    </select>
+
+    <select id="getGdtdqlQlid" parameterType="String" resultType="String">
+        SELECT t.qlid
+        FROM gd_td_ql t
+        WHERE 1=1 AND (instr(t.tdzh ,#{hhSearch})>0 OR instr(t.tdzl ,#{hhSearch})>0 OR instr(t.qlr ,#{hhSearch})>0 OR instr(t.djh ,#{hhSearch})>0)
+    </select>
+
+    <select id="getGdtdqlCount" parameterType="java.util.Map" resultType="Integer">
+        SELECT COUNT(0)
+        FROM gd_fw_ql t
+        WHERE 1=1
+        <if test="hhSearch != null and hhSearch != ''">
+            AND (instr(t.fczh ,#{hhSearch})>0 OR instr(t.fwzl ,#{hhSearch})>0 OR instr(t.qlr ,#{hhSearch})>0)
+        </if>
+        <if test="fczh != null and fczh != ''">
+            AND instr(t.fczh ,#{fczh})>0
+        </if>
+        <if test="zslx != null and zslx != ''">
+            AND instr(t.zslx ,#{zslx})>0
+        </if>
+        <if test="qlr != null and qlr != ''">
+            AND instr(t.qlr ,#{qlr})>0
+        </if>
+        <![CDATA[
+        AND rownum<=300
+        ]]>
+    </select>
+
+    <select id="getGdEntityJsonByPage" parameterType="java.util.Map" resultType="map">
+        <if test="bdcLx != null and bdcLx != ''">
+            <if test="bdcLx == 'TDFW'">
+                SELECT t.fwid gdid,t.dah,t.fwzl,t.ghyt,t.jzmj,t.szc,t.zcs
+                FROM gd_fw t
+                <where>
+                    <if test="gdId != null and gdId != ''">
+                        t.fwid = #{gdId}
+                    </if>
+                </where>
+            </if>
+            <if test="bdcLx == 'TD'">
+                SELECT t.tdid gdid,t.djh,t.zl,t.yt,t.zdmj
+                FROM gd_td t
+                <where>
+                    <if test="gdId != null and gdId != ''">
+                        t.tdid = #{gdId}
+                    </if>
+                </where>
+            </if>
+        </if>
+    </select>
+
+    <select id="getGdInfoJsonByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.gdid,t.zl FROM (
+        SELECT t.fwid gdid,fwzl zl FROM GD_FW t
+        WHERE fwid IS NOT NULL
+        UNION ALL
+        SELECT t.tdid gdid,zl zl FROM GD_TD t
+        WHERE tdid IS NOT NULL
+        UNION ALL
+        SELECT t.cqid gdid,zl zl FROM GD_CQ t
+        WHERE cqid IS NOT NULL
+        UNION ALL
+        SELECT t.lqid gdid,lqzl zl FROM GD_LQ t
+        WHERE lqid IS NOT NULL
+        ) t
+        <where>
+            <if test="gdIds != null and gdIds !=''">
+                t.gdid IN
+                <foreach collection="gdIds" item="item" open="(" separator=" , " close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="zl != null and zl != ''">
+                t.zl = #{zl}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcLxAndQlIdsByGdId" parameterType="string" resultType="map">
+        SELECT strcat(g.qlid) qlid,g.bdclx
+        FROM gd_bdc_ql_rel g
+        <if test="gdId != null and gdId != ''">
+            <where>
+                g.bdcid = #{gdId}
+            </where>
+        </if>
+        GROUP BY g.bdcid,g.bdclx
+    </select>
+
+    <select id="getGdIdsByQlId" parameterType="java.util.Map" resultType="map">
+        SELECT t.bdcid gdid,t.qlid qlid
+        FROM gd_bdc_ql_rel t
+        <if test="qlIds != null and qlIds != ''">
+            <where>
+                <if test="qlIds != null and qlIds != ''">
+                    AND
+                    <foreach collection="qlIds" item="item" open="(" separator=" or " close=")">
+                        t.qlid = #{item}
+                    </foreach>
+                </if>
+            </where>
+        </if>
+        <where>
+            <if test="QLID != null and QLID != ''">
+                t.qlid = #{QLID}
+            </if>
+            <if test="GDID != null and GDID != ''">
+                t.bdcid = #{GDID}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getCqZhQlrZslxByQlId" parameterType="java.util.Map" resultType="map">
+        SELECT t.cqzh,t.qlr,t.zslx,t.zl,t.qlid FROM(
+        SELECT t.fczh cqzh,t.qlid,t.qlr,t.zslx,t.fwzl zl
+        FROM gd_fw_ql t
+        UNION ALL
+        SELECT t.tdzh cqzh,t.qlid,t.qlr,t.zslx,t.tdzl zl
+        FROM gd_td_ql t
+        ) t
+        <where>
+            <if test="qlIds != null and qlIds !=''">
+                t.qlid IN
+                <foreach collection="qlIds" item="item" open="(" separator=" , " close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="hhSearch != null and hhSearch != ''">
+                instr(CQZH,#{hhSearch})>0 OR instr(QLR,#{hhSearch})>0 OR instr(ZL,#{hhSearch})>0
+            </if>
+        </where>
+        ORDER BY qlid
+    </select>
+
+    <select id="getZsZtByQlId" parameterType="java.util.Map" resultType="map">
+        SELECT qlid,cqzh,iszx FROM (
+        <if test="ZSLX == 'gd_fwsyq'">
+            SELECT t.qlid qlid,fczh cqzh,iszx
+            FROM gd_fwsyq t
+        </if>
+        <if test="ZSLX == 'gd_tdsyq'">
+            SELECT t.qlid qlid,tdzh cqzh,iszx
+            FROM gd_tdsyq t
+        </if>
+        <if test="ZSLX == 'gd_cf'">
+            SELECT t.cfid qlid,cfwh cqzh,isjf iszx
+            FROM gd_cf t
+        </if>
+        <if test="ZSLX == 'gd_yg'">
+            SELECT t.ygid qlid,ygdjzmh cqzh,iszx
+            FROM gd_yg t
+        </if>
+        <if test="ZSLX == 'gd_yy'">
+            SELECT t.yyid qlid,yysx cqzh,iszx
+            FROM gd_yy t
+        </if>
+        <if test="ZSLX == 'gd_dy'">
+            SELECT t.dyid qlid,dydjzmh cqzh,isjy iszx
+            FROM gd_dy t
+        </if>
+        ) t
+        <where>
+            <if test="QLID != null and QLID != ''">
+                t.qlid = #{QLID}
+            </if>
+        </where>
+    </select>
+
+    <select id="getQllxdmFromGdQl" parameterType="java.util.Map" resultType="map">
+        SELECT qlid ,flag FROM(
+        SELECT t.qlid qlid,'isGdFwSyq' flag
+        FROM gd_fwsyq t
+        UNION ALL
+        SELECT t.qlid qlid,'isGdTdSyq' flag
+        FROM gd_tdsyq t
+        UNION ALL
+        SELECT t.cfid qlid,'isGdCf' flag
+        FROM gd_cf t
+        UNION ALL
+        SELECT t.ygid qlid,'isGdYg' flag
+        FROM gd_yg t
+        UNION ALL
+        SELECT t.yyid qlid,'isGdYy' flag
+        FROM gd_yy t
+        UNION ALL
+        SELECT t.dyid qlid,'isGdDy' flag
+        FROM gd_dy t
+        ) t
+        <where>
+            <if test="QLID != null and QLID != ''">
+                t.qlid = #{QLID}
+            </if>
+        </where>
+    </select>
+
+    <select id="getGdFwQlByMap" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT t.qlid,t.proid,t.fczh,t.qlr,t.fwzl,t.djlx,t.zslx,t.fjh,t.bsm,t.qlrzjh,t.ywr
+        FROM gd_fw_ql t
+        <where>
+            <if test="fczh!='' and fczh!=null">
+                AND t.fczh=#{fczh}
+            </if>
+            <if test="proid!='' and proid!=null">
+                AND t.proid=#{proid}
+            </if>
+        </where>
+    </select>
+</mapper>

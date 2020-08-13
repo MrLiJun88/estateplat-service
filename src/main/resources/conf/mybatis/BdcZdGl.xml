@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZdGlMapper">
+
+    <select id="getZdBdclx" resultType="map">
+        SELECT dm,mc
+        FROM BDC_ZD_BDCLX order by decode(dm,'TDFW','1','TD','2','3')
+    </select>
+
+    <!--<select id="getZdSqlx" resultType="map">-->
+    <!--select  s.djlxdm,b.bdclxdm,t.dm,a.mc from BDC_ZD_SQLX t left join bdc_sqlx_qllx_rel sq on t.dm=sq.sqlxdm-->
+    <!--left join BDC_ZD_QLLX a on sq.qllxdm=a.dm left join bdc_bdclx_qllx_rel b on a.dm=b.qllxdm left join bdc_djlx_sqlx_rel s on s.sqlxdm=t.dm-->
+    <!--</select>-->
+
+    <select id="getDjlxSqlxRel" resultType="map">
+          SELECT t.djlxdm,t.sqlxdm
+          FROM bdc_djlx_sqlx_rel t
+    </select>
+    <select id="getZdYt" resultType="map">
+            SELECT t.DM,t.MC
+            FROM djsj_zd_yt t
+    </select>
+
+    <select id="getZdytByDm" resultType="map">
+        SELECT dm,mc
+        FROM DJSJ_ZD_DLDM
+        WHERE dm = #{dm}
+    </select>
+
+    <select id="getZdFwjg" resultType="map">
+        SELECT t.DM,t.MC
+        FROM djsj_zd_fwjg t
+    </select>
+    <select id="getbdclxQllxRel" resultType="map">
+          SELECT t.BDCLXDM,t.QLLXDM,a.MC
+          FROM bdc_bdclx_qllx_rel t
+          LEFT JOIN BDC_ZD_QLLX a ON a.dm = t.QLLXDM
+    </select>
+    <select id="getBdclxdm" parameterType="String" resultType="String">
+      SELECT t.bdclxdm
+      FROM bdc_bdclx_qllx_rel t
+      WHERE t.qllxdm=#{qllxdm}
+    </select>
+
+    <select id="getZdmj" parameterType="String" resultType="Double">
+      SELECT DISTINCT(t.fzmj)
+      FROM DJSJ_ZD_DCB t
+      WHERE t.djh=#{djh}
+    </select>
+
+    <select id="getFdcqs" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcFdcq">
+        SELECT t.qlid,t.bdcdyid,t.tdsyqr,t.tdsyksqx,t.tdsyjsqx,t.jyjg,t.ghyt,t.fwxz,t.fwjg,t.szc,t.zcs,t.jzmj,t.tnjzmj,t.ftjzmj,t.jgsj,t.mjdw,t.dytdmj,t.fttdmj,t.fwsyqr,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.zrzh,t.fwdah,t.cqly,t.lsyd,t.fwlx,t.qljssj,t.qlqssj,t.szmyc,t.cg,t.fdcjyhth,t.tdsyksqx2,t.tdsyjsqx2,t.tdsyksqx3,t.tdsyjsqx3,t.myzcs,t.tdsyqmj,t.wlc,t.djzch,t.ytzx,t.pth,t.fzlx,t.zxyy,t.zxdbr,t.zxdbsj,t.cqxz,t.xkzh,t.qqh,t.bz,t.jznd,t.htje,t.htqdsj
+        FROM bdc_fdcq t
+        LEFT JOIN bdc_bdcdy a ON t.bdcdyid=a.bdcdyid
+        WHERE substr(a.bdcdyh,0,19)=#{djh} AND nvl(t.qszt,'1')!='2'
+    </select>
+
+    <select id="getdjlxQllxRel" resultType="map">
+          SELECT t.DJLXDM,t.QLLXDM,a.MC
+          FROM bdc_djlx_qllx_rel t
+          LEFT JOIN BDC_ZD_QLLX a ON a.dm = t.QLLXDM
+    </select>
+
+    <select id="getZdSqlxList" resultType="map">
+       SELECT t.dm,t.mc
+       FROM BDC_ZD_SQLX t
+    </select>
+
+    <select id="getSqlxOrderbyDm" resultType="cn.gtmap.estateplat.model.server.core.BdcZdSqlx">
+      SELECT t.*
+      FROM bdc_zd_sqlx t
+      ORDER BY to_number(t.dm)
+    </select>
+
+    <select id="getSqlxMcByDm" parameterType="String" resultType="String">
+       SELECT t.mc
+       FROM BDC_ZD_SQLX t
+       WHERE t.dm = #{dm}
+    </select>
+
+    <select id="getSqllxQllxRel" resultType="map">
+              SELECT t.SQLXDM,t.QLLXDM,a.MC
+              FROM bdc_sqlx_qllx_rel t
+              LEFT JOIN BDC_ZD_QLLX a ON a.dm = t.QLLXDM
+    </select>
+
+    <select id="getYqllxBySqlx" resultType="String">
+        SELECT t.yqllxdm
+        FROM BDC_SQLX_QLLX_REL t
+        WHERE t.sqlxdm=#{sqlxdm}
+    </select>
+
+    <select id="getQllxBySqlx" resultType="String">
+        SELECT t.qllxdm FROM BDC_SQLX_QLLX_REL t  WHERE t.sqlxdm=#{sqlxdm}
+    </select>
+
+    <select id="getZdDyfs" resultType="map">
+        SELECT dm,mc
+        FROM bdc_zd_dyfs
+    </select>
+
+    <select id="getZdGyfs" resultType="map">
+        SELECT dm,mc
+        FROM bdc_zd_gyfs
+    </select>
+
+    <select id="getZdQlxz" resultType="map">
+      SELECT dm,mc,parent_dm
+      FROM bdc_zd_qlxz
+    </select>
+
+    <select id="getSqlxByBdclxDjlx" resultType="map" parameterType="map">
+        SELECT  c.mc,c.wdid dm,t.sqlxdm
+        FROM BDC_BDCLX_SQLX_REL t
+        LEFT JOIN BDC_ZD_SQLX c ON c.dm=t.sqlxdm
+        WHERE t.bdclxdm=#{bdclxdm,jdbcType=VARCHAR} AND t.djlxdm=#{djlxdm,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getSqlxBydjlx" resultType="cn.gtmap.estateplat.model.server.core.BdcZdSqlx">
+        SELECT a.mc,t.sqlxdm as dm
+        FROM BDC_DJLX_SQLX_REL t
+        LEFT JOIN BDC_ZD_SQLX a ON a.dm=t.sqlxdm
+        WHERE t.djlxdm=#{djlxdm}
+        ORDER BY a.dm asc
+    </select>
+
+    <select id="getZdQslx" resultType="map">
+        SELECT dm,mc
+        FROM djsj_zd_qslx
+    </select>
+
+    <select id="getZdDzwtzm" resultType="map">
+        SELECT dm,mc
+        FROM BDC_ZD_DZWTZM
+    </select>
+
+    <select id="getZdtzm" resultType="map">
+        SELECT dm,mc
+        FROM BDC_ZD_ZDTZM
+    </select>
+
+    <select id="getBdcXtLogConfigByPage" resultType="cn.gtmap.estateplat.model.server.core.BdcZdLogController">
+        SELECT controller_path,controller_msg
+        FROM BDC_ZD_LOG_CONTROLLER
+    </select>
+
+    <select id="getBdcLimitTableConfigByPage" resultType="cn.gtmap.estateplat.model.server.core.BdcZdTables">
+        SELECT id,table_name,table_id,table_xmrel_sql
+        FROM BDC_ZD_TABLES
+        ORDER BY id DESC
+    </select>
+
+    <select id="getGdFcDjlxSqlxRel" parameterType="String"
+            resultType="cn.gtmap.estateplat.model.server.core.GdFcDjlxSqlxRel">
+        SELECT  t.id,t.sqlxdm,t.djlxdm,a.wdid
+        FROM gd_fcdjlx_bdcsqlx_rel t
+        LEFT JOIN bdc_zd_sqlx a ON a.dm=t.sqlxdm
+        WHERE  t.djlxdm=#{djlxdm}
+        ORDER BY a.dm asc
+    </select>
+
+    <select id="getDjlxByBdclx" parameterType="String" resultType="map">
+        SELECT DISTINCT t.djlxdm dm,a.mc
+        FROM BDC_BDCLX_SQLX_REL t
+        LEFT JOIN bdc_zd_djlx a ON t.djlxdm=a.dm
+        WHERE  t.bdclxdm=#{bdclxdm}
+        ORDER BY case t.djlxdm when '100' then 1 when '300' then 2 when '200' then 3 when '1000' then 4
+        when '400' then 5 when '700' then 6 when '500' then 7 when '600' then 8 when '800' then 9 when '900' then 10
+        end
+    </select>
+
+    <select id="getFiledName" parameterType="String" resultType="String">
+       SELECT t.column_name
+       FROM user_tab_columns t
+       WHERE t.TABLE_NAME=#{tableName}
+    </select>
+
+    <select id="getGjzwLxZdb" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc
+        FROM BDC_ZD_GJZWLX t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+    <select id="getQlxzZdb" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc,t.parent_dm
+        FROM BDC_ZD_QLXZ t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+    <select id="getDzwytZdb" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc,t.parent_dm
+        FROM BDC_ZD_FWYT t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+    <select id="getZdzhytZdb" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc,t.xtlx,t.bz
+        FROM djsj_zd_dldm t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcSqlxByMap" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcZdSqlx">
+        SELECT t.dm,t.mc,t.wdid
+        FROM bdc_zd_sqlx t
+        <where>
+            <if test="dm!=null and dm!=''">
+                AND t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                AND t.mc=#{mc}
+            </if>
+            <if test="wdid!=null and wdid!=''">
+                AND t.wdid=#{wdid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDjzx" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc
+        FROM bdc_zd_djzx t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                instr(t.mc,#{mc})>0
+            </if>
+            <if test="djzxmc !=null and djzxmc !=''">
+                t.mc=#{djzxmc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDyfs" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc
+        FROM bdc_zd_dyfs t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDjzxBywdid" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT s.wdid wfid,t.sqlxdm sqlx,t.djzxdm,d.mc djzxmc
+        FROM bdc_sqlx_djzx_rel t
+        LEFT JOIN bdc_zd_djzx d ON d.dm=t.djzxdm
+        LEFT JOIN bdc_zd_sqlx s ON s.dm=t.sqlxdm
+        <where>
+            <if test="sqlx != null and sqlx !=''">
+                AND d.dm = #{sqlx}
+            </if>
+            <if test="djzx != null and djzx !=''">
+                AND d.dm = #{djzx}
+            </if>
+            <if test="wdid != null and wdid !=''">
+                AND s.wdid = #{wdid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTDFWSqlxGddjlx" parameterType="String" resultType="map">
+    SELECT DISTINCT dm,mc FROM (
+		SELECT b.dm, b.mc
+		  FROM BDC_BDCLX_SQLX_REL a
+		 INNER JOIN bdc_zd_sqlx b
+		    ON b.dm = a.sqlxdm
+		 WHERE a.bdclxdm = 'TDFW'
+		UNION ALL
+		SELECT DISTINCT b.djlx dm, b.djlx mc
+		  FROM GD_FWSYQ a
+		 INNER JOIN gd_xm b
+		    ON b.proid = a.proid
+		 WHERE b.djlx IS NOT NULL
+		UNION ALL
+		 SELECT DISTINCT d.djlx dm, d.djlx mc
+		   FROM gd_yg c
+		  INNER JOIN gd_xm d
+		     ON d.proid = c.proid
+		  WHERE d.djlx IS NOT NULL
+	)WHERE dm IS NOT NULL AND mc IS NOT NULL
+    </select>
+
+
+    <select id="getTdsyqxByDm" parameterType="String" resultType="String">
+        SELECT t.syqx
+        FROM BDC_DLDM_SYQX_REL t
+        WHERE t.dldm=#{dldm}
+    </select>
+
+    <select id="getDjsyByDm" parameterType="String" resultType="String">
+        SELECT t.mc
+        FROM bdc_zd_djsy t
+        WHERE t.dm = #{dm}
+    </select>
+
+    <select id="getCflxDmByMc" parameterType="String" resultType="String">
+        SELECT dm
+        FROM bdc_zd_cflx
+        WHERE mc = #{mc}
+    </select>
+
+    <select id="getbdcZdQllx" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcZdSqlx">
+        SELECT t.dm,t.mc
+        FROM bdc_zd_qllx t
+        <where>
+            <if test="dm!=null and dm!=''">
+                AND t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                AND t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcZdYhlx" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc
+        FROM BDC_ZD_YHLX t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcZdLz" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc
+        FROM BDC_ZD_LZ t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcZdFwxz" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc
+        FROM DJSJ_ZD_FWXZ t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcZdCflx" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc
+        FROM BDC_ZD_CFLX t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcZdDjlx" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc,t.zsmc
+        FROM BDC_ZD_DJLX t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+            <if test="zsmc!=null and zsmc!=''">
+                t.zsmc=#{zsmc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcZdSqlx" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc,t.wdid
+        FROM BDC_ZD_SQLX t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+            <if test="wdid!=null and wdid!=''">
+                t.wdid=#{wdid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDjzxByProid" parameterType="String" resultType="map">
+        SELECT a.*
+        FROM BDC_SQLX_DJZX_REL t
+        LEFT JOIN bdc_zd_djzx a ON t.djzxdm=a.dm
+        LEFT JOIN bdc_xm b ON t.sqlxdm=b.sqlx
+        WHERE b.proid=#{proid}
+        ORDER BY a.dm asc
+    </select>
+
+
+    <select id="getZdGglxlist" parameterType="java.util.Map" resultType="map">
+        SELECT t.mc,t.dm
+        FROM BDC_ZD_GGLX t
+    </select>
+
+
+
+    <select id="getBdcZdFwlxList" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc
+        FROM DJSJ_ZD_FWLX t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBdcZdDjsy" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc,t.zsmc
+        FROM bdc_zd_djsy t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+            <if test="zsmc!=null and zsmc!=''">
+                t.zsmc=#{zsmc}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getBdcZdDybdclx" parameterType="java.util.Map" resultType="map">
+        SELECT t.dm,t.mc,t.bm
+        FROM BDC_ZD_DYBDCLX t
+        <where>
+            <if test="dm!=null and dm!=''">
+                t.dm=#{dm}
+            </if>
+            <if test="mc!=null and mc!=''">
+                t.mc=#{mc}
+            </if>
+            <if test="bm!=null and bm!=''">
+                t.bm=#{bm}
+            </if>
+        </where>
+    </select>
+
+    <select id="getComDjsy"  resultType="map">
+       SELECT DISTINCT (case when instr(t.djsydm,'/',1)=0 then c1.zsmc else case when  instr(t.djsydm,'/',1)>1 then c.zsmc||'/'||b.zsmc end
+       end) mc,t.djsydm as dm
+        FROM  BDC_QLLX_DJSY_REL t
+        LEFT JOIN bdc_zd_djsy c1 ON c1.dm=t.djsydm
+        LEFT JOIN  bdc_zd_djsy c ON c.dm=substr(t.djsydm,0,instr(t.djsydm,'/',1)-1)
+        LEFT JOIN  bdc_zd_djsy b ON b.dm=substr(t.djsydm,instr(t.djsydm,'/',1)+1,2)
+    </select>
+
+    <select id="getZjzlByMc" parameterType="java.lang.String" resultType="String">
+        SELECT t.dm
+        FROM bdc_zd_zjlx t
+        WHERE t.mc = #{mc}
+    </select>
+
+    <select id="getDjlxDmByMc" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT t.dm
+        FROM bdc_zd_djlx t
+        WHERE t.mc=#{mc}
+    </select>
+
+    <select id="getSqlxDmByMc" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT t.dm
+        FROM bdc_zd_sqlx t
+        WHERE t.mc=#{mc}
+    </select>
+
+    <select id="getQllxDmByMC" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT t.dm
+        FROM bdc_zd_qllx t
+        WHERE t.mc=#{mc}
+    </select>
+
+    <select id="getQllxMcByDm" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT t.mc
+        FROM bdc_zd_qllx t
+        WHERE t.dm=#{dm}
+    </select>
+
+    <select id="getGyfsDmByMc" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT t.dm
+        FROM bdc_zd_gyfs t
+        WHERE t.mc=#{mc}
+    </select>
+
+    <select id="getGyfsMcByDm" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT t.mc
+        FROM bdc_zd_gyfs t
+        WHERE t.dm=#{dm}
+    </select>
+
+    <select id="getZdytMcByDm" parameterType="String" resultType="String">
+        select t.mc from DJSJ_ZD_DLDM t
+        where t.dm=#{dm}
+    </select>
+
+    <select id="getFwytByDm" parameterType="String" resultType="String">
+        select t.mc from BDC_ZD_FWYT t
+        where t.dm=#{dm}
+    </select>
+
+    <select id="getBdclxMcByDm" parameterType="String" resultType="String">
+        SELECT mc
+        FROM BDC_ZD_BDCLX
+        WHERE dm = #{dm}
+    </select>
+
+    <select id="getDjlxBySqlx" parameterType="String" resultType="String">
+        select t.djlxdm from bdc_djlx_sqlx_rel t where t.sqlxdm=#{sqlxdm} and rownum = 1
+    </select>
+
+
+    <select id="getBdcZdGdlx" resultType="map">
+        SELECT dm AS "dm",mc AS "mc"
+        FROM bdc_zd_gdlx t
+    </select>
+
+    <select id="getZdBdclxOrderBy" resultType="map">
+        SELECT dm,mc
+        FROM BDC_ZD_BDCLX order by decode(dm,'TDFW','1','TD','2','3')
+    </select>
+
+    <select id="getArchiveNameBySqlx" parameterType="String" resultType="String">
+        SELECT t.archive_name FROM bdc_zd_sqlx t WHERE t.dm=#{sqlx}
+    </select>
+</mapper>

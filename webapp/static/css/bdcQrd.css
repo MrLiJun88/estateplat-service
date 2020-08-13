@@ -1,0 +1,55 @@
+.center1 {
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.title_qrd {
+    height: 30px;
+    color: #1d87d1;
+    font-size: 24px;
+}
+
+.qrdTable {
+    margin-right: 50px;
+}
+
+.qrdTable tr {
+    height: 20px;
+}
+
+
+.sjms {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 18px;
+    min-width: 100px;
+    width: auto;
+    border: solid 1px grey;
+}
+
+.xbk {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: grey;
+}
+
+.xgzd {
+    text-align: center;
+    border: solid 1px grey;
+}
+
+.yz {
+    padding-left: 10px;
+}
+
+.xz {
+    padding-right: 10px;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: grey;
+}
+
+.markSure{
+    padding-top: 10px;
+    padding-left: 300px;
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.DjxxMapper">
+
+    <select id="getSpbByPage" parameterType="java.util.Map" resultType="map">
+        select distinct t.id, t.qlr,t.ywr,t.bdcdyh,t.sqlx,t.qllx,t.sqzsbs,t.sqfbcz,t.zl,t.bh,t.djlx from (
+        select x.proid id,a.qlr,c.ywr,b.bdcdyh,x.qllx,x.sqzsbs,x.sqfbcz,x.zl,x.bh,x.sqlx,x.djlx from BDC_XM x
+        left join bdc_bdcdy b on x.bdcdyid = b.bdcdyid
+        left join (
+        select x.proid ,replace(strcat(q.qlrmc),'/',' ')qlr from bdc_xm x
+        left join BDC_QLR q on q.proid = x.proid
+        where q.qlrlx = 'qlr'
+        group by x.proid ) a on x.proid = a.proid
+        left join (
+        select x.proid ,replace(strcat(q.qlrmc),'/',' ')ywr from bdc_xm x
+        left join BDC_QLR q on q.proid = x.proid
+        where q.qlrlx = 'ywr'
+        group by x.proid ) c on x.proid = c.proid
+        ) t
+        <where>
+            t.bdcdyh is not null
+            <if test="dcxc != null and dcxc !=''">
+                and t.qlr like '%' || #{dcxc} || '%' or t.ywr like '%' || #{dcxc} || '%' or t.bdcdyh like '%' || #{dcxc} ||
+                '%'
+                or t.djlx like '%' || #{dcxc} || '%' or t.qllx like '%' || #{dcxc} || '%' or t.sqzsbs like '%' || #{dcxc} || '%'
+                or t.sqfbcz like '%' || #{dcxc} || '%' or t.zl like '%' || #{dcxc} || '%'
+            </if>
+            <if test="qlr != null and qlr !=''">
+                and t.qlr like '%' || #{qlr} || '%'
+            </if>
+            <if test="ywr != null and ywr !=''">
+                and t.ywr like '%' || #{ywr} || '%'
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                and t.bdcdyh like '%' || #{bdcdyh} || '%'
+            </if>
+            <if test="sqlx != null and sqlx !=''">
+                and t.sqlx like '%' || #{sqlx} || '%'
+            </if>
+            <if test="qllx != null and qllx !=''">
+                and qllx like '%' || #{qllx} || '%'
+            </if>
+            <if test="sqzsbs != null and sqzsbs !=''">
+                and sqzsbs like '%' || #{sqzsbs} || '%'
+            </if>
+            <if test="sqfbcz != null and sqfbcz !=''">
+                and sqfbcz like '%' || #{sqfbcz} || '%'
+            </if>
+            <if test="zl != null and zl !=''">
+                and zl like '%' || #{zl} || '%'
+            </if>
+            <if test="xzqdm != null and xzqdm !=''">
+                and t.bdcdyh like  #{xzqdm} || '%'
+            </if>
+        </where>
+        order by t.bh desc
+    </select>
+</mapper>

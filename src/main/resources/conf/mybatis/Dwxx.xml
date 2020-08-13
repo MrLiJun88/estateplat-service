@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.DwxxMapper">
+
+    <select id="getDwxxList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.Dwxx">
+        SELECT t.xzdm dwdm,t.xzmc dwmc
+        FROM djsj_zd_xzdm t
+        <where>
+            <if test="dwdm != null and dwdm !=''">
+                AND t.xzdm LIKE #{dwdm} || '%'
+            </if>
+            <if test="xzLevel != null and xzLevel !=''">
+                <![CDATA[ AND LENGTH(t.xzdm) <= ${xzLevel}  ]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="getDwxxByDwdm" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.Dwxx">
+        SELECT t.xzdm dwdm,t.xzmc dwmc
+        FROM djsj_zd_xzdm t
+        WHERE t.xzdm = #{dwdm}
+    </select>
+
+    <select id="getXzDwxxList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.Dwxx">
+        SELECT t.dm dwdm,t.mc dwmc
+        FROM bdc_zd_xzdm t
+    </select>
+
+    <select id="getDwmcByDwdm" parameterType="String" resultType="java.lang.String">
+        SELECT t.dwmc dwmc
+        FROM djsj_dwxx t
+        WHERE t.dwdm = #{dwdm}
+    </select>
+</mapper>

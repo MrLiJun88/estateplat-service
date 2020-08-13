@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋附属设施-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcFwfsssMapper">
+    <select id="getBdcFwFsssJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT DISTINCT t.fwfsssid,t.bdcdyh,t.zfbdcdyh,t.fwzl,t.jzmj,t.zfbdcdyh glzt
+        FROM bdc_fwfsss t
+        LEFT JOIN bdc_bdcdy y ON y.bdcdyh=t.zfbdcdyh
+        <where>
+            <if test="wiid != null and wiid !=''">
+                AND t.wiid = #{wiid}
+            </if>
+            <if test="bdcdyid != null and bdcdyid !=''">
+                AND (y.bdcdyid = #{bdcdyid} OR t.zfbdcdyh IS NULL)
+            </if>
+            <if test="proid != null and proid !=''">
+                AND t.proid = #{proid}
+            </if>
+        </where>
+    </select>
+
+    <select id="intiFwfsssByFwid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcFwfsss">
+        SELECT t.gyqk,t.jyjg,t.ghyt,t.tnjzmj,t.fwzl,t.jzmj,t.ftjzmj,t.cqly,t.dwdm,t.bz,t.cg,t.dah fwbm
+        FROM gd_fw t
+        WHERE t.fwid=#{fwid}
+    </select>
+
+    <select id="initBdcFwfsssFromZhsWithZhsIndex" parameterType="String"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcFwfsss">
+        SELECT t.gyqk,t.jyjg,t.ghyt,t.sctnjzmj tnjzmj,t.fwzl fwzl,t.zhsjzmj jzmj,t.scftjzmj ftjzmj,t.cqly,t.fwlx,
+        '1' sjly,t.fjsm bz,t.cg,t.fw_zhs_index fwbm,t.fttdmj
+        FROM djsj_fwzhs t
+        LEFT JOIN djsj_fwhs a on a.fw_hs_index=t.fw_hs_index
+        WHERE a.bdcdyh=#{bdcdyh}
+        UNION ALL
+        SELECT t.gyqk,t.jyjg,t.ghyt,t.sctnjzmj tnjzmj,t.fwzl fwzl,t.zhsjzmj jzmj,t.scftjzmj ftjzmj,t.cqly,t.fwlx,
+        '1' sjly,t.fjsm bz,t.cg,t.fw_zhs_index fwbm,t.fttdmj
+        FROM djsj_fwzhs t
+        LEFT JOIN djsj_fwhs a on a.fw_hs_index=t.fw_hs_index
+        LEFT JOIN djsj_fw_ljz l on l.fw_dcb_index=a.fw_dcb_index
+        WHERE NVL(l.bdcdyfwlx,'4')='2' AND l.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="initBdcFwfsssFromZhsWithZhsFwbm" parameterType="String"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcFwfsss">
+        SELECT t.gyqk,t.jyjg,t.ghyt,t.sctnjzmj tnjzmj,t.fwzl fwzl,t.zhsjzmj jzmj,t.scftjzmj ftjzmj,t.cqly,t.fwlx,
+        '1' sjly,t.fjsm bz,t.cg,t.fwbm,t.fttdmj
+        FROM djsj_fwzhs t
+        LEFT JOIN djsj_fwhs a on a.fw_hs_index=t.fw_hs_index
+        WHERE a.bdcdyh=#{bdcdyh}
+        UNION ALL
+        SELECT t.gyqk,t.jyjg,t.ghyt,t.sctnjzmj tnjzmj,t.fwzl fwzl,t.zhsjzmj jzmj,t.scftjzmj ftjzmj,t.cqly,t.fwlx,
+        '1' sjly,t.fjsm bz,t.cg,t.fwbm,t.fttdmj
+        FROM djsj_fwzhs t
+        LEFT JOIN djsj_fwhs a on a.fw_hs_index=t.fw_hs_index
+        LEFT JOIN djsj_fw_ljz l on l.fw_dcb_index=a.fw_dcb_index
+        WHERE NVL(l.bdcdyfwlx,'4')='2' AND l.bdcdyh=#{bdcdyh}
+    </select>
+
+    <select id="getBdcFwfsssList" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcFwfsss">
+        SELECT t.fwfsssid,t.jyjg,t.ghyt,t.dw,t.jzmj,t.dwdm,t.bz,t.cg,t.proid,t.bdcdyid,t.fwzl,t.tnjzmj,t.ftjzmj,t.fwbm,t.bdcdyh,t.zfbdcdyh,t.fttdmj,t.wiid,t.yqlid,t.yproid,t.jrfzmj
+        FROM bdc_fwfsss t
+        <where>
+            <if test="wiid != null and wiid !=''">
+                AND t.wiid = #{wiid}
+            </if>
+            <if test="proid != null and proid !=''">
+                AND t.proid = #{proid}
+            </if>
+            <if test="zfbdcdyh != null and zfbdcdyh !=''">
+                AND t.zfbdcdyh = #{zfbdcdyh}
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND t.bdcdyh = #{bdcdyh}
+            </if>
+            <if test="fwbm != null and fwbm !=''">
+                AND t.fwbm = #{fwbm}
+            </if>
+            <if test="hasBdcdy != null and hasBdcdy !=''">
+                AND t.bdcdyid IS NOT NULL
+            </if>
+        </where>
+    </select>
+
+
+
+    <delete id="batchDelBdcFwfsss" parameterType="java.util.Map">
+        DELETE FROM bdc_fwfsss t WHERE t.wiid = #{wiid} AND t.zfbdcdyh IN
+        <foreach collection="zfbdcdyhList" item="item" index="index" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="getDjsjFwzhsListByFwbm" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcFwfsss">
+        SELECT t.bdcdyh,t.fw_zhs_index FROM djsj_fwzhs t WHERE t.fw_zhs_index = #{fwbm}
+    </select>
+</mapper>

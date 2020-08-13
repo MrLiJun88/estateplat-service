@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcQsqMapper">
+
+    <select id="getBdcQsq" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcQsq">
+        SELECT * FROM BDC_QTXGQL t
+    </select>
+
+    <insert id="saveBdcQsq" parameterType="cn.gtmap.estateplat.model.server.core.BdcQsq" >
+        INSERT INTO BDC_QTXGQL(qlid,bdcdyid,qlksqx,sylx,qsfs,qsl,qsyt,tsl,tsdd,tsszyq,qljsqx,lsqszt,lszt,kcmj,kckz,kcfs,scgm,
+        ywh,qllx,proid,gyqk,djsj,dbr,fj,qszt)
+        VALUES(#{qlid,jdbcType=VARCHAR},#{bdcdyid,jdbcType=VARCHAR},#{qlksqx,jdbcType=VARCHAR}
+        ,#{sylx,jdbcType=VARCHAR},#{qsfs,jdbcType=VARCHAR},#{qsl,jdbcType=VARCHAR},#{qsyt,jdbcType=VARCHAR}
+        ,#{tsl,jdbcType=DATE},#{tsdd,jdbcType=DATE},#{tsszyq,jdbcType=VARCHAR},#{qljsqx,jdbcType=VARCHAR}
+        ,#{lsqszt,jdbcType=DATE},#{lszt,jdbcType=DATE},#{kcmj,jdbcType=VARCHAR},#{kckz,jdbcType=VARCHAR}
+        ,#{kcfs,jdbcType=DATE},#{scgm,jdbcType=DATE},#{ywh,jdbcType=VARCHAR}
+        ,#{qllx,jdbcType=VARCHAR},#{proid,jdbcType=VARCHAR},#{gyqk,jdbcType=VARCHAR},#{djsj,jdbcType=DATE}
+        ,#{dbr,jdbcType=VARCHAR},#{fj,jdbcType=VARCHAR},#{qszt,jdbcType=INTEGER})
+    </insert>
+</mapper>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--过度数据可以不匹配不动产单元创建的申请类型，且不登簿-->
+<props>
+    <sqlxdm>4009902</sqlxdm>
+    <sqlxdm>4009903</sqlxdm>
+    <sqlxdm>4009901</sqlxdm>
+	<sqlxdm>8009902</sqlxdm>
+	<sqlxdm>8009901</sqlxdm>
+	<sqlxdm>8009903</sqlxdm>
+	<sqlxdm>8009904</sqlxdm>
+</props>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.QllxParentMapper">
+
+    <select id="queryQllxVo" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.QllxParent">
+        SELECT t.qlid,t.proid,t.bdcdyid,t.ywh,t.qszt,t.qllx,t.dbr,t.djsj
+        FROM ${tableName} t
+        <if test="(bdcdyh != null and bdcdyh !='') or (zdzhh!=null and zdzhh!='')">
+            LEFT JOIN bdc_bdcdy b ON t.bdcdyid=b.bdcdyid
+        </if>
+        <if test="yporid != null and yporid !=''">
+            LEFT JOIN bdc_xm_rel r ON r.proid=t.proid
+        </if>
+        <if test="xmzt !=null and xmzt !=''">
+            LEFT JOIN bdc_xm x ON t.proid=x.proid
+        </if>
+        <where>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND b.bdcdyh = #{bdcdyh}
+            </if>
+            <if test="bdcdyid != null and bdcdyid !=''">
+                AND c.bdcdyid = #{bdcdyid}
+            </if>
+            <if test="yporid != null and yporid !=''">
+                AND r.yproid = #{yporid}
+            </if>
+            <if test="proid != null and proid !=''">
+                AND t.proid=#{proid}
+            </if>
+            <if test="zdzhh != null and zdzhh !=''">
+                AND substr(b.bdcdyh,0,19) = #{zdzhh}
+            </if>
+            <if test="qszt != null and qszt!=''">
+                AND t.qszt = #{qszt}
+            </if>
+            <if test="qsztsql != null and qsztsql!=''">
+                <![CDATA[
+                AND nvl(t.qszt,0) != 2
+                     ]]>
+            </if>
+            <if test="qsztiszx != null">
+                AND t.qszt != #{qsztiszx}
+            </if>
+
+            <if test="xmzt !=null and xmzt !=''">
+                AND x.xmzt=#{xmzt}
+            </if>
+            <if test="sqlx !=null and sqlx !=''">
+                AND x.sqlx!=#{sqlx}
+            </if>
+            <if test="cflx !=null and cflx !=''">
+                AND t.cflx in (${cflx})
+            </if>
+            <if test="proidTemp != null and proidTemp !=''">
+                AND t.proid !=#{proidTemp}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryQllxMap" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT t.qlid,t.proid,t.bdcdyid,t.ywh,t.qszt,t.qllx,b.bdcdyh
+        FROM ${tableName} t
+        LEFT JOIN bdc_bdcdy b ON t.bdcdyid=b.bdcdyid
+        <where>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND b.bdcdyh = #{bdcdyh}
+            </if>
+            <if test="zdzhh != null and zdzhh !=''">
+                AND substr(b.bdcdyh,0,19) = #{zdzhh}
+            </if>
+            <if test="qszt != null">
+                AND t.qszt = #{qszt}
+            </if>
+            <!--是否过滤掉预查封-->
+            <if test="filterycf !=null and filterycf !=''">
+                AND t.cflx in ('1','2')
+            </if>
+        </where>
+    </select>
+
+</mapper>

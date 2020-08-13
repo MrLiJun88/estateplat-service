@@ -1,0 +1,50 @@
+[
+  {
+    "djzx": "存量房买卖",
+    "djzxdm":"1515",
+    "alertStatus": "网签备案中,已租赁",
+    "confirmStatus": ""
+  },
+  {
+    "djzx": "赠与。受遗赠",
+    "djzxdm":"1518",
+    "alertStatus": "已备案,网签备案中,已租赁",
+    "confirmStatus": ""
+  },
+  {
+    "djzx": "房改房",
+    "djzxdm":"1519",
+    "alertStatus": "已备案,网签备案中,已租赁",
+    "confirmStatus": ""
+  },
+  {
+    "djzx": "婚内加（减）名",
+    "djzxdm":"1520",
+    "alertStatus": "已备案,网签备案中,已租赁",
+    "confirmStatus": ""
+  },
+  {
+    "djzx": "共有情况变化",
+    "djzxdm":"1521",
+    "alertStatus": "已备案,网签备案中,已租赁",
+    "confirmStatus": ""
+  },
+  {
+    "djzx": "依法律文书。公证的继承",
+    "djzxdm":"1525",
+    "alertStatus": "",
+    "confirmStatus": "已备案,网签备案中,已租赁"
+  },
+  {
+    "djzx": "其他继承",
+    "djzxdm":"1526",
+    "alertStatus": "已备案,网签备案中,已租赁",
+    "confirmStatus": ""
+  },
+  {
+    "djzx": "房屋析产离婚",
+    "djzxdm":"1527",
+    "alertStatus": "已备案,网签备案中,已租赁",
+    "confirmStatus": ""
+  }
+]

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+	<bean id="SysAuthorService"
+		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" 
+		value="${platform.url}/sysAuthorService.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.SysAuthorService"/>
+	</bean>
+	<bean id="SysUserServiceImpl"
+		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" 
+		value="${platform.url}/userservice.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.SysUserService"/>
+	</bean>
+
+	<bean id="SysWorkFlowDefineService"
+		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" 
+		value="${platform.url}/workFlowDefineService.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.SysWorkFlowDefineService"/>
+	</bean>
+	<bean id="WorkFlowCoreService"
+		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" 
+		value="${platform.url}/workflowcore.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.WorkFlowCoreService"/>
+	</bean>	
+	<bean id="SysWorkFlowInstanceService"
+		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" 
+		value="${platform.url}/workFlowInstanceService.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.SysWorkFlowInstanceService"/>
+	</bean>
+	<bean id="SysDictionaryService"
+		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" 
+		value="${platform.url}/sysDictionaryService.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.SysDictionaryService"/>
+	</bean>
+	<bean id="fileCenterNodeServiceImpl" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl">
+			<value>${fileCenter.url}/http/nodeService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.gtis.fileCenter.service.NodeService</value>
+		</property>
+	</bean>
+	<bean id="ompFileCenterNodeServiceImpl"
+		  class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl">
+			<value>${omp.fileCenter.url}/http/nodeService</value>
+		</property>
+		<property name="serviceInterface">
+			<value>com.gtis.fileCenter.service.NodeService</value>
+		</property>
+	</bean>
+	<bean id="SysOpinionService"
+		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" 
+		value="${platform.url}/sysOpinionService.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.SysOpinionService"/>
+	</bean>	
+	<bean id="TaskService"
+		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" 
+		value="${platform.url}/taskService.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.SysTaskService"/>
+	</bean>
+
+    <bean id="fileService" class="com.gtis.fileCenter.service.impl.FileServiceImpl">
+        <property name="nodeService" ref="fileCenterNodeServiceImpl"/>
+        <property name="fileCenterUrl" value="${fileCenter.url}"/>
+    </bean>
+
+    <bean id="SysSignService"
+          class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl"
+                  value="${platform.url}/sysSignService.service"/>
+        <property name="serviceInterface" value="com.gtis.plat.service.SysSignService"/>
+    </bean>
+
+    <bean id="newExchangeService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="${exchange.url}/exchangeService.service"/>
+        <property name="serviceInterface" value="com.gtis.exchange.service.INewExchangeServeice"/>
+    </bean>
+    <bean id="SysCalendarService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="${platform.url}/sysCalendarService.service"/>
+        <property name="serviceInterface" value="com.gtis.plat.service.SysCalendarService"/>
+    </bean>
+
+	<!--zdd 前置机对象集合服务 -->
+	<bean id="qzDataReaderService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" value="${etl.url}/qzDataReaderService.service"/>
+		<property name="serviceInterface" value="cn.gtmap.estateplat.service.exchange.QzFwTdxxService"/>
+	</bean>
+	<!--zdd 前置机 业务审批项目与不动产项目关系表服务 -->
+	<bean id="qzXmgxService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" value="${etl.url}/qzXmgxService.service"/>
+		<property name="serviceInterface" value="cn.gtmap.estateplat.service.exchange.QzXmgxService"/>
+	</bean>
+	<bean id="qzYwxxPageService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" value="${etl.url}/qzYwxxPageService.service"/>
+		<property name="serviceInterface" value="cn.gtmap.estateplat.service.exchange.QzYwxxPageService"/>
+	</bean>
+
+	<bean id="bdcExamineService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceInterface">
+			<value>cn.gtmap.estateplat.service.examine.BdcExamineService</value>
+		</property>
+		<property name="serviceUrl">
+			<value>${examine.url}/bdcExamineService</value>
+		</property>
+		<property name="overloadEnabled">
+			<value>true</value>
+		</property>
+	</bean>
+
+
+	<bean id="historyService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceInterface" value="cn.gtmap.estateplat.service.history.HistoryService"/>
+		<property name="serviceUrl" value="${history.url}/HistoryService"/>
+	</bean>
+
+
+	<bean id="QlztService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl" value="${config.url}/qlztService"/>
+		<property name="serviceInterface" value="cn.gtmap.estateplat.service.config.QlztService"/>
+	</bean>
+
+	<bean id="GxztService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl" value="${config.url}/gxztService"/>
+		<property name="serviceInterface" value="cn.gtmap.estateplat.service.config.GxztService"/>
+	</bean>
+
+	<bean id="RedundantFieldService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl" value="${config.url}/redundantFieldService"/>
+		<property name="serviceInterface" value="cn.gtmap.estateplat.service.config.RedundantFieldService"/>
+	</bean>
+
+
+	<bean id="RedundantMulFieldService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl" value="${config.url}/redundantMulFieldService"/>
+		<property name="serviceInterface" value="cn.gtmap.estateplat.service.config.RedundantMulFieldService"/>
+	</bean>
+
+
+	<!--realEstateShareService-->
+	<bean id="realEstateShareService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceInterface">
+			<value>cn.gtmap.estateplat.service.exchange.share.RealEstateShareService</value>
+		</property>
+		<property name="serviceUrl">
+			<value>${exchange.url}/RealEstateShareService</value>
+		</property>
+	</bean>
+
+	<bean id="etlGxYhManageService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceInterface">
+			<value>cn.gtmap.estateplat.service.etl.EtlGxYhManageService</value>
+		</property>
+		<property name="serviceUrl">
+			<value>${etl.url}/etlGxYhManageService</value>
+		</property>
+		<property name="overloadEnabled" value="true"></property>
+	</bean>
+
+	<bean id="JyxxService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceInterface">
+			<value>cn.gtmap.estateplat.service.etl.JyxxService</value>
+		</property>
+		<property name="serviceUrl">
+			<value>${etl.url}/jyxxService</value>
+		</property>
+	</bean>
+
+	<bean id="sysDynamicSignService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" value="${platform.url}/sysDynamicSignService.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.SysDynamicSignService"/>
+	</bean>
+	<bean id="sysActivityService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl" value="${platform.url}/sysActivityService.service"/>
+		<property name="serviceInterface" value="com.gtis.plat.service.SysActivityService"/>
+	</bean>
+	<bean id="workFlowXmlUtil" class="cn.gtmap.estateplat.server.utils.WorkFlowXmlUtil">
+		<property name="workFlowIntanceService" ref="SysWorkFlowInstanceService"/>
+	</bean>
+
+	<bean id="GetIntegrationBusinessDataService" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceInterface">
+			<value>cn.gtmap.estateplat.service.etl.GetIntegrationBusinessDataService</value>
+		</property>
+		<property name="serviceUrl">
+			<value>${etl.url}/getIntegrationBusinessDataService</value>
+		</property>
+	</bean>
+</beans>

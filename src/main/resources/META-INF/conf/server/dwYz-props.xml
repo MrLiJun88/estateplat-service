@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--相关权利类型对应国家标准单位(平方米除外)
+平方米:1;
+亩:2;
+公顷:3;
+-->
+<props>
+    <qllx>
+        <qllxdm>9</qllxdm>
+        <dw>2</dw>
+    </qllx>
+
+    <qllx>
+        <qllxdm>10</qllxdm>
+        <dw>2</dw>
+    </qllx>
+
+    <qllx>
+        <qllxdm>11</qllxdm>
+        <dw>2</dw>
+    </qllx>
+
+    <qllx>
+        <qllxdm>12</qllxdm>
+        <dw>2</dw>
+    </qllx>
+
+    <qllx>
+        <qllxdm>13</qllxdm>
+        <dw>3</dw>
+    </qllx>
+
+    <qllx>
+        <qllxdm>15</qllxdm>
+        <dw>3</dw>
+    </qllx>
+
+    <qllx>
+        <qllxdm>1</qllxdm>
+        <dw>3</dw>
+    </qllx>
+
+
+</props>

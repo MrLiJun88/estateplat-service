@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcJjdMapper">
+
+    <select id="getJjdxxJsonByPage" parameterType="java.util.HashMap" resultType="cn.gtmap.estateplat.model.server.core.BdcJjdXx">
+        SELECT rownum xh,t.bh slh,t.sqlx ywdjlx,t.proid,t.qlr sqr,
+        substr(b.bdcdyh,0,6)||' '||substr(b.bdcdyh,7,6)||' '||substr(b.bdcdyh,13,7)||' '||substr(b.bdcdyh,20,11) bdcdyh,
+        b.zl,b.bdcdyh as bdcdyhs
+        FROM (
+        SELECT t.bh,s.mc sqlx,t.proid,replace(strcat(q.qlrmc),'/',',') qlr FROM bdc_xm t
+        LEFT JOIN bdc_zd_sqlx s ON s.dm=t.sqlx
+        LEFT JOIN bdc_qlr q ON q.proid=t.proid and q.qlrlx='qlr'
+        WHERE t.xmzt='1'
+        group by t.proid,t.bh,s.mc,t.BJSJ
+        order by t.BJSJ desc
+        )t
+        LEFT JOIN bdc_spxx b ON b.proid=t.proid
+        WHERE 1=1
+        <if test="bhs != null and bhs !=''">
+            and
+            <foreach collection="bhs" item="item" open="(" separator=" or " close=")">
+                t.bh = #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="getJjdJsonByPage" parameterType="java.util.HashMap" resultType="cn.gtmap.estateplat.model.server.core.BdcJjd">
+          SELECT t.*  FROM bdc_jjd t       WHERE 1=1
+        <if test="jjdbhs != null and jjdbhs !=''">
+            and
+            <foreach collection="jjdbhs" item="item" open="(" separator=" or " close=")">
+                instr(t.jjdbh,#{item})>0
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getJjdXh" parameterType="String" resultType="String">
+            SELECT replace(lpad(max(to_number(substr(t.jjdbh,5,11))+1),6),' ','0') xlh  FROM bdc_jjd t WHERE to_number(substr(t.jjdbh,0,4))=#{nf}
+    </select>
+
+    <select id="getBeforeSlh" parameterType="String" resultType="String">
+            SELECT x.bh  FROM bdc_xm t
+            LEFT JOIN bdc_xm_rel r ON r.proid=t.proid
+            LEFT JOIN bdc_xm x ON x.proid=r.yproid   and x.xmzt='1'
+            WHERE t.bh=#{bh}
+    </select>
+
+    <select id="getAfterSlh" parameterType="String" resultType="String">
+           SELECT x.bh  FROM bdc_xm t
+           LEFT JOIN bdc_xm_rel r ON r.yproid=t.proid
+            LEFT JOIN bdc_xm x ON x.proid=r.proid and x.xmzt='1'
+            WHERE t.bh=#{bh}
+    </select>
+</mapper>

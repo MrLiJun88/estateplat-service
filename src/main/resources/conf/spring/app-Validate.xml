@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+    <!--不动产验证登记服务-->
+    <bean id="projectCheckInfoService" class="cn.gtmap.estateplat.server.service.impl.ProjectCheckInfoServiceImpl">
+        <property name="projectValidateMap">
+            <map>
+                <!--不动产单元（100）大类100开头，后面续编-->
+                <!--验证不动产单元是否查封-->
+                <entry key="101">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyCfValidateServiceImpl"/>
+                </entry>
+                <!--过渡房屋是否存在查封登记-->
+                <entry key="102">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyGdCfValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否存在预告登记-->
+                <entry key="103">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdySfYgValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否存在异议登记-->
+                <entry key="104">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdySfYYValidateServiceImpl"/>
+                </entry>
+                <!--不动产单元是否存在抵押-->
+                <entry key="105">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdySfDyValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否锁定-->
+                <entry key="106">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdySfSdValidateServiceImpl"/>
+                </entry>
+                <!--验证过渡房屋 是否处于抵押状态-->
+                <entry key="107">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyGdFwDyValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否存在在建筑物抵押-->
+                <entry key="108">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdySfZjDyValidateServiceImpl"/>
+                </entry>
+                <!--验证批量发证的不动产单元是否抵押（只针对批量选择楼盘表或者选择逻辑幢）-->
+                <entry key="109">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyPlDjDyValidateServiceImpl"/>
+                </entry>
+                <!--验证批量发证的不动产单元是否查封（只针对批量选择楼盘表或者选择逻辑幢）-->
+                <entry key="110">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyPlDjCfValidateServiceImpl"/>
+                </entry>
+                <!--验证批量发证的不动产单元是否预告（只针对批量选择楼盘表或者选择逻辑幢）-->
+                <entry key="111">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyPlDjYgValidateServiceImpl"/>
+                </entry>
+                <!--验证批量发证的不动产单元是否异议（只针对批量选择楼盘表或者选择逻辑幢）-->
+                <entry key="112">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyPlDjYyValidateServiceImpl"/>
+                </entry>
+                <!--验证创建抵押转移合并(原证书不能是抵押状态)-->
+                <entry key="113">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyCreatZydyValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否正在办理其他登记-->
+                <entry key="114">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdySfblQtdjValidateServiceImpl"/>
+                </entry>
+                <!--验证项目是否匹配不动产单元-->
+                <entry key="115">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyIsMatchValidateServiceImpl"/>
+                </entry>
+                <!--过渡原项目是否处于活动状态 即原项目是否在办理其他登记-->
+                <entry key="116">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyGdYxmSfblValidateServiceImpl"/>
+                </entry>
+                <!--验证原项目是否正在办理-->
+                <entry key="117">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyYxmSfblValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否办理过预告登记,预告抵押权登记-->
+                <entry key="118">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyYzxValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元所在宗地是否正在登记-->
+                <entry key="119">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyZdSfDjValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元所在宗地是否处于抵押-->
+                <entry key="120">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyZdSfDyValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元所在宗地是否处于预告-->
+                <entry key="121">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyZdSfYgValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元所在宗地是否处于异议-->
+                <entry key="122">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyZdSfYyValidateServiceImpl"/>
+                </entry>
+                <!--验证预告登记是否存在预告抵押权登记-->
+                <entry key="123">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyZxYgExisYgdyValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元号是否处于活动状态 即不动产单元号是否在办理其他登记-->
+                <entry key="124">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyZzblValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元号是否处于同一宗地-->
+                <entry key="125">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyInXtZdValidateServiceImpl"/>
+                </entry>
+                <!--&lt;!&ndash;验证不动产单元号是否处于已经做过逐户注销&ndash;&gt;-->
+                <!--<entry key="126">-->
+                <!--<bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyDoneZhjyValidateServiceImpl"/>-->
+                <!--</entry>-->
+                <!--&lt;!&ndash;验证不动产单元号是否处于已经做过多次抵押&ndash;&gt;-->
+                <!--<entry key="127">-->
+                <!--<bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyZdSfDcDyValidateServiceImpl"/>-->
+                <!--</entry>-->
+                <!--验证不动产单元是否预查封-->
+                <entry key="128">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyYcfValidateServiceImpl"/>
+                </entry>
+                <!--带抵押转移，必须存在抵押情况-->
+                <entry key="129">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyCreatDDyzyValidateServiceImpl"/>
+                </entry>
+                <!--验证是否可以批量查封-->
+                <entry key="130">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyPlCfValidateServiceImpl"/>
+                </entry>
+                <!--验证未办结的项目进行查封、抵押后，原项目被冻结，不可继续办理-->
+                <entry key="131">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyYxmDjValidateServiceImpl"/>
+                </entry>
+                <!--验证房屋是否给限制-->
+                <entry key="132">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyFwxzValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元所在宗地是否已查封-->
+                <entry key="133">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdySzzdCfValidateServiceImpl"/>
+                </entry>
+                <!--验证在建工程抵押，权籍数据是否处于抵押状态-->
+                <entry key="134">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyFwYcHsIsDyValidateServiceImpl"/>
+                </entry>
+                <!--查封期限验证服务，只在任务转发验证-->
+                <entry key="135">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyCfQxValidateServiceImpl"/>
+                </entry>
+                <!--验证改不动产单元是否被裁定-->
+                <entry key="136">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyCdQxValidateServiceImpl"/>
+                </entry>
+                <!--验证存在在建工程抵押的不动产单元办理首次登记信息表-->
+                <entry key="137">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyZjDyZmdValidateServiceImpl"/>
+                </entry>
+                <!--验证存在预告登记的不动产单元办理不动产权证书-->
+                <entry key="138">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyYgBdcqzValidateServiceImpl"/>
+                </entry>
+                <!--验证土地对应的房屋是否有在建工程抵押-->
+                <entry key="139">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcFwOfTdHasZjgcdyValidateServiceImpl"/>
+                </entry>
+                <!--验证当依据法律文书转移时的权利人是否是裁定的被转移人-->
+                <entry key="140">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyCdZyrValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否多条现势产权验证-->
+                <entry key="143">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyMultiXsCqValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否已存在一条及以上现势产权验证-->
+                <entry key="144">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyExistXsCqValidateServiceImpl"/>
+                </entry>
+
+
+                <!--验证不动产单元交易状态网签备案中-->
+                <entry key="145">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyTradingStatusNetSignRecordingServiceImpl"/>
+                </entry>
+                <!--验证不动产单元交易状态已备案-->
+                <entry key="146">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyTradingStatusForRecordServiceImpl"/>
+                </entry>
+                <!--验证不动产单元交易状态租赁备案中-->
+                <entry key="147">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyTradingStatusLeaseRecordingServiceImpl"/>
+                </entry>
+                <!--验证不动产单元交易状态已租赁-->
+                <entry key="148">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyTradingStatusAlreadyLeasedServiceImpl"/>
+                </entry>
+                <!--验证不动产单元交易状态已查封-->
+                <entry key="150">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyTradingStatusCloseDownServiceImpl"/>
+                </entry>
+                <!--验证改不动产单元未被裁定-->
+                <entry key="149">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyWbCdValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否为虚拟宗单元号-->
+                <entry key="151">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyhIsXnzdyhValidateServiceImpl"/>
+                </entry>
+                <!--江阴验证房屋网签备案状态-->
+                <entry key="152">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.JybdcdyZtValidateServiceImpl"/>
+                </entry>
+                <!--一证多房验证-->
+                <entry key="197">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcyzdfValidateServiceImpl"/>
+                </entry>
+                <!--不动产收档验证-->
+                <entry key="198">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcSdValidateServiceImpl"/>
+                </entry>
+                <!--验证是否虚拟单元号-->
+                <entry key="199">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcXnBdcdyhValidateServiceImpl"/>
+                </entry>
+                <!--验证是否调用确认单-->
+                <entry key="192">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcQrdValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否存在权籍-->
+                <entry key="193">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyExistQjValidateServiceImpl"/>
+                </entry>
+                <!--核定登簿时验证不动产单元是否预查封-->
+                <entry key="194">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.HddbBdcdyYcfValidateServiceImpl"/>
+                </entry>
+                <!--权利（200）验证权利以200开头-->
+                <!--验证查封是否存在没有解封的续封-->
+                <entry key="201">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyXfValidateServiceImpl"/>
+                </entry>
+                <!--验证过渡数据是否处于锁定状态-->
+                <entry key="202">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QlSfSdGdDataValidateServiceImpl"/>
+                </entry>
+                <!--判断选择产权证的权利状态 是否为现势状态 即正常状态-->
+                <entry key="203">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QlZtCheckValidateServiceImpl"/>
+                </entry>
+                <!--判断选择产权证是否被锁定-->
+                <entry key="204">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcZsSdValidateServiceImpl"/>
+                </entry>
+                <!--过渡房屋是否存在查封登记-不匹配不动产单元的验证-->
+                <entry key="205">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.GdFwCfValidateServiceImpl"/>
+                </entry>
+                <!--解锁流程中选择证书是否存在锁定的验证-->
+                <entry key="206">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.JsWorkflowExistSdValidateServiceImpl"/>
+                </entry>
+                <!--遗失补证流程证书是否存在非遗失补证的验证-->
+                <entry key="207">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdczsExistFysbzValidateServiceImpl"/>
+                </entry>
+
+                <!--证书（300）验证证书以300开头 -->
+                <!--验证房屋土地证是否注销-->
+                <entry key="301">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.GdFwTdZsZtValidateServiceImpl"/>
+                </entry>
+
+                <!--验证一证多房的房产证是否匹配不同的不动产单元-->
+                <entry key="302">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.GdYzdfPpbdcdyValidateServiceImpl"/>
+                </entry>
+
+                <!--验证存量房交易状态是否在办-->
+                <entry key="303">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.GxJyClfHtZtValidateServiceImpl"/>
+                </entry>
+
+                <!--验证房产证是否匹配土地证-->
+                <entry key="304">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.GdfczMatchTdzValidateServiceImpl"/>
+                </entry>
+
+                <!--抵押权注销登记验证未匹配单元号的他项权证是否在办理其他登记-->
+                <entry key="305">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.GdDyzxSfblQtdjValidateServiceImpl"/>
+                </entry>
+
+                <!--验证资金托管是否未到账-->
+                <entry key="306">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.FundTrusteeshipStatusServiceImpl"/>
+                </entry>
+                <!--验证资金托管是否已到账-->
+                <entry key="307">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.FundTrusteeshipStatusAccountServiceImpl"/>
+                </entry>
+
+                <!--江阴验证商品房网签备案状态是否已备案-->
+                <entry key="308">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.JySpfJyZtValidateServiceImpl"/>
+                </entry>
+                <!--江阴验证是否完税-->
+                <entry key="309">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyWsValidateServiceImpl"/>
+                </entry>
+
+                <!--江阴验证存量房网签备案状态是否已备案-->
+                <entry key="310">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.JyClfJyZtValidateServiceImpl"/>
+                </entry>
+
+                <!--项目（400）验证项目以400开头 -->
+                <entry key="401">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcZjValidateServiceImpl"/>
+                </entry>
+                <!--验证项目是否已经发起评价 -->
+                <entry key="402">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcZfValidateServiceimpl"/>
+                </entry>
+                <!--验证一窗受理项目税务缴税状态-未缴费-->
+                <entry key="403">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.YcslSwjfztValidateServiceImpl"/>
+                </entry>
+                <!--验证一窗受理项目税务缴税状态-未缴费-->
+                <entry key="404">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.CheckSfZfdccValidateServiceImpl"/>
+                </entry>
+
+                <!--交易验证（500）验证交易那边的以500开头-->
+                <!--根据住建接口中的shifoudk字段验证不动产做转移登记时是否有抵押 -->
+                <entry key="501">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcJyZyDyValidateServiceImpl"/>
+                </entry>
+                <!--验证抵押首次时产权证是否存在有效的合同状态 -->
+                <entry key="502">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcJyDyValidateServiceImpl"/>
+                </entry>
+                <!--验证产权证号交易状态已备案-->
+                <entry key="503">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.CqzhTradingStatusForRecordServiceImpl"/>
+                </entry>
+                <!--其他（900）其他验证以900开头-->
+                <!--验证权利人义务人是否重复 -->
+                <entry key="901">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QtDuplicateQlrYwrValidateServiceImpl"/>
+                </entry>
+                <!--验证单位是否是国家标准单位-->
+                <entry key="902">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QtDwValidateServiceImpl"/>
+                </entry>
+                <!--检查收件材料份数是否为空-->
+                <entry key="903">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QtIsNullSjclValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元权利人是否是预告权利人-->
+                <entry key="904">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QtQlrEqualsYgQlrValidateServiceImpl"/>
+                </entry>
+                <!--验证异议是否是同一个异议事项和申请人-->
+                <entry key="905">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QtSqrAndYysxValidateServiceImpl"/>
+                </entry>
+                <!--验证证书编号填写是否正确-->
+                <entry key="906">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QtZsbhValidateServiceImpl"/>
+                </entry>
+                <!--转移抵押转发验证，验证转移的权利人是抵押的义务人-->
+                <entry key="907">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QtZydyQlrGxValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元或产权证是否警示-->
+                <entry key="908">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyJsxxValidateServiceImpl"/>
+                </entry>
+                <!--验证公告-->
+                <entry key="909">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcGgValidateServiceImpl"/>
+                </entry>
+                <!--信用管理验证服务，只在任务转发验证-->
+                <entry key="910">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.QtQlrExistXyMxValidateServiceImpl"/>
+                </entry>
+                <!--验证不动产单元是否备案-->
+                <entry key="911">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyBaServiceImpl"/>
+                </entry>
+
+                <!--验证不动产单元号是否12-28位-->
+                <entry key="912">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyhLengthValidateServiceImpl"/>
+                </entry>
+
+                <!--验证被担保主债权数额必须小于10亿-->
+                <entry key="913">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdbzzqseValueValidateServiceImpl"/>
+                </entry>
+                <!--验证权利人是否是保障性住房者-->
+                <entry key="914">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcXyglIsBzxzfValidateServiceImpl"/>
+                </entry>
+                <!--验证互联网＋银行接口是否调用成功-->
+                <entry key="915">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.GxYhInterfaceValidateServiceImpl"/>
+                </entry>
+                <!--验证权利人证件号是否大于5位-->
+                <entry key="916">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcQlrZjhLengthCheckServiceImpl"/>
+                </entry>
+
+                <!--验证查封时间是否和项目创建时间一致-->
+                <entry key="917">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcCfTimeConsistencyServiceImpl"/>
+                </entry>
+
+               <!-- 验证不动产单元是否未售-->
+                <entry key="918">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyBafwztValidateServiceImpl"/>
+                </entry>
+                <!-- 验证不动产单元是否存在内部限制-->
+                <entry key="919">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyExistNbxzValidateServiceImpl"/>
+                </entry>
+
+                <!--验证银行抵押权利人是否一致-->
+                <entry key="1001">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.GxYhQlrValidateServiceImpl"/>
+                </entry>
+                <!--验证抵押顺位是否正确-->
+                <entry key="1002">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.BdcdyDySwValidateServiceImpl"/>
+                </entry>
+                <!--验证集成平台有预约的产证是否通过集成平台创件-->
+                <entry key="1003">
+                    <bean class="cn.gtmap.estateplat.server.service.core.impl.validator.IntegrationCqzhValidateServiceImpl"/>
+                </entry>
+            </map>
+        </property>
+        <!--不动产强制验证代码-->
+        <property name="projectForceValidateMap">
+            <map>
+                <entry key="101" value-ref="bdcForceValidate101"/>
+                <entry key="102" value-ref="bdcForceValidate102"/>
+                <entry key="104" value-ref="bdcForceValidate104"/>
+                <entry key="110" value-ref="bdcForceValidate110"/>
+                <entry key="112" value-ref="bdcForceValidate112"/>
+                <entry key="201" value-ref="bdcForceValidate201"/>
+                <!--<entry key="908" value-ref="bdcForceValidate908"/>-->
+                <entry key="106" value-ref="bdcForceValidate106"/>
+                <entry key="136" value-ref="bdcForceValidate136"/>
+                <entry key="143" value-ref="bdcForceValidate143"/>
+                <entry key="149" value-ref="bdcForceValidate149"/>
+            </map>
+        </property>
+        <!--server不验证的申请类型及节点名称-->
+        <property name="sqlxNoCheckMap">
+            <map>
+                <entry>
+                    <key>
+                        <value>default</value>
+                    </key>
+                    <value>缮证,发证</value>
+                </entry>
+                <entry>
+                    <key>
+                        <value>zsbhNoCheck</value>
+                    </key>
+                    <value>受理（初审）,核定（登簿）,审核,收件,收费</value>
+                </entry>
+                <entry>
+                    <!--排除需要验证的验证代码 -->
+                    <key>
+                        <value>exceptCheckCode</value>
+                    </key>
+                    <value>906</value>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="bdcForceValidate101" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value="801,803,807,1204,809,8009902,8009904,806,2003301,1014,9980430,9920043,9920044,8009910"/>
+        <property name="checkmsg" value="#该不动产单元已查封！"/>
+    </bean>
+    <bean id="bdcForceValidate102" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value="801,803,807,1204,809,8009902,8009904,806,9920043,9920044,8009910"/>
+        <property name="checkmsg" value="#该产权证已查封！"/>
+    </bean>
+    <bean id="bdcForceValidate104" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value="801,604,803,807,806,1204,809,8009902,8009904,6009901,9920043,9920044,8009910"/>
+        <property name="checkmsg" value="#该不动产单元已办理异议登记！"/>
+    </bean>
+    <bean id="bdcForceValidate110" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value="801,803,807,1204,809,8009902,8009904,806,2003301,1014,9980430,9920043,9920044,8009910"/>
+        <property name="checkmsg" value="#该不动产单元已查封！"/>
+    </bean>
+    <bean id="bdcForceValidate112" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value="801,604,803,807,806,1204,809,8009902,8009904,6009901,9920043,9920044,8009910"/>
+        <property name="checkmsg" value="#该不动产单元已办理异议登记！"/>
+    </bean>
+    <bean id="bdcForceValidate201" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value="801,803,807,1204,809,8009902,8009904,806"/>
+        <property name="checkmsg" value="#该不动产单元存在没有解封的续封！"/>
+    </bean>
+    <!--<bean id="bdcForceValidate908" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        &lt;!&ndash;排除强制验证申请类型代码 &ndash;&gt;
+        <property name="esqlxdm" value="${exceptSqlxForCheckJs}"/>
+        <property name="checkmsg" value="#该不动产单元或不动产权证已警示！"/>
+    </bean>-->
+    <bean id="bdcForceValidate106" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value="${exceptSqlxForCheckJs}"/>
+        <property name="checkmsg" value="#该不动产单元已冻结！"/>
+    </bean>
+    <bean id="bdcForceValidate136" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value="2003301,801,806,1014,9980430,9920043,9920044"/>
+        <property name="checkmsg" value="#该不动产单元已裁定！"/>
+    </bean>
+    <bean id="bdcForceValidate143" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value=""/>
+        <property name="checkmsg" value="#该不动产单元存在多个现势产权！"/>
+    </bean>
+
+    <bean id="bdcForceValidate149" class="cn.gtmap.estateplat.server.core.model.BdcForceValidate">
+        <!--排除强制验证申请类型代码 -->
+        <property name="esqlxdm" value="2003301"/>
+        <property name="checkmsg" value="#该不动产单元未被裁定！"/>
+    </bean>
+</beans>

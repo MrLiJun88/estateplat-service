@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDyMapper">
+    <select id="getZjgFcxxByPage" parameterType="java.util.Map" resultType="map">
+       select  p.qlr,p.bdcdyh,p.zl,p.yt,p.mj from
+       (select c.qlrmc qlr,q.bdcdyh,w.zl ,k.mc yt,d.jzmj mj from BDC_ZS a 
+        inner join BDC_ZS_QLR_REL b on a.zsid=b.zsid
+		left join  BDC_QLR c on b.qlrid=c.qlrid and c.qlrlx!='ywr'
+		inner join  BDC_FDCQ d on c.proid=d.proid and d.qszt=1
+		left join BDC_ZD_FWYT k on d.ghyt=k.dm
+		left join BDC_BDCDY q on q.bdcdyid=d.bdcdyid
+		inner join BDC_SPXX w on w.proid=c.proid
+		where 1=1 
+		<if test="sfzh !=null and sfzh !=''">
+              and (c.qlrzjh =#{sfzh}  
+              <if test="oldSfzh !=null and oldSfzh !=''">or c.qlrzjh=#{oldSfzh}</if>) 
+         </if>
+		<if test="xm !=null and xm !=''">
+            and c.qlrmc=#{xm}
+         </if>
+		union all
+		SELECT c.qlrmc qlr,q.bdcdyh,w.zl ,k.mc yt,e.jzmj mj from BDC_ZS a 
+		inner join BDC_ZS_QLR_REL b on a.zsid=b.zsid
+		left join  BDC_QLR c on b.qlrid=c.qlrid and c.qlrlx!='ywr'
+		inner join  BDC_FDCQ_dz d on c.proid=d.proid and d.qszt=1
+		left join BDC_BDCDY q on q.bdcdyid=d.bdcdyid
+		inner join BDC_SPXX w on w.proid=c.proid
+		inner join Bdc_Fwfzxx e on e.qlid=d.qlid
+		left join Bdc_Zd_Fwyt k on e.ghyt=k.dm
+		where 1=1 
+		<if test="sfzh !=null and sfzh !=''">
+              and (c.qlrzjh =#{sfzh}   
+               <if test="oldSfzh !=null and oldSfzh !=''">or c.qlrzjh=#{oldSfzh}</if>) 
+         </if>
+		<if test="xm !=null and xm !=''">
+            and c.qlrmc=#{xm}
+            </if>
+		union all
+		select t1.qlr,t6.bdcdyh,t2.fwzl zl,t2.ghyt yt,t2.jzmj mj from GD_QLR t1 
+		inner join  gd_bdc_ql_rel t5 on t5.qlid = t1.qlid
+		inner join  GD_FW t2 on  t5.bdcid=t2.fwid
+		inner join  GD_FWSYQ t4 on t4.qlid=t1.qlid and t4.iszx=0
+		left join   GD_DYH_REL t6 on t6.gdid=t2.fwid
+		where t1.qlrlx!='ywr'
+		<if test="sfzh !=null and sfzh !=''">
+            and (t1.qlrzjh=#{sfzh}  
+              <if test="oldSfzh !=null and oldSfzh !=''">or t1.qlrzjh=#{oldSfzh}</if>)  
+         </if>
+		<if test="xm !=null and xm !=''">
+            and t1.qlr=#{xm}
+          </if>
+          ) p
+    </select>
+</mapper>

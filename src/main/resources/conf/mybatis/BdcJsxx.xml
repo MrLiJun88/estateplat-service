@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//不动产单元-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcJsxxMapper">
+    <select id="getBdcJsxxListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT
+        t.jsid,
+        t.cqzh,
+        t.bdcdyh,
+        t.zsid ,
+        t.bdclx,
+        t.jszt ,
+        t.jsyy ,
+        t.jssj ,
+        t.jbr  ,
+        t.qxr  ,
+        t.qxsj ,
+        t.qxyy,
+        t.zl,
+        t.qlr
+        FROM bdc_jsxx t
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (instr(t.bdcdyh ,#{dcxc} )>0 or instr(t.cqzh ,#{dcxc} )>0 or instr(t.zl ,#{dcxc} )>0 )
+            </if>
+            <if test="cqzh != null and cqzh !=''">
+                AND t.cqzh =#{cqzh}
+            </if>
+            <if test="zsid != null and zsid !=''">
+                AND t.zsid =#{zsid}
+            </if>
+            <if test="bdcdyh != null and bdcdyh !=''">
+                AND t.bdcdyh =#{bdcdyh}
+            </if>
+            <if test="jszt != null and jszt !=''">
+                AND t.jszt =#{jszt}
+            </if>
+            <if test="jbr != null and jbr !=''">
+                AND t.jbr =#{jbr}
+            </if>
+            <if test="qxr != null and qxr !=''">
+                AND t.qxr =#{qxr}
+            </if>
+            <if test="zl != null and zl !=''">
+                AND t.zl =#{zl}
+            </if>
+        </where>
+        ORDER BY t.jssj DESC
+    </select>
+</mapper>

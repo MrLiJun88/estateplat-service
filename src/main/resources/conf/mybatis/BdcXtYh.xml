@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//银行表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcXtYhMapper">
+
+    <select id="getBankListByPage"  resultType="map">
+        SELECT t.Yhid, t.YHmc, t.zjlx,t.zjbh, t.bz,t.sftysf
+        FROM BDC_XT_YH t ORDER BY t.yhmc
+    </select>
+
+    <select id="getSjdBz"  parameterType="String" resultType="map">
+       SELECT t.sfxmbz,t.jsff,t.je
+       FROM bdc_xt_sfxm t
+       WHERE  t.sfxmmc=#{sfxmmc} AND t.qlrlx=#{qlrlx}
+    </select>
+
+    <select id="getBankListByYhmc"  resultType="cn.gtmap.estateplat.model.server.core.BdcXtYh" parameterType="String">
+        SELECT t.Yhid, t.YHmc, t.zjlx,t.zjbh, t.bz FROM BDC_XT_YH t
+        WHERE  1=1
+        <if test="yhmc != null and yhmc !=''">
+            AND  t.yhmc=#{yhmc}
+        </if>
+        ORDER BY t.Yhid
+    </select>
+
+</mapper>

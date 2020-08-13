@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--配置合并流程申请类型代码，sqlx为合并流程申请类型代码，sqlx1为合并流程第一个流程申请类型代码，sqlx2为申请类型第二个流程申请类型代码-->
+<sqlxs>
+    <sqlx dm="706">
+        <sqlx1>700</sqlx1>
+        <sqlx2>707</sqlx2>
+    </sqlx>
+    <sqlx dm="135">
+        <sqlx1>211</sqlx1>
+        <sqlx2>1019</sqlx2>
+    </sqlx>
+    <sqlx dm="219">
+        <sqlx1>225</sqlx1>
+        <sqlx2>1012</sqlx2>
+    </sqlx>
+    <sqlx dm="904">
+        <sqlx1>901</sqlx1>
+        <sqlx2>1019</sqlx2>
+    </sqlx>
+    <sqlx dm="906">
+        <sqlx1>901</sqlx1>
+        <sqlx2>1019</sqlx2>
+    </sqlx>
+    <sqlx dm="9980409">
+        <sqlx1>9960401</sqlx1>
+        <sqlx2>1012</sqlx2>
+    </sqlx>
+    <sqlx dm="218">
+        <sqlx1>212</sqlx1>
+        <sqlx2>1019</sqlx2>
+    </sqlx>
+    <sqlx dm="9980424">
+        <sqlx1>212</sqlx1>
+        <sqlx2>1019</sqlx2>
+    </sqlx>
+    <sqlx dm="9980430">
+        <sqlx1>2003301</sqlx1>
+        <sqlx2>1019</sqlx2>
+    </sqlx>
+    <sqlx dm="9980445">
+        <sqlx1>3000407</sqlx1>
+        <sqlx2>212</sqlx2>
+    </sqlx>
+    <sqlx dm="9980446">
+        <sqlx1>212</sqlx1>
+        <sqlx2>212</sqlx2>
+    </sqlx>
+    <sqlx dm="9980405">
+        <sqlx1>901</sqlx1>
+        <sqlx2>1012</sqlx2>
+    </sqlx>
+    <sqlx dm="9981802">
+        <sqlx1>799</sqlx1>
+        <sqlx2>799</sqlx2>
+    </sqlx>
+</sqlxs>

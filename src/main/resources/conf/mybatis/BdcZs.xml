@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZsMapper">
+
+    <select id="getMaxLsh" resultType="java.lang.Integer" parameterType="map">
+        SELECT MAX(to_number(ZHLSH))
+        FROM bdc_zs
+        WHERE zstype=#{zstype} AND nf= #{nf}
+        <if test="dwdm!=null and dwdm!=''">
+            AND dwdm LIKE #{dwdm} || '%'
+        </if>
+        <if test="startQh!=null and startQh!=''">
+            AND zhlsh LIKE #{startQh} || '%'
+        </if>
+    </select>
+
+    <select id="getBdcZsListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT c.bdcdyh,c.zl,c.mj djzwmj,a.bh,b.proid,
+        case
+        when t.sqfbcz='是' then a.czr
+        else a.qlr end as qlr
+        ,a.bdcqzh,a.zsid,c.zdzhmj,a.zslx,a.zstype
+        FROM bdc_zs a
+        LEFT JOIN bdc_xmzs_rel b ON a.zsid=b.zsid
+        LEFT JOIN bdc_xm t ON b.proid=t.proid
+        LEFT JOIN bdc_fdcq q ON t.proid=q.proid
+        LEFT JOIN bdc_spxx c ON t.proid=c.proid
+        <where>
+            <if test="wiid!=null and wiid!=''">
+                AND t.wiid=#{wiid}
+            </if>
+            <if test="fzlx!=null and fzlx!=''">
+                AND q.fzlx = #{fzlx}
+            </if>
+            <if test="zl!=null and zl!=''">
+                AND c.zl LIKE '%'||#{zl}||'%'
+            </if>
+            <if test="filterBdcFwfsss != null and filterBdcFwfsss !=''">
+                AND not exists (
+                SELECT f.fwfsssid
+                FROM bdc_fwfsss f
+                WHERE f.wiid=t.wiid AND f.bdcdyid=t.bdcdyid)
+            </if>
+        </where>
+        ORDER BY length(c.dh),c.dh,c.sxh,length(c.zl),c.zl,c.bdcdyh,b.proid,a.zsid
+    </select>
+
+    <select id="getZmdDataListByPage" resultType="map" parameterType="java.util.Map">
+        SELECT x.proid,y.bdcdyid,y.bdcdyh,b.zl,b.mj as djzwmj,d.mc as ghyt,q.fzlx,z.zsid,z.bh,z.dyzt
+        FROM bdc_xm x
+        LEFT JOIN bdc_bdcdy y ON x.bdcdyid=y.bdcdyid
+        LEFT JOIN bdc_spxx b ON b.proid=x.proid
+        LEFT JOIN bdc_fdcq q ON q.proid=x.proid
+        LEFT JOIN bdc_xmzs_rel r ON r.proid = x.proid
+        LEFT JOIN bdc_zs z ON z.zsid = r.zsid
+        LEFT JOIN bdc_zd_fwyt d ON d.dm=b.yt
+        <where>
+            <if test="fzlx!=null and fzlx!=''">
+                AND q.fzlx=#{fzlx}
+            </if>
+            <if test="proid!=null and proid!=''">
+                AND x.wiid=(
+                SELECT c.wiid
+                FROM bdc_xm c
+                WHERE c.proid=#{proid})
+            </if>
+            <if test="zl!=null and zl!=''">
+                AND instr(b.zl ,#{zl} )>0
+            </if>
+            <if test="bdcdyh!=null and bdcdyh!=''">
+                AND y.bdcdyh=#{bdcdyh}
+            </if>
+        </where>
+        ORDER BY length(b.dh),b.dh,b.sxh,length(b.zl), b.zl, y.bdcdyh
+    </select>
+
+    <select id="getPlZsByProid" resultType="cn.gtmap.estateplat.model.server.core.BdcZs" parameterType="String">
+        SELECT a.zsid,a.bdcqzh,a.zhlsh,a.nf,a.czr,a.czrq,a.zslx,a.bh,a.qlqtzk,a.dwdm,a.sqsjc,a.szsxqc,a.zstype,a.fzrq,a.szr,a.lzrzjh,a.fzr,a.lzr,a.czrid,a.dyzt,a.lzrzjzl,a.lzrq,a.szrq,a.lzrid,a.szrid,a.ewmnr,a.fj,a.bdcdyh,a.zl,a.zmqlsx,a.qlr,a.ywr,a.gyqk,a.qllx,a.qlxz,a.yt,a.mj,a.syqx,a.tsxx,a.yxdysj,a.bdcqzhjc
+        FROM bdc_zs a
+        LEFT JOIN BDC_XMZS_REL b ON a.zsid=b.zsid
+        WHERE b.proid=#{proid}
+        ORDER BY a.zhlsh
+    </select>
+
+    <select id="getPlZsByWiid" resultType="cn.gtmap.estateplat.model.server.core.BdcZs" parameterType="String">
+        SELECT a.zsid,a.bdcqzh,a.zhlsh,a.nf,a.czr,a.czrq,a.zslx,a.bh,a.qlqtzk,a.dwdm,a.sqsjc,a.szsxqc,a.zstype,a.fzrq,a.szr,a.lzrzjh,a.fzr,a.lzr,a.czrid,a.dyzt,a.lzrzjzl,a.lzrq,a.szrq,a.lzrid,a.szrid,a.ewmnr,a.fj,a.bdcdyh,a.zl,a.zmqlsx,a.qlr,a.ywr,a.gyqk,a.qllx,a.qlxz,a.yt,a.mj,a.syqx,a.tsxx,a.yxdysj
+        FROM bdc_zs a
+        LEFT JOIN BDC_XMZS_REL b ON a.zsid=b.zsid
+        WHERE b.proid in (
+        SELECT DISTINCT t.proid
+        FROM bdc_xm t
+        WHERE t.wiid=#{wiid})
+        ORDER BY a.zhlsh
+    </select>
+
+    <select id="getPlZs" resultType="map" parameterType="java.util.Map">
+        SELECT zsid,
+        bdcqzh,
+        zhlsh,
+        nf,
+        czr,
+        czrq,
+        zslx,
+        bh,
+        qlqtzk,
+        dwdm,
+        sqsjc,
+        szsxqc,
+        zstype,
+        fzrq,
+        szrid,
+        szr,
+        szrq,
+        lzrzjzl,
+        lzrzjh,
+        lzrq,
+        fzr,
+        lzr,
+        lzrid,
+        czrid,
+        dyzt,
+        ewmnr,
+        fj,
+        bdcdyh,
+        zl,
+        zmqlsx,
+        qlr,
+        ywr,
+        gyqk,
+        qllx,
+        qlxz,
+        yt,
+        mj,
+        syqx,
+        yxdysj,
+        tsxx,
+        proid
+        FROM (SELECT d.*, rownum ru
+        FROM (SELECT a.*,b.proid
+        FROM bdc_zs a LEFT JOIN BDC_XMZS_REL b ON a.zsid = b.zsid
+        LEFT JOIN bdc_spxx x on x.proid=b.proid
+        WHERE 1=1
+        <if test="dyzt != null and dyzt !=''">
+            AND nvl(a.dyzt,0) = #{dyzt}
+        </if>
+        <if test="zstype != null and zstype !=''">
+            AND a.zstype = #{zstype}
+        </if>
+        <if test="wiid != null and wiid !=''">
+            AND b.proid IN (
+            SELECT DISTINCT t.proid
+            FROM bdc_xm t
+            WHERE t.wiid = #{wiid})
+        </if>
+        <if test="proids != null and proids !=''">
+            AND
+            <foreach collection="proids" item="item" open="(" separator=" or " close=")">
+                b.proid = #{item}
+            </foreach>
+        </if>
+        ORDER BY length(x.dh),x.dh,x.sxh,length(x.zl), x.zl, a.bdcdyh) d
+        <if test="endNum != null and endNum !=''">
+            <![CDATA[ WHERE rownum <= #{endNum}  ]]>
+        </if>
+        ) s
+        <if test="startNum != null and startNum !=''">
+            <![CDATA[ WHERE ru >= #{startNum}]]>
+        </if>
+    </select>
+
+
+    <select id="getYbdcqzhByProid" parameterType="String" resultType="String">
+        SELECT replace(strcat(t.bdcqzh),'/',',' )
+        FROM bdc_zs t
+        LEFT JOIN bdc_xmzs_rel z ON z.zsid=t.zsid
+        LEFT JOIN bdc_xm_rel m ON m.yproid=z.proid
+        WHERE m.proid=#{proid}
+    </select>
+
+    <select id="getYzhByProidAndBdcid" parameterType="map" resultType="String">
+        SELECT replace(strcat(t.bdcqzh),'/',',' )
+        FROM bdc_zs t
+        LEFT JOIN bdc_xmzs_rel z ON z.zsid=t.zsid
+        LEFT JOIN bdc_xm_rel m ON m.yproid=z.proid
+        LEFT JOIN bdc_xm d ON d.proid=z.proid
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyid=d.bdcdyid
+        LEFT JOIN bdc_bdcdy b1 ON b1.bdcdyh=b.bdcdyh
+        <where>
+            <if test="proid!=null and proid!=''">
+                AND m.proid=#{proid}
+            </if>
+            <if test="bdcdyid!=null and bdcdyid!=''">
+                AND b1.bdcdyid=#{bdcdyid}
+            </if>
+        </where>
+    </select>
+
+    <select id="getYbdcqzByProidAndBdcdyh" parameterType="map" resultType="cn.gtmap.estateplat.model.server.core.BdcZs">
+        SELECT
+        t.zsid,t.bdcqzh,t.zhlsh,t.nf,t.czr,t.czrq,t.zslx,t.bh,t.qlqtzk,t.dwdm,t.sqsjc,t.szsxqc,t.zstype,t.fzrq,t.szr,t.lzrzjh,t.fzr,t.lzr,t.czrid,t.dyzt,t.lzrzjzl,t.lzrq,t.szrq,t.lzrid,t.szrid,t.ewmnr,t.fj,t.bdcdyh,t.zl,t.zmqlsx,t.qlr,t.ywr,t.gyqk,t.qllx,t.qlxz,t.yt,t.mj,t.syqx,t.tsxx,t.yxdysj
+        FROM bdc_zs t
+        LEFT JOIN bdc_xmzs_rel z ON z.zsid=t.zsid
+        LEFT JOIN bdc_xm_rel m ON m.yproid=z.proid
+        LEFT JOIN bdc_xm d ON d.proid=z.proid
+        LEFT JOIN bdc_bdcdy b ON b.bdcdyid=d.bdcdyid
+        <where>
+            <if test="proid!=null and proid!=''">
+                AND m.proid=#{proid}
+            </if>
+            <if test="bdcdyh!=null and bdcdyh!=''">
+                AND b.bdcdyh=#{bdcdyh}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getGdzsByProid" parameterType="String" resultType="map">
+        SELECT case when r.gdproid IS NOT NULL then
+        case when y.yzh IS NOT NULL then
+          case when t.tdzh IS NOT NULL then   y.yzh||','||t.tdzh
+          else  y.yzh end else t.tdzh  end
+        else t.tdzh end gdzs FROM bdc_xm_rel r
+        LEFT JOIN (SELECT replace(strcat(y.yzh),'/',',') yzh,strcat(y.proid) proid FROM bdc_xm_rel r
+        LEFT JOIN gd_yzh y ON r.gdproid=y.proid
+        WHERE  r.proid=#{proid})y ON y.proid=r.gdproid
+        LEFT JOIN gd_tdsyq t ON t.tdid=r.tdid
+        WHERE r.proid=#{proid}
+    </select>
+
+    <select id="queryBdcZs" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcZs">
+        SELECT a.*
+        FROM bdc_zs a
+        LEFT JOIN bdc_xmzs_rel b ON a.zsid = b.zsid
+        <where>
+            <if test="proid != null and proid !=''">
+                AND b.proid = #{proid}
+            </if>
+        </where>
+        ORDER BY a.zhlsh
+    </select>
+
+    <select id="getMaxLshByXl" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT ${BdcqzLsh}.nextVal
+        FROM dual
+    </select>
+
+    <select id="getTdzhByQlid" parameterType="String" resultType="String">
+        SELECT t.zh FROM (
+        SELECT t.tdzh zh,t.qlid FROM gd_td_ql t WHERE nvl(t.iszx,'0')='0'
+        UNION ALL
+        SELECT d.bdcqzh zh,t.qlid FROM bdc_jsydzjdsyq t
+        LEFT JOIN bdc_xmzs_rel c ON t.proid=c.proid
+        LEFT JOIN bdc_zs d ON c.zsid=d.zsid
+        WHERE t.qszt='1'
+        UNION ALL
+        SELECT d.bdcqzh zh,t.qlid FROM bdc_tdsyq t
+        LEFT JOIN bdc_xmzs_rel c on t.proid=c.proid
+        LEFT JOIN bdc_zs d on c.zsid=d.zsid
+        WHERE t.qszt='1') t
+        WHERE t.qlid=#{qlid}
+    </select>
+
+    <select id="getFczhByQlid" parameterType="String" resultType="String">
+        SELECT to_char(strcat(t.bdcqzh))
+        FROM (
+        SELECT b.bdcqzh,t.qlid FROM  (SELECT t1.proid,t1.qlid FROM bdc_fdcq t1 WHERE t1.qszt='1'
+        UNION ALL
+        SELECT t2.proid,t2.qlid FROM bdc_fdcq_dz t2 WHERE t2.qszt='1'
+        UNION ALL
+        SELECT t3.proid,t3.qlid FROM bdc_yg t3 WHERE t3.qszt='1'
+        ) t
+        INNER JOIN bdc_xmzs_rel a ON t.proid=a.proid
+        LEFT JOIN bdc_zs b ON a.zsid=b.zsid
+        UNION ALL
+        SELECT t.fczh bdcqzh,t.qlid FROM gd_fw_ql t WHERE t.zslx IN ('房屋所有权','房屋登记证明','预告证明')
+        ) t
+        WHERE t.qlid=#{qlid}
+    </select>
+
+    <select id="getFcJsonByPage" parameterType="map" resultType="map">
+        SELECT DISTINCT t.proid,t.qlid,'1' xmly FROM (
+        SELECT t1.proid,t1.qlid FROM bdc_fdcq t1 WHERE t1.qszt='1'
+        UNION ALL
+        SELECT t2.proid,t2.qlid FROM bdc_fdcq_dz t2 WHERE t2.qszt='1'
+        UNION ALL
+        SELECT t3.proid,t3.qlid FROM bdc_yg t3 WHERE t3.qszt='1'
+        ) t
+        <if test="bdcqzh!=null and bdcqzh!=''">
+            INNER JOIN bdc_xmzs_rel a ON t.proid=a.proid
+            LEFT JOIN bdc_zs b ON a.zsid=b.zsid
+        </if>
+        <if test="(zl!=''and zl != null) or (bdcdyh!=''and bdcdyh!=null)">
+            LEFT JOIN bdc_spxx c ON t.proid=c.proid
+        </if>
+        WHERE 1=1
+        <if test="zl != null and zl !=''">
+            <if test="exactQuery =='false'">
+                AND c.zl LIKE #{zl}
+            </if>
+            <if test="exactQuery =='true'">
+                AND c.zl=#{zl}
+            </if>
+        </if>
+        <if test="bdcqzh != null and bdcqzh !=''">
+            <if test="exactQuery =='false'">
+                AND b.bdcqzh LIKE #{bdcqzh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND b.bdcqzh=#{bdcqzh}
+            </if>
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            <if test="exactQuery =='false'">
+                AND c.bdcdyh LIKE #{bdcdyh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND c.bdcdyh=#{bdcdyh}
+            </if>
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND t.proid IN (SELECT proid FROM bdc_qlr b
+            <if test="exactQuery == 'false'">
+                WHERE b.qlrmc like #{qlr}
+            </if>
+            <if test="exactQuery == 'true'">
+                WHERE b.qlrmc = #{qlr}
+            </if>
+            AND b.qlrlx='qlr'
+            )
+        </if>
+        UNION ALL
+        SELECT DISTINCT t.proid,t.qlid,'2' xmly FROM gd_fw_ql t
+        LEFT JOIN gd_ql_dyh_rel r ON r.qlid=t.qlid
+        WHERE t.zslx IN ('房屋所有权','房屋登记证明','预告证明')
+        <if test="zl != null and zl !=''">
+            <if test="exactQuery =='false'">
+                AND t.fwzl LIKE #{zl}
+            </if>
+            <if test="exactQuery =='true'">
+                AND t.fwzl=#{zl}
+            </if>
+        </if>
+        <if test="bdcqzh != null and bdcqzh !=''">
+            <if test="exactQuery =='false'">
+                AND t.fczh LIKE #{bdcqzh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND t.fczh=#{bdcqzh}
+            </if>
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            <if test="exactQuery =='false'">
+                AND r.bdcdyh LIKE #{bdcdyh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND r.bdcdyh=#{bdcdyh}
+            </if>
+        </if>
+    </select>
+
+    <select id="getTdJsonByPage" parameterType="map" resultType="map">
+        SELECT DISTINCT t.qlid,t.proid,'2' xmly FROM gd_td_ql t
+        WHERE nvl(t.iszx,'0')='0'
+        <if test="djh != null and djh !=''">
+            <if test="exactQuery =='false'">
+                AND t.djh like #{djh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND t.djh=#{djh}
+            </if>
+        </if>
+        <if test="zl != null and zl !=''">
+            <if test="exactQuery =='false'">
+                AND t.tdzl like #{zl}
+            </if>
+            <if test="exactQuery =='true'">
+                AND t.tdzl=#{zl}
+            </if>
+        </if>
+        <if test="zh != null and zh !=''">
+            <if test="exactQuery =='false'">
+                AND t.tdzh like #{zh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND t.tdzh=#{zh}
+            </if>
+        </if>
+        UNION ALL
+        SELECT DISTINCT t.qlid,t.proid,'1' xmly FROM bdc_jsydzjdsyq t
+        <if test="(djh!='' and djh!=null) or (zl!='' and zl!=null)">
+            LEFT JOIN bdc_spxx b ON t.proid=b.proid
+        </if>
+        <if test="zh!='' and zh!=null">
+            LEFT JOIN bdc_xmzs_rel c ON t.proid=c.proid
+            LEFT JOIN bdc_zs d ON c.zsid=d.zsid
+        </if>
+        WHERE t.qszt='1'
+        <if test="djh != null and djh !=''">
+            <if test="exactQuery =='false'">
+                AND SUBSTR(b.bdcdyh,0,19) like #{djh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND SUBSTR(b.bdcdyh,0,19)=#{djh}
+            </if>
+        </if>
+        <if test="zl != null and zl !=''">
+            <if test="exactQuery =='false'">
+                AND b.zl like #{zl}
+            </if>
+            <if test="exactQuery =='true'">
+                AND b.zl=#{zl}
+            </if>
+        </if>
+        <if test="zh != null and zh !=''">
+            <if test="exactQuery =='false'">
+                AND d.bdcqzh like #{zh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND d.bdcqzh=#{zh}
+            </if>
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND t.proid IN (SELECT proid FROM bdc_qlr b
+            <if test="exactQuery == 'false'">
+                WHERE b.qlrmc like #{qlr}
+            </if>
+            <if test="exactQuery == 'true'">
+                WHERE b.qlrmc = #{qlr}
+            </if>
+            AND b.qlrlx='qlr'
+            )
+        </if>
+        UNION ALL
+        SELECT DISTINCT t.qlid,t.proid,'1' xmly FROM bdc_tdsyq t
+        <if test="(djh!='' and djh!=null) or (zl!='' and zl!=null)">
+            LEFT JOIN bdc_spxx b ON t.proid=b.proid
+        </if>
+        <if test="zh!='' and zh!=null">
+            LEFT JOIN bdc_xmzs_rel c ON t.proid=c.proid
+            LEFT JOIN bdc_zs d ON c.zsid=d.zsid
+        </if>
+        WHERE t.qszt='1'
+        <if test="djh != null and djh !=''">
+            <if test="exactQuery =='false'">
+                AND SUBSTR(b.bdcdyh,0,19) like #{djh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND SUBSTR(b.bdcdyh,0,19)=#{djh}
+            </if>
+        </if>
+        <if test="zl != null and zl !=''">
+            <if test="exactQuery =='false'">
+                AND b.zl like #{zl}
+            </if>
+            <if test="exactQuery =='true'">
+                AND b.zl=#{zl}
+            </if>
+        </if>
+        <if test="zh != null and zh !=''">
+            <if test="exactQuery =='false'">
+                AND d.bdcqzh like #{zh}
+            </if>
+            <if test="exactQuery =='true'">
+                AND d.bdcqzh=#{zh}
+            </if>
+        </if>
+        <if test="qlr != null and qlr !=''">
+            AND t.proid IN (SELECT proid FROM bdc_qlr b
+            <if test="exactQuery == 'false'">
+                WHERE b.qlrmc like #{qlr}
+            </if>
+            <if test="exactQuery == 'true'">
+                WHERE b.qlrmc = #{qlr}
+            </if>
+            AND b.qlrlx='qlr'
+            )
+        </if>
+    </select>
+
+    <select id="getViewBdcqzList" parameterType="java.util.Map" resultType="map">
+        SELECT *
+        FROM bdc_bdcqzlist t
+        <where>
+            <if test="proid != null and proid !=''">
+                AND proid = #{proid}
+            </if>
+            <if test="onezsproid != null and onezsproid !=''">
+                AND proid in (SELECT t1.proid FROM bdc_xm t1,bdc_xm t2 WHERE t1.wiid = t2.wiid AND t2.proid=
+                #{onezsproid})
+            </if>
+        </where>
+    </select>
+
+    <update id="updateDyzt" parameterType="java.util.Map">
+        update bdc_zs
+        set dyzt = #{dyzt}
+        WHERE zsid = #{zsid}
+    </update>
+
+    <select id="getYtdbdcqzhByZdbdcdyh" parameterType="String" resultType="String">
+        SELECT strcat(c.bdcqzh) bdcqzh
+        FROM bdc_bdcdy t
+        LEFT JOIN (
+        SELECT bdcdyid,qszt,proid FROM BDC_TDSYQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_JSYDZJDSYQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_FDCQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_JZWGY
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_FDCQ_DZ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_TDCBNYDSYQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_LQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_HYSYQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_JZWSYQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM Bdc_Qtxgql
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_DYQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_DYAQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_CF WHERE qszt!='2'
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_YG
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_YY
+        ) a ON t.bdcdyid=a.BDCDYID
+        LEFT JOIN bdc_xmzs_rel b ON a.PROID=b.proid
+        LEFT JOIN bdc_zs c ON b.zsid=c.zsid
+        WHERE t.bdcdyh=#{bdcdyh} AND a.qszt='1'
+        GROUP BY t.bdcdyh
+    </select>
+
+
+    <select id="getYtdzhByZdbdcdyh" parameterType="String" resultType="String">
+        SELECT DISTINCT t.tdzh
+        FROM gd_tdsyq t
+        LEFT JOIN gd_ql_dyh_rel r ON r.qlid=t.qlid
+        WHERE r.bdcdyh=#{bdcdyh} AND iszx = 0
+    </select>
+
+    <select id="getBdcdyCountByZsid" parameterType="java.lang.String" resultType="int">
+        SELECT count(*) FROM
+        (SELECT t.bdcdyid
+        FROM bdc_bdcdy t
+        LEFT JOIN bdc_xm x ON t.bdcdyid=x.bdcdyid
+        LEFT JOIN bdc_xmzs_rel r ON r.proid = x.proid
+        WHERE r.zsid=#{zsid}
+        GROUP BY t.bdcdyid)
+    </select>
+    <select id="getProidByBdczqh" parameterType="String" resultType="String">
+        SELECT t.proid
+        FROM bdc_xmzs_rel t
+        LEFT JOIN bdc_zs z ON z.zsid = t.zsid
+        WHERE z.bdcqzh=#{bdcqzh}
+    </select>
+
+    <delete id="batchDelBdcZsByBdcZsList" parameterType="java.util.ArrayList">
+        DELETE from BDC_ZS t WHERE t.zsid IN
+        <foreach collection="bdcZsList" item="item" index="index" open="(" separator="," close=")">
+            #{item.zsid}
+        </foreach>
+    </delete>
+
+    <delete id="batchDelBdcZsByZsidList" parameterType="java.util.List">
+        DELETE from BDC_ZS t WHERE t.zsid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="batchDelBdcXmZsRelByBdcXmList" parameterType="java.util.List">
+        DELETE FROM BDC_XMZS_REL t WHERE t.proid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item.proid}
+        </foreach>
+    </delete>
+
+    <insert id="batchInsertBdcDelZszhByBdcDelZszhList" parameterType="java.util.Map">
+        insert into BDC_DEL_ZSZH (zszhid,bdcqzh,zhlsh,nf,zslx,dwdm,sqsjc,szsxqc,zstype,gxrq,isuse,proid,zsbh)
+        select a.*
+        from (
+        <foreach collection="list" item="item" index="index" separator="union all">
+            (select #{item.zszhid,jdbcType=VARCHAR}, #{item.bdcqzh,jdbcType=VARCHAR},#{item.zhlsh,jdbcType=VARCHAR},
+            #{item.nf,jdbcType=VARCHAR},#{item.zslx,jdbcType=VARCHAR},#{item.dwdm,jdbcType=VARCHAR},#{item.sqsjc,jdbcType=VARCHAR},
+            #{item.szsxqc,jdbcType=VARCHAR}, #{item.zstype,jdbcType=VARCHAR}, #{item.gxrq,jdbcType=DATE},
+            #{item.isuse,jdbcType=VARCHAR},
+            #{item.proid,jdbcType=VARCHAR},#{item.zsbh,jdbcType=VARCHAR} from dual)
+        </foreach>
+        ) a
+    </insert>
+
+
+    <select id="getZsidListByBdcXmList" parameterType="java.util.List" resultType="String">
+        SELECT t.zsid FROM BDC_XMZS_REL t WHERE t.proid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item.proid}
+        </foreach>
+    </select>
+
+    <update id="batchUpateBdcZsLzrqByzsidList" parameterType="java.util.Map">
+        UPDATE BDC_ZS t set t.lzrq=#{lzrq} WHERE t.zsid IN
+        <foreach collection="zsidList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getPlZsByMap" resultType="cn.gtmap.estateplat.model.server.core.BdcZs" parameterType="String">
+        SELECT
+        a.zsid,a.bdcqzh,a.zhlsh,a.nf,a.czr,a.czrq,a.zslx,a.bh,a.qlqtzk,a.dwdm,a.sqsjc,a.szsxqc,a.zstype,a.fzrq,a.szr,a.lzrzjh,a.fzr,a.lzr,a.czrid,a.dyzt,a.lzrzjzl,a.lzrq,a.szrq,a.lzrid,a.szrid,a.ewmnr,a.fj,a.bdcdyh,a.zl,a.zmqlsx,a.qlr,a.ywr,a.gyqk,a.qllx,a.qlxz,a.yt,a.mj,a.syqx,a.tsxx,a.yxdysj
+        FROM BDC_ZS a
+        LEFT JOIN BDC_XMZS_REL b ON a.zsid=b.zsid
+        LEFT JOIN BDC_XM c ON c.proid=b.proid
+        <where>
+            <if test="wiid != null and wiid !=''">
+                AND c.wiid=#{wiid}
+            </if>
+            <if test="bhIsNull != null and bhIsNull !=''">
+                AND a.bh IS NULL
+            </if>
+            <if test="bdcqzh != null and bdcqzh !=''">
+                <if test="exactQuery == 'false'">
+                    AND a.bdcqzh like #{bdcqzh}
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND a.bdcqzh=#{bdcqzh}
+                </if>
+            </if>
+            <if test="cqzhjc != null and cqzhjc !=''">
+                <if test="exactQuery == 'false'">
+                    AND a.bdcqzhjc like #{cqzhjc}
+                </if>
+                <if test="exactQuery == 'true'">
+                    AND a.bdcqzhjc=#{cqzhjc}
+                </if>
+            </if>
+        </where>
+        ORDER BY a.zhlsh
+    </select>
+
+    <select id="getFzjlBdcqzxxList" parameterType="java.util.HashMap" resultType="java.util.Map">
+        SELECT z.zl, z.syqx AS 使用期限,
+        z.yt,z.mj,z.fj,z.qlxz,
+        substr(z.bdcdyh,0,6)||' '||substr(z.bdcdyh,7,6)||' '||substr(z.bdcdyh,13,7)||' '||substr(z.bdcdyh,20) bdcdyh
+        FROM bdc_zs z
+        LEFT JOIN bdc_xmzs_rel r on r.zsid=z.zsid
+        LEFT JOIN bdc_xm m on m.proid = r.proid
+        LEFT JOIN bdc_zd_djsy a ON a.dm=substr(m.djsy,0,1)
+        WHERE 1=1
+        <if test="proid != null and proid != ''">
+            AND m.proid = #{proid}
+        </if>
+    </select>
+
+    <select id="getXmWiidByZsid" parameterType="string" resultType="string">
+        SELECT DISTINCT m.wiid  FROM bdc_zs z LEFT JOIN bdc_xmzs_rel r
+        ON r.zsid=z.zsid LEFT JOIN bdc_xm m ON m.proid=r.proid
+        WHERE z.zsid = #{zsid}
+    </select>
+
+    <select id="getMaxScdjzLsh" resultType="java.lang.Integer" parameterType="map">
+        SELECT MAX(to_number(ZHLSH))
+        FROM bdc_zs
+        WHERE zstype=#{zstype} AND nf= #{nf}
+        <if test="zxzh!=null and zxzh!=''">
+            AND bdcqzh LIKE #{zxzh} || '%'
+        </if>
+    </select>
+
+    <select id="queryBdcqzhByProid" parameterType="java.lang.String" resultType="map">
+      SELECT replace(strcat(t.bdcqzh),'/','、') bdcqzh,strcat(t.zstype) zstype FROM bdc_zs t
+      INNER JOIN bdc_xmzs_rel r on r.zsid=t.zsid
+      WHERE r.proid=#{proid}
+      GROUP BY r.proid
+    </select>
+
+    <select id="queryBdcZsByBdcdyh" parameterType="java.lang.String"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcZs">
+      SELECT t.* FROM bdc_zs t
+      INNER JOIN bdc_xmzs_rel r ON r.zsid=t.zsid
+      LEFT JOIN (
+        SELECT bdcdyid,qszt,proid FROM BDC_FDCQ
+        UNION ALL
+        SELECT bdcdyid,qszt,proid FROM BDC_FDCQ_DZ
+      )a on a.proid=r.proid
+      LEFT JOIN bdc_bdcdy d ON d.bdcdyid=a.bdcdyid
+      WHERE d.bdcdyh=#{bdcdyh} AND a.qszt=1
+    </select>
+
+    <select id="getBdcZsListByWiidOrderByZl" resultType="cn.gtmap.estateplat.model.server.core.BdcZs" parameterType="String">
+        SELECT a.zsid,a.bdcqzh,a.zhlsh,a.nf,a.czr,a.czrq,a.zslx,a.bh,a.qlqtzk,a.dwdm,a.sqsjc,a.szsxqc,a.zstype,a.fzrq,a.szr,a.lzrzjh,a.fzr,a.lzr,a.czrid,a.dyzt,a.lzrzjzl,a.lzrq,a.szrq,a.lzrid,a.szrid,a.ewmnr,a.fj,a.bdcdyh,a.zl,a.zmqlsx,a.qlr,a.ywr,a.gyqk,a.qllx,a.qlxz,a.yt,a.mj,a.syqx,a.tsxx,a.yxdysj
+        FROM bdc_zs a
+        left join bdc_xmzs_rel b on a.zsid=b.zsid
+        left join bdc_xm x on x.proid=b.proid
+        left join bdc_spxx s on s.proid=b.proid
+        where x.wiid = #{wiid}
+        order by length(s.dh),s.dh,s.sxh,length(s.zl),s.zl
+    </select>
+</mapper>

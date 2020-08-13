@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <bean id="auditLogService" class="cn.gtmap.estateplat.server.core.log.AuditLogServiceImpl"/>
+
+    <bean class="cn.gtmap.estateplat.log.AuditLogAspect">
+        <property name="auditLogService" ref="auditLogService"/>
+        <property name="sysUserService" ref="SysUserServiceImpl"/>
+    </bean>
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <bean id="history" class="cn.gtmap.estateplat.server.core.aop.History">
+        <property name="bdcXmService" ref="bdcXmServiceImpl"/>
+        <property name="historyService" ref="historyService"/>
+    </bean>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <aop:config proxy-target-class="true">
+        <!--History-->
+        <!--转发至缮证事件-->
+        <aop:pointcut id="turnProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.turnProjectEvent(..)))"/>
+        <!--缮证退回事件-->
+        <aop:pointcut id="backProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.changeYqlZtqhEvent(..)))"/>
+        <!--办结事件-->
+        <aop:pointcut id="endProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.endProjectEvent(..))"/>
+        <!--删除事件-->
+        <aop:pointcut id="delProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.workFlowDel(..)))"/>
+        <!--History-->
+        <aop:aspect ref="history">
+            <aop:after pointcut-ref="turnProjectEvent" method="createHistoryRel"/>
+            <aop:after pointcut-ref="backProjectEvent" method="deleteHistoryRel"/>
+            <aop:after pointcut-ref="endProjectEvent" method="createHistoryRel"/>
+            <aop:before pointcut-ref="delProjectEvent" method="deleteHistoryRel"/>
+        </aop:aspect>
+
+    </aop:config>
+
+</beans>

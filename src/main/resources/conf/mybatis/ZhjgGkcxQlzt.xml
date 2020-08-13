@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//不动产单元-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.ZjgGkcxMapper">
+	<select id="getCfxxByZsid" parameterType="java.util.Map" resultType="map">
+	 select d0.qlid ,'cf' ly,d0.qszt
+	 from bdc_zs a0
+	 inner join bdc_xmzs_rel b0  on a0.zsid = b0.zsid
+	 inner join bdc_xm c0 on c0.proid = b0.proid
+	 inner join bdc_cf d0 on c0.bdcdyid = d0.bdcdyid
+	where  a0.zslx not in ('17','18','20','21')
+	<if test="zsid != null and zsid != ''">and a0.zsid = #{zsid} </if>
+    <if test="zsid == null or zsid == ''">and 1=2</if>
+    union all
+	  select j1.cfid,'cf' ly  ,(j1.isjf+1) qszt
+		from gd_cf j1
+		inner join gd_bdc_ql_rel k1 on j1.cfid = k1.qlid 
+	where exists(
+    select m0.fwid from gd_fw m0
+    inner join gd_bdc_ql_rel n0 on m0.fwid = n0.bdcid
+    inner join gd_fwsyq p0 on p0.qlid = n0.qlid 
+    where k1.bdcid = m0.fwid and p0.iszx = 0 
+    <if test="zsid != null and zsid != ''">and p0.fczh = #{zsid}</if>
+	<if test="zsid == null or zsid == ''">and 1=2</if>
+	)
+	union all
+	select j2.cfid,'cf' ly  ,(j2.isjf+1) qszt
+	from gd_cf j2
+	inner join gd_bdc_ql_rel k2 on j2.cfid = k2.qlid 
+	where exists(
+	    select m1.fwid from gd_fw m1
+	    inner join gd_bdc_ql_rel n1 on m1.fwid = n1.bdcid
+	    inner join gd_yg p1 on p1.ygid = n1.qlid 
+	    where k2.bdcid = m1.fwid and p1.iszx = 0 
+	    <if test="zsid != null and zsid != ''">and p1.ygdjzmh = #{zsid}</if>
+	<if test="zsid == null or zsid == ''">and 1=2</if>
+	)
+	union all
+	select j3.cfid,'cf' ly  ,(j3.isjf+1) qszt
+	from gd_cf j3
+	inner join gd_bdc_ql_rel k3 on j3.cfid = k3.qlid 
+	where exists(
+	    select m2.tdid from gd_td m2
+	    inner join gd_bdc_ql_rel n2 on m2.tdid = n2.bdcid
+	    inner join gd_tdsyq p2 on p2.qlid = n2.qlid 
+	    where k3.bdcid = m2.tdid and p2.iszx = 0 
+	    <if test="zsid != null and zsid != ''">and p2.tdzh = #{zsid}</if>
+	<if test="zsid == null or zsid == ''">and 1=2</if>
+	)
+	union all
+	select j4.cfid,'cf' ly  ,(j4.isjf+1) qszt
+	from gd_cf j4
+	inner join gd_bdc_ql_rel k4 on j4.cfid = k4.qlid 
+	where exists(
+	    select m3.tdid from gd_td m3
+	    inner join gd_bdc_ql_rel n3 on m3.tdid = n3.bdcid
+	    inner join gd_yg p3 on p3.ygid = n3.qlid 
+	    where k4.bdcid = m3.tdid and p3.iszx = 0 
+	    <if test="zsid != null and zsid != ''">and p3.ygdjzmh = #{zsid}</if>
+	<if test="zsid == null or zsid == ''">and 1=2</if>
+	)
+  	union all
+	select t0.qlid, 'cf' ly,t0.qszt
+	  from gd_fwsyq r0
+	 inner join bdc_xm_rel s0 on r0.proid = s0.yproid
+	 inner join bdc_cf t0 on s0.proid = t0.proid
+	 where r0.iszx = 0
+	 <if test="zsid != null and zsid != ''">and r0.fczh = #{zsid}</if>
+    <if test="zsid == null or zsid == ''">and 1=2</if>
+    union all
+	select t1.qlid, 'cf' ly,t1.qszt
+	  from gd_tdsyq r1 
+	  inner join bdc_xm_rel s1 on r1.proid = s1.yproid 
+	  inner join bdc_cf t1 on s1.proid = t1.proid
+	 where  r1.iszx = 0 
+	 <if test="zsid != null and zsid != ''">and r1.tdzh = #{zsid} </if>
+    <if test="zsid == null or zsid == ''">and 1=2</if>
+    union all 
+	select t5.qlid,'cf' ly,t5.qszt
+	from gd_yg r5
+	inner join bdc_xm_rel s5 on r5.proid = s5.yproid
+	inner join bdc_cf t5 on t5.proid = s5.proid
+	where r5.iszx = 0
+	<if test="zsid != null and zsid != ''">and r5.ygdjzmh=#{zsid}</if>
+    <if test="zsid == null or zsid == ''">and 1=2</if>
+</select>
+<select id="getDyaxxByZsid" parameterType="java.util.Map" resultType="map">
+	select d1.qlid ,'dy' ly,d1.qszt
+	   from bdc_zs a1
+	   inner join bdc_xmzs_rel b1  on a1.zsid = b1.zsid
+	   inner join bdc_xm c1 on c1.proid = b1.proid
+	   inner join bdc_dyaq d1 on c1.bdcdyid = d1.bdcdyid
+	  where a1.zslx not in ('17','18','20','21')
+  <if test="zsid != null and zsid != ''">and a1.zsid = #{zsid}</if>
+    <if test="zsid == null or zsid == ''">and 1=2</if>
+	  union all 
+	  select e1.dyid,'dy' ly ,(e1.isjy+1) qszt
+	  from gd_dy e1
+	  inner join gd_bdc_ql_rel f1 on e1.dyid = f1.qlid 
+	  where exists(
+	        select g0.fwid from gd_fw g0
+	        inner join gd_bdc_ql_rel h0 on g0.fwid = h0.bdcid
+	        inner join gd_fwsyq i0 on i0.qlid = h0.qlid 
+	        where f1.bdcid = g0.fwid and i0.iszx = 0 
+	        <if test="zsid != null and zsid != ''">and i0.fczh = #{zsid}</if>
+	    <if test="zsid == null or zsid == ''">and 1=2</if>
+	  )
+	  union all
+	  select e2.dyid,'dy' ly ,(e2.isjy+1) qszt
+	  from gd_dy e2
+	  inner join gd_bdc_ql_rel f2 on e2.dyid = f2.qlid 
+	  where exists(
+	        select g1.fwid from gd_fw g1
+	        inner join gd_bdc_ql_rel h1 on g1.fwid = h1.bdcid
+	        inner join gd_yg i1 on i1.ygid = h1.qlid 
+	        where f2.bdcid = g1.fwid and i1.iszx = 0 
+	        <if test="zsid != null and zsid != ''">and i1.ygdjzmh = #{zsid}</if>
+	    <if test="zsid == null or zsid == ''">and 1=2</if>
+	  )
+	  union all
+	  select e3.dyid,'dy' ly ,(e3.isjy+1) qszt
+	  from gd_dy e3
+	  inner join gd_bdc_ql_rel f3 on e3.dyid = f3.qlid 
+	  where exists(
+	        select g2.tdid from gd_td g2
+	        inner join gd_bdc_ql_rel h2 on g2.tdid = h2.bdcid
+	        inner join gd_tdsyq i2 on i2.qlid = h2.qlid 
+	        where f3.bdcid = g2.tdid and i2.iszx = 0 
+	        <if test="zsid != null and zsid != ''">and i2.tdzh = #{zsid}</if>
+	    <if test="zsid == null or zsid == ''">and 1=2</if>
+	  )
+	  union all
+	  select e4.dyid,'dy' ly ,(e4.isjy+1) qszt
+	  from gd_dy e4
+	  inner join gd_bdc_ql_rel f4 on e4.dyid = f4.qlid 
+	  where exists(
+	        select g3.tdid from gd_td g3
+	        inner join gd_bdc_ql_rel h3 on g3.tdid = h3.bdcid
+	        inner join gd_yg i3 on i3.ygid = h3.qlid 
+	        where f4.bdcid = g3.tdid and i3.iszx = 0 
+	        <if test="zsid != null and zsid != ''">and i3.ygdjzmh = #{zsid}</if>
+	    <if test="zsid == null or zsid == ''">and 1=2</if>
+	  )
+  	union all
+	select t2.qlid, 'dy' ly,t2.qszt 
+	  from gd_fwsyq r2
+	 inner join bdc_xm_rel s2 on r2.proid = s2.yproid
+	 inner join bdc_dyaq t2 on s2.proid = t2.proid
+	 where r2.iszx = 0 
+	 <if test="zsid != null and zsid != ''">and r2.fczh = #{zsid}</if>
+    <if test="zsid == null or zsid == ''">and 1=2</if>
+	union all
+	select t3.qlid, 'dy' ly,t3.qszt
+	  from gd_tdsyq r3 
+	  inner join bdc_xm_rel s3 on r3.proid = s3.yproid 
+	  inner join bdc_dyaq t3 on s3.proid = t3.proid
+	 where  r3.iszx = 0
+	 <if test="zsid != null and zsid != ''">and r3.tdzh = #{zsid}</if>
+    <if test="zsid == null or zsid == ''">and 1=2</if> 
+	union all
+	select t4.qlid,'dy' ly,t4.qszt
+	from gd_yg r4
+	inner join bdc_xm_rel s4 on r4.proid = s4.yproid
+	inner join bdc_dyaq t4 on t4.proid = s4.proid
+	where r4.iszx = 0 
+	<if test="zsid != null and zsid != ''">and r4.ygdjzmh=#{zsid}</if>
+    <if test="zsid == null or zsid == ''">and 1=2</if>
+</select>
+</mapper>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--批量流程挂接资源中不提交权利人的申请类型配置-->
+<props>
+    <sqlx>
+        <dm>806</dm>
+        <mc>批量查封</mc>
+    </sqlx>
+</props>

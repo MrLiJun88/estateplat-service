@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcXtZsQlqtzkMapper">
+
+    <select id="getBdcXtZsQlqtzk" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcXtZsQlqtzk">
+        SELECT t.qllxdm,t.qllxzlx,t.qlqtzkmb,t.indexcount
+        FROM bdc_xt_zs_qlqtzk t
+        WHERE 1=1
+        <if test="qllxdm != null and qllxdm !=''">
+            AND t.qllxdm = #{qllxdm}
+        </if>
+        <if test="qllxzlx != null and qllxzlx !=''">
+            AND t.qllxzlx = #{qllxzlx}
+        </if>
+        ORDER BY qllxdm,qllxzlx,t.indexcount
+    </select>
+
+</mapper>

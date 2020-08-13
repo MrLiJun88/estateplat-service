@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: cn.gtmap:mybatis-plugin:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Documents/apache-maven/repository2/cn/gtmap/mybatis-plugin/1.0-SNAPSHOT/mybatis-plugin-1.0-20200613.101033-21.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/Documents/apache-maven/repository2/cn/gtmap/mybatis-plugin/1.0-SNAPSHOT/mybatis-plugin-1.0-20200613.101033-21-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Documents/apache-maven/repository2/cn/gtmap/mybatis-plugin/1.0-SNAPSHOT/mybatis-plugin-1.0-20200613.101033-21-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

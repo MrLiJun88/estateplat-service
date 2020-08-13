@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!--配置不动产公告cpt名称和公告类型-->
+<props>
+    <gg>
+        <ftl>bdcdjScdjgg</ftl>
+        <gglx>不动产权利首次登记公告</gglx>
+    </gg>
+    <gg>
+        <ftl>bdcdjYyzxgg</ftl>
+        <gglx>不动产异议登记事项注销公告</gglx>
+    </gg>
+    <gg>
+        <ftl>bdcdjDjbgzgg</ftl>
+        <gglx>不动产登记簿更正登记公告</gglx>
+    </gg>
+    <gg>
+        <ftl>bdcdjZszmzfgg</ftl>
+        <gglx>不动产权属证书/不动产登记证明作废公告</gglx>
+    </gg>
+    <gg>
+        <ftl>bdcdjZszmzfgg</ftl>
+        <gglx>不动产权属证书/不动产登记证明作废公告</gglx>
+    </gg>
+    <gg>
+        <ftl>bdcdjZscqzxgg</ftl>
+        <gglx>不动产权属证书拆迁注销公告</gglx>
+    </gg>
+    <gg>
+        <ftl>bdcdjZmfyxzzxgg</ftl>
+        <gglx>不动产权属证明法院协助注销公告</gglx>
+    </gg>
+    <gg>
+        <ftl>bdcdjZsfyxzzxgg</ftl>
+        <gglx>不动产权属证书法院协助注销公告</gglx>
+    </gg>
+</props>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDjslxxMapper">
+
+    <select id="getBdcXmxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT rownum xh,bh,djzx,qllx,zl,proid,qllxdm,sqlx FROM(
+        SELECT a.bh,t.mc djzx,d.mc qllx,b.zl,a.proid,a.qllx qllxdm,e.mc sqlx FROM bdc_xm a
+        LEFT JOIN bdc_spxx b ON b.proid=a.PROID
+        LEFT JOIN bdc_zd_qllx d ON d.dm=a.qllx
+        LEFT JOIN bdc_zd_sqlx e ON e.dm=a.sqlx
+        LEFT JOIN bdc_zd_djzx t ON t.dm=a.djzx
+        <where>
+            <if test="wiid != null and wiid !=''">
+                AND a.wiid = #{wiid}
+            </if>
+        </where>
+        ORDER BY  a.proid
+        )
+    </select>
+
+    <select id="getBdcdyxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT rownum xh,t.* FROM(SELECT DISTINCT a.bdcdyh,c.zl,c.zdzhmj,d.mc zdzhyt,c.zdzhyt dm,c.mj dzwmj,e.mc dzwyt,a.bdcdyid,f.fwfsssid
+        FROM bdc_bdcdy a
+        LEFT JOIN bdc_xm b ON a.bdcdyid=b.bdcdyid
+        LEFT JOIN bdc_spxx c ON c.proid=b.proid
+        LEFT JOIN djsj_zd_dldm d ON d.dm=c.zdzhyt
+        LEFT JOIN bdc_zd_fwyt e ON e.dm=c.yt
+        LEFT JOIN Bdc_Fwfsss f ON f.wiid=b.wiid AND f.bdcdyh=a.bdcdyh
+        <where>
+        <if test="wiid != null and wiid !=''">
+            AND b.wiid = #{wiid}
+        </if>
+        </where>
+        ) t
+    </select>
+
+    <select id="getSlxxQlxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT rownum xh,bdcdyh,qllx,zl,qlid,proid,qllxdm,djlx FROM(
+            SELECT b.bdcdyh,d.mc qllx,f.zl,a.qlid,c.proid,a.qllx qllxdm,e.mc djlx FROM bdc_qlxxlist a
+            LEFT JOIN bdc_bdcdy b ON a.BDCDYID=b.bdcdyid
+            LEFT JOIN bdc_xm c ON c.proid=a.PROID
+            LEFT JOIN bdc_spxx f ON f.proid=a.PROID
+            LEFT JOIN bdc_zd_qllx d ON d.dm=a.qllx
+            LEFT JOIN bdc_zd_djlx e ON e.dm=c.djlx
+            <where>
+                <if test="wiid != null and wiid !=''">
+                    AND c.wiid = #{wiid}
+                </if>
+                <if test="bdcdyid != null and bdcdyid !=''">
+                    AND c.bdcdyid = #{bdcdyid}
+                </if>
+            </where>
+        ORDER BY  c.proid
+        )
+    </select>
+
+    <select id="getYqlxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT rownum xh,bdcdyh,qllx,zl,qlid,proid FROM(
+        SELECT  bdcdyh,qllx,zl,qlid,proid FROM(
+        SELECT distinct a.qlid, d.bdcdyh,e.mc qllx,f.zl,a.proid FROM bdc_qlxxlist a
+        LEFT JOIN bdc_bdcdy d ON a.BDCDYID=d.bdcdyid
+        LEFT JOIN bdc_xm_rel b ON b.yproid=a.proid
+        LEFT JOIN bdc_xm c ON b.proid=c.proid
+        LEFT JOIN bdc_spxx f ON b.proid=f.proid
+        LEFT JOIN bdc_zd_qllx e ON e.dm=a.qllx
+        <if test="wiid != null and wiid !=''">
+            WHERE c.wiid = #{wiid}
+        </if>
+        ))
+    </select>
+    <select id="getSlxxSjclByPage" parameterType="java.util.Map" resultType="map">
+        SELECT rownum xh,a.clmc,a.fs,a.mrfs,d.mc lx,a.sjclid
+        FROM bdc_sjcl a
+        LEFT JOIN bdc_sjxx b ON a.sjxxid=b.sjxxid
+        LEFT JOIN bdc_xm c ON c.proid=b.proid
+        LEFT JOIN bdc_zd_cllx d ON d.dm=a.cllx
+        <if test="wiid != null and wiid !=''">
+            WHERE c.wiid = #{wiid}
+        </if>
+        <if test="wiid != null and wiid !=''">
+            WHERE c.wiid = #{wiid}
+        </if>
+    </select>
+
+    <select id="getGgxxPagesJson" parameterType="java.util.Map" resultType="map">
+        SELECT rownum xh,(SELECT a.mc
+        FROM bdc_zd_gglx a
+        WHERE a.dm=t.gglx) gglx,t.ggmc,to_char(t.kssj,'yyyy-mm-dd') kssj,to_char(t.jssj,'yyyy-mm-dd') jssj,t.ggqx,t.ggid ,CASE t.sffb WHEN '0' THEN '否' ELSE  '是'  END sffb
+        FROM bdc_gg t
+        <if test="wiid != null and wiid !=''">
+            WHERE t.wiid = #{wiid}
+        </if>
+    </select>
+
+    <select id="getbdcXtSjclByPage" parameterType="java.util.Map" resultType="map">
+        SELECT ROWNUM xh, SJCLID, CLMC ,fs,lx,mrfs
+        FROM ( SELECT rawtohex(sys_guid()) as SJCLID, t.clmc as CLMC,t.mrfs fs,t1.DM sqlx,d.mc lx,t.djzx,t.mrfs
+        FROM BDC_XT_SJCL t
+        LEFT JOIN bdc_zd_sqlx T1 ON T.SQLX = T1.DM
+        LEFT JOIN bdc_zd_cllx d ON d.dm=t.cllx
+        LEFT JOIN bdc_xm x ON x.sqlx =t.sqlx
+        WHERE 1=1
+        <if test="proid != null and proid !=''">
+            AND x.proid = #{proid}
+        </if>
+        <if test="djzx != null and djzx !=''">
+            AND t.djzx = #{djzx}
+        </if>
+      ORDER BY T.SJCLID)
+    </select>
+
+    <select id="getZsxxPagesJson" parameterType="java.util.Map" resultType="map">
+        SELECT ROWNUM xh, proid, qlr ,bdcqzh,zsid,zstype,zl
+        FROM (SELECT  b.proid,a.qlr,a.bdcqzh,a.zsid,a.zstype,c.zl FROM bdc_zs a
+        LEFT JOIN bdc_xmzs_rel b ON a.zsid=b.zsid
+        LEFT JOIN bdc_xm t ON b.proid=t.proid
+        LEFT JOIN bdc_spxx c ON t.proid=c.proid
+        <where>
+            <if test="wiid!=null and wiid!=''">
+                AND t.wiid =#{wiid}
+            </if>
+        </where>
+        ORDER BY a.zstype,a.zhlsh）
+    </select>
+
+    <select id="getFsssxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.fwfsssid,a.bdcdyh,t.fwzl
+        ,CASE WHEN b.mc!=null
+        THEN b.mc
+        ELSE t.ghyt
+        END ghyt,t.jzmj,t.cg,t.wiid FROM BDC_FWFSSS t
+        LEFT JOIN bdc_bdcdy a ON a.bdcdyid=t.bdcdyid
+        LEFT JOIN bdc_zd_fwyt b ON b.dm=t.ghyt
+        <where>
+            <if test="wiid != null and wiid !=''">
+                AND t.wiid = #{wiid}
+            </if>
+            <if test="zfbdcdyh != null and zfbdcdyh !=''">
+                AND t.zfbdcdyh = #{zfbdcdyh}
+            </if>
+        </where>
+    </select>
+
+    <select id="getGdFczxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT DISTINCT f.qlid,f.qllx,d.bdcdyh,f.cqzh,r.bdclx,f.proid gdproid,d.djid,r.bdcid
+        FROM (
+        SELECT t.qlid,t.proid ,'房屋所有权' qllx,t.djlx,t.fczh cqzh FROM GD_FWSYQ t
+        WHERE nvl(t.iszx,0)='0'
+        UNION ALL
+        SELECT t.cfid qlid,t.proid,'查封' qllx,t.djlx,t.cfwh cqzh FROM gd_cf t
+        WHERE t.bdclx='TDFW' AND nvl(t.isjf,0)='0'
+        UNION ALL
+        SELECT t.dyid qlid,t.proid,'抵押' qllx,t.djlx,t.dydjzmh cqzh  FROM gd_dy t
+        WHERE t.bdclx='TDFW' AND nvl(t.isjy,0)='0'
+        )f
+        LEFT JOIN gd_bdc_ql_rel r ON r.qlid=f.qlid
+        LEFT JOIN gd_dyh_rel d ON d.gdid=r.bdcid
+        WHERE d.bdcdyh IS NOT NULL
+        <if test="dcxc != null and dcxc !=''">
+            AND ( instr(f.fczh, #{dcxc} )>0 OR instr(d.bdcdyh ,#{dcxc} )>0 )
+        </if>
+        <if test="cqzh != null and cqzh !=''">
+            AND f.cqzh=#{cqzh}
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND d.bdcdyh=#{bdcdyh}
+        </if>
+    </select>
+
+    <select id="getGdTdzxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT distinct f.qlid,f.qllx,d.bdcdyh,f.cqzh,r.bdclx,f.proid gdproid,d.djid,r.bdcid
+        FROM (
+        SELECT t.qlid qlid,t.proid,CASE WHEN t.issynq='1' THEN '土地使用权' ELSE '土地所有权' END qllx,t.djlx,t.tdzh cqzh FROM gd_tdsyq t
+        WHERE nvl(t.iszx,0)='0'
+        UNION ALL
+        SELECT t.cfid qlid,t.proid,'查封' qllx,t.djlx,t.cfwh cqzh FROM gd_cf t
+        WHERE t.bdclx='TDFW' AND nvl(t.isjf,0)='0'
+        UNION ALL
+        SELECT t.dyid qlid,t.proid,'抵押' qllx,t.djlx,t.dydjzmh cqzh  FROM gd_dy t
+        WHERE t.bdclx='TDFW' AND nvl(t.isjy,0)='0'
+        )f
+        LEFT JOIN gd_bdc_ql_rel r ON r.qlid=f.qlid
+        LEFT JOIN gd_dyh_rel d ON d.gdid=r.bdcid
+        WHERE d.bdcdyh IS NOT NULL
+        <if test="dcxc != null and dcxc !=''">
+            AND ( instr(f.fczh, #{dcxc} )>0 or instr(d.bdcdyh ,#{dcxc} )>0 )
+        </if>
+        <if test="cqzh != null and cqzh !=''">
+            AND f.cqzh=#{cqzh}
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND d.bdcdyh=#{bdcdyh}
+        </if>
+    </select>
+</mapper>

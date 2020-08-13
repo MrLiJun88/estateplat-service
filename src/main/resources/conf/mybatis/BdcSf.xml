@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcSfxxMapper">
+
+    <select id="getBdcSfxxListJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT distinct rownum xh,x.proid,x.bh slbh,s.sjrq,s.sfxxid,s.sfzt,x.cjsj,q.qlrmc jkr FROM bdc_sfxx s
+        INNER JOIN bdc_xm x ON x.proid=s.proid
+        INNER JOIN bdc_sfxm m ON s.sfxxid=m.sfxxid
+        INNER JOIN (SELECT strcat(t.qlrmc) qlrmc,t.proid,t.qlrlx FROM bdc_qlr t
+        <where>
+            <if test="jkr != null and jkr !=''">
+                t.qlrmc=#{jkr}
+            </if>
+        </where>
+        GROUP BY t.proid,t.qlrlx ) q ON q.proid=s.proid AND q.qlrlx = m.qlrlx
+        WHERE nvl(x.xmzt,'0')!='0' and m.je>0
+        <if test="bh != null and bh !=''">
+            AND instr(x.bh, #{bh})>0
+        </if>
+        <if test="zl != null and zl !=''">
+            AND x.wiid in (select x.wiid from bdc_spxx s left join bdc_xm x on x.proid=s.proid where s.zl=#{zl})
+        </if>
+        <if test="fwbm != null and fwbm !=''">
+            AND x.wiid in (select wiid from bdc_bdcdy d left join bdc_xm x on x.bdcdyid=d.bdcdyid where fwbm=#{fwbm})
+        </if>
+        <!--<if test="jkr != null and jkr !=''">-->
+        <!--AND s.jkr=#{jkr}-->
+        <!--</if>-->
+
+        <if test="bdcqzh != null and bdcqzh !=''">
+            AND x.wiid in (select wiid from bdc_zs z left join bdc_xmzs_rel r on r.zsid=z.zsid left join bdc_xm x on
+            x.proid=r.proid where instr(z.bdcqzh, #{bdcqzh})>0 or instr(z.bdcqzhjc, #{bdcqzh})>0 )
+        </if>
+        <if test="cjqssj != null and cjqssj !=''">
+            <![CDATA[ AND to_char(x.cjsj,'yyyy-MM-dd') >= #{cjqssj} ]]>
+        </if>
+        <if test="cjzzsj != null and cjzzsj !=''">
+            <![CDATA[  AND to_char(x.cjsj,'yyyy-MM-dd') <= #{cjzzsj} ]]>
+        </if>
+        <if test="sfxmmc != null and sfxmmc != ''">
+            AND m.bz IN
+            <foreach collection="sfxmmc" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY x.bh ASC
+    </select>
+    <select id="getxtsfbzBySqlx" parameterType="java.util.HashMap" resultType="map">
+        SELECT DISTINCT (t.sfxmbz) FROM BDC_XT_SFXM t
+        <where>
+            <if test="sqlx != null and sqlx !=''">
+                AND t.sqlxdm=#{sqlx}
+            </if>
+            <if test="qlrlx != null and qlrlx !=''">
+                AND t.qlrlx=#{qlrlx}
+            </if>
+        </where>
+    </select>
+    <select id="getxtsfdwBySqlx" parameterType="java.util.HashMap" resultType="map">
+        SELECT DISTINCT (t.dw) FROM BDC_XT_SFXM t
+        <where>
+            <if test="sqlx != null and sqlx !=''">
+                AND t.sqlxdm=#{sqlx}
+            </if>
+            <if test="qlrlx != null and qlrlx !=''">
+                AND t.qlrlx=#{qlrlx}
+            </if>
+        </where>
+    </select>
+
+    <select id="getSfxxMapBySfxxid" parameterType="java.util.HashMap" resultType="java.util.Map">
+        select t.*,x.sfxmid,x.sfxmbm,x.sfxmmc,x.dw,x.sl,x.sfbz,x.je,x.dxje from bdc_sfxx_jg t
+        LEFT JOIN bdc_sfxm_jg x ON x.sfxxid = t.sfxxid
+        WHERE 1=1
+        <if test="sfxxids != null and sfxxids != ''">
+            AND t.sfxxid IN
+            <foreach collection="sfxxids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="sfxxid != null and sfxxid != ''">
+            AND t.sfxxid = #{sfxxid}
+        </if>
+        ORDER BY t.fph
+    </select>
+
+    <update id="updateBdcSfxx">
+        UPDATE bdc_sfxx
+        SET sfzt=#{sfzt,jdbcType=VARCHAR},sjrq=#{sjrq,jdbcType=DATE}
+        WHERE proid=#{proid,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertIdToTemp" parameterType="java.util.Map">
+        INSERT INTO printbdcsfxxtemp(uuid,id)
+        VALUES (#{uuid},#{id})
+    </insert>
+
+    <delete id="delPrintBdcSfxxTemp" parameterType="java.lang.String">
+        DELETE FROM PRINTBDCSFXXTEMP t WHERE t.uuid=#{uuid}
+    </delete>
+
+    <select id="queryBdcSfxmByWiid" parameterType="java.lang.String" resultType="cn.gtmap.estateplat.model.server.core.BdcSfxm">
+        select m.*  from bdc_sfxm m
+        left join bdc_sfxx x on x.sfxxid=m.sfxxid
+        left join bdc_xm xm on xm.proid=x.proid
+        where xm.wiid=#{wiid}
+    </select>
+
+</mapper>

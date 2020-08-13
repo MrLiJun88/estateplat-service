@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//不动产单元-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcXymxMapper">
+    <select id="getBdcXymxListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT
+        t.xymxid,
+        t.xyglid,
+        t.nr,
+        t.cjsj,
+        t.gxdwid,
+        t.shr,
+        t.shsj,
+        t.sfsx
+        FROM bdc_xymx t
+        <where>
+            <if test="dcxc != null and dcxc !=''">
+                AND (instr(t.shr ,#{dcxc} )>0)
+            </if>
+            <if test="shrName != null and shrName !=''">
+                AND t.shr=#{shrName}
+            </if>
+            <if test="shsjEnd != null and shsjEnd !=''">
+                <![CDATA[  AND t.shsj <= #{shsjEnd}]]>
+            </if>
+            <if test="shsjStart != null and shsjStart !=''">
+                <![CDATA[  AND t.shsj >= #{shsjStart}]]>
+            </if>
+            <if test="sfsx != null and sfsx !=''">
+                AND t.sfsx=#{sfsx}
+            </if>
+            <if test="xyglid != null and xyglid !=''">
+                AND t.xyglid=#{xyglid}
+            </if>
+        </where>
+        ORDER BY t.cjsj DESC
+    </select>
+
+    <select id="getXsBdcXyxxByZjh" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT t.qlrmc,t.qlrzjh,x.mc as qlrzjzl,s.xymxid
+        FROM bdc_xygl t
+        LEFT JOIN bdc_xymx s ON t.xyglid=s.xyglid
+        LEFT JOIN bdc_zd_zjlx x ON t.qlrsfzjzl=x.dm
+        WHERE t.qlrzjh=#{qlrzjh,jdbcType=VARCHAR} AND t.qlrmc=#{qlrmc,jdbcType=VARCHAR} AND nvl(s.sfsx,'0')!=2 AND rownum=1 AND nvl(t.sjly,'0')!=2
+    </select>
+</mapper>

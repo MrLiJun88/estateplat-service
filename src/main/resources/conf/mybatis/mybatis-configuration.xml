@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <!-- 全局映射器启用缓存 -->
+        <setting name="cacheEnabled" value="false" />
+        <!-- 进行自动映射时，数据以下划线命名，如数据库返回的"order_address"命名字段是否映射为class的"orderAddress"字段。默认为false -->
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+        <!-- 将空值字段也映射到map中 -->
+        <setting name="callSettersOnNulls" value="true"/>
+        <!--<setting name="logImpl" value="STDOUT_LOGGING" />-->
+    </settings>
+    <!--<plugins>-->
+        <!--<plugin interceptor="cn.gtmap.estateplat.core.support.mybatis.page.PaginationInterceptor">-->
+            <!--<property name="dialect" value="oracle"/>-->
+            <!--<property name="stmtIdRegex" value="*."/>-->
+        <!--</plugin>-->
+        <!--<plugin interceptor="cn.gtmap.estateplat.core.support.mybatis.mapper.MapperInterceptor">-->
+            <!--&lt;!&ndash;================================================&ndash;&gt;-->
+            <!--&lt;!&ndash;可配置参数说明(一般无需修改)&ndash;&gt;-->
+            <!--&lt;!&ndash;================================================&ndash;&gt;-->
+            <!--&lt;!&ndash;UUID生成策略&ndash;&gt;-->
+            <!--&lt;!&ndash;配置UUID生成策略需要使用OGNL表达式&ndash;&gt;-->
+            <!--&lt;!&ndash;默认值32位长度:@java.util.UUID@randomUUID().toString().replace("-", "")&ndash;&gt;-->
+            <!--&lt;!&ndash;<property name="UUID" value="@java.util.UUID@randomUUID().toString()"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;主键自增回写方法,默认值MYSQL,详细说明请看文档&ndash;&gt;-->
+            <!--<property name="IDENTITY" value="HSQLDB"/>-->
+            <!--&lt;!&ndash;序列的获取规则,使用{num}格式化参数，默认值为{0}.nextval，针对Oracle&ndash;&gt;-->
+            <!--&lt;!&ndash;可选参数一共3个，对应0,1,2,分别为SequenceName，ColumnName,PropertyName&ndash;&gt;-->
+            <!--<property name="seqFormat" value="{0}.nextval"/>-->
+            <!--&lt;!&ndash; 设置全局的catalog,默认为空，如果设置了值，操作表时的sql会是catalog.tablename &ndash;&gt;-->
+            <!--<property name="catalog" value=""/>-->
+            <!--&lt;!&ndash; 设置全局的schema,默认为空，如果设置了值，操作表时的sql会是schema.tablename &ndash;&gt;-->
+            <!--&lt;!&ndash; 如果同时设置了catalog,优先使用catalog.tablename &ndash;&gt;-->
+            <!--<property name="schema" value=""/>-->
+            <!--&lt;!&ndash;主键自增回写方法执行顺序,默认AFTER,可选值为(BEFORE|AFTER)&ndash;&gt;-->
+            <!--<property name="ORDER" value="AFTER"/>-->
+            <!--&lt;!&ndash;通用Mapper接口，多个用逗号隔开&ndash;&gt;-->
+            <!--<property name="mappers" value="cn.gtmap.estateplat.server.core.mybatisMapper.mapper.Mapper"/>-->
+        <!--</plugin>-->
+    <!--</plugins>-->
+    <mappers>
+        <mapper resource="conf/mybatis/BdcQlr.xml" />
+        <mapper resource="conf/mybatis/BdcZs.xml"  />
+        <mapper resource="conf/mybatis/BdcXm.xml" />
+        <mapper resource="conf/mybatis/BdcSf.xml" />
+        <mapper resource="conf/mybatis/BdcXygl.xml" />
+        <mapper resource="conf/mybatis/Djxx.xml" />
+        <mapper resource="conf/mybatis/BdcDy.xml" />
+        <mapper resource="conf/mybatis/Bdcdjb.xml" />
+        <mapper resource="conf/mybatis/BdcDjsj.xml" />
+        <mapper resource="conf/mybatis/BdcXtSjglRelation.xml" />
+        <mapper resource="conf/mybatis/BdcYy.xml" />
+        <mapper resource="conf/mybatis/BdcYg.xml" />
+        <mapper resource="conf/mybatis/BdcCf.xml" />
+        <mapper resource="conf/mybatis/BdcDyaq.xml" />
+        <mapper resource="conf/mybatis/BdcDyq.xml" />
+        <mapper resource="conf/mybatis/BdcQsq.xml" />
+        <mapper resource="conf/mybatis/BdcJzwsyq.xml" />
+        <mapper resource="conf/mybatis/BdcHysyq.xml" />
+        <mapper resource="conf/mybatis/BdcLq.xml" />
+        <mapper resource="conf/mybatis/BdcTdcbnydsyq.xml" />
+        <mapper resource="conf/mybatis/BdcFdcqDz.xml" />
+        <mapper resource="conf/mybatis/BdcJzwgy.xml" />
+        <mapper resource="conf/mybatis/BdcFdcq.xml" />
+        <mapper resource="conf/mybatis/BdcJsydzjdsyq.xml" />
+        <mapper resource="conf/mybatis/BdcTdsyq.xml" />
+        <mapper resource="conf/mybatis/BdcXmRel.xml" />
+        <mapper resource="conf/mybatis/BdcQllx.xml" />
+        <mapper resource="conf/mybatis/BdcZsQlrRel.xml" />
+        <mapper resource="conf/mybatis/GdFw.xml" />
+        <mapper resource="conf/mybatis/GdTd.xml" />
+        <mapper resource="conf/mybatis/GdLq.xml" />
+        <mapper resource="conf/mybatis/GdCq.xml" />
+        <mapper resource="conf/mybatis/BdcZdQllx.xml" />
+        <mapper resource="conf/mybatis/Spxx.xml" />
+        <mapper resource="conf/mybatis/Lpbxx.xml" />
+        <mapper resource="conf/mybatis/BdcXtConfig.xml" />
+        <mapper resource="conf/mybatis/BdcZdDjlx.xml" />
+        <mapper resource="conf/mybatis/BdcZdGl.xml" />
+        <mapper resource="conf/mybatis/BdcTd.xml" />
+        <mapper resource="conf/mybatis/BdcHst.xml" />
+        <mapper resource="conf/mybatis/BdcHs.xml" />
+        <mapper resource="conf/mybatis/QllxParent.xml" />
+        <mapper resource="conf/mybatis/BdcXtZsQlqtzk.xml" />
+        <mapper resource="conf/mybatis/BdcXtLog.xml" />
+        <mapper resource="conf/mybatis/BdcXtLimitfield.xml" />
+        <mapper resource="conf/mybatis/DjSj.xml" />
+        <mapper resource="conf/mybatis/Bdcqldjxx.xml" />
+        <mapper resource="conf/mybatis/DjsjFw.xml" />
+        <mapper resource="conf/mybatis/GdXm.xml" />
+        <mapper resource="conf/mybatis/GdDhDzh.xml" />
+        <mapper resource="conf/mybatis/BdcDelZszh.xml" />
+        <mapper resource="conf/mybatis/BdcBdcdy.xml" />
+        <mapper resource="conf/mybatis/GdQlr.xml" />
+        <mapper resource="conf/mybatis/BdcZsBh.xml" />
+		<mapper resource="conf/mybatis/BdcXtYh.xml"/>
+		<mapper resource="conf/mybatis/BdcCompany.xml"/>
+		<!--zdd  无用  暂时隐掉 <mapper resource="conf/mybatis/BdcBdcQz.xml"/>-->
+		<mapper resource="conf/mybatis/Dwxx.xml"/>
+        <mapper resource="conf/mybatis/BdcSjxx.xml"/>
+        <mapper resource="conf/mybatis/BdcSjcl.xml"/>
+        <mapper resource="conf/mybatis/BdcJtzf.xml"/>
+        <mapper resource="conf/mybatis/BdcqzQsb.xml"/>
+        <mapper resource="conf/mybatis/BdcJjd.xml"/>
+        <mapper resource="conf/mybatis/BdcZm.xml"/>
+        <mapper resource="conf/mybatis/BdcHy.xml"/>
+        <mapper resource="conf/mybatis/BdcGdxx.xml"/>
+        <mapper resource="conf/mybatis/GdTdsyq.xml"/>
+        <mapper resource="conf/mybatis/GdTddyq.xml"/>
+        <mapper resource="conf/mybatis/GdCf.xml"/>
+        <mapper resource="conf/mybatis/GdSyq.xml"/>
+        <mapper resource="conf/mybatis/GdDyq.xml"/>
+        <mapper resource="conf/mybatis/GdFwCf.xml"/>
+        <mapper resource="conf/mybatis/BdcByslTzs.xml"/>
+        <mapper resource="conf/mybatis/BdcBydjdjd.xml"/>
+        <mapper resource="conf/mybatis/GzdjTzs.xml"/>
+        <mapper resource="conf/mybatis/Gdql.xml"/>
+        <mapper resource="conf/mybatis/BdcZjjzwxx.xml"/>
+        <mapper resource="conf/mybatis/BdcFwQs.xml"/>
+        <mapper resource="conf/mybatis/BdcTdQs.xml"/>
+        <mapper resource="conf/mybatis/Fccx.xml"/>
+        <mapper resource="conf/mybatis/BdcQs.xml"/>
+        <mapper resource="conf/mybatis/GdFwsyq.xml"/>
+        <mapper resource="conf/mybatis/GdYtdcx.xml"/>
+        <mapper resource="conf/mybatis/WuhuBdcdjDAcx.xml"/>
+       <!--   <mapper resource="conf/mybatis/CsYtdcx.xml"/> -->
+        <mapper resource="conf/mybatis/HaBdcxm.xml"/>
+        <mapper resource="conf/mybatis/ZjgFccx.xml"/>
+        <mapper resource="conf/mybatis/BdcdjGkcxZhjg.xml"/>
+        <mapper resource="conf/mybatis/ZhjgGkcxQlzt.xml"/>
+        <mapper resource="conf/mybatis/BdcZsPrint.xml"/>
+        <mapper resource="conf/mybatis/Fwxx.xml"/>
+        <mapper resource="conf/mybatis/BdcCxjl.xml"/>
+        <mapper resource="conf/mybatis/BdcSpfZdHjgx.xml"/>
+        <mapper resource="conf/mybatis/FcjyFcYw.xml"/>
+        <mapper resource="conf/mybatis/BdcZsSd.xml"/>
+        <mapper resource="conf/mybatis/Bdcdjtj.xml"/>
+        <mapper resource="conf/mybatis/BdcBdcdySd.xml"/>
+        <mapper resource="conf/mybatis/BdcDjslxx.xml"  />
+        <mapper resource="conf/mybatis/BdcBdcdySd.xml"  />
+        <mapper resource="conf/mybatis/BdcSllsh.xml"  />
+        <mapper resource="conf/mybatis/BdcJsxx.xml"  />
+        <mapper resource="conf/mybatis/BdcLsh.xml"  />
+        <mapper resource="conf/mybatis/BdcXymx.xml"  />
+        <mapper resource="conf/mybatis/BdcDjsjdxx.xml"  />
+        <mapper resource="conf/mybatis/BdcSqr.xml"  />
+        <mapper resource="conf/mybatis/BdcSfxm.xml"  />
+        <mapper resource="conf/mybatis/BdcFwfsss.xml"/>
+        <mapper resource="conf/mybatis/BdcdjbQuery.xml"/>
+        <mapper resource="conf/mybatis/BdcJsydsyqLhxx.xml"/>
+        <mapper resource="conf/mybatis/ExamineCheckInfo.xml"/>
+        <mapper resource="conf/mybatis/BdcSpxx.xml"/>
+        <mapper resource="conf/mybatis/WfRecvImg.xml"/>
+        <mapper resource="conf/mybatis/BdcPpd.xml"/>
+        <mapper resource="conf/mybatis/DjsjLsBdcdyh.xml" />
+        <mapper resource="conf/mybatis/GdBdcSd.xml" />
+        <mapper resource="conf/mybatis/BdcCjlb.xml"/>
+        <mapper resource="conf/mybatis/BdcZsCd.xml"/>
+        <mapper resource="conf/mybatis/BdcPpgxXm.xml"/>
+    </mappers>
+</configuration>

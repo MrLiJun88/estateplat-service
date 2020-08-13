@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcDyaqMapper">
+
+    <select id="queryBdcDyaq" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcDyaq">
+        SELECT t.*
+        FROM bdc_dyaq t
+        <if test="bdcDyh != null and bdcDyh !=''">
+            LEFT JOIN bdc_bdcdy b ON t.bdcdyid=b.bdcdyid
+        </if>
+        <where>
+            <if test="bdcDyh != null and bdcDyh !=''">
+               AND b.bdcdyh =  #{bdcDyh}
+            </if>
+            <if test="bdcdyid != null and bdcdyid !=''">
+               AND t.bdcdyid =  #{bdcdyid}
+            </if>
+            <if test="proid != null and proid !=''">
+                AND t.proid =  #{proid}
+            </if>
+            <if test="qszt != null and qszt !=''">
+                AND nvl(t.qszt,'0') =  #{qszt}
+            </if>
+            <if test="proids != null and proids !=''">
+                AND
+                <foreach collection="proids" item="item" open="(" separator=" or " close=")">
+                    t.proid = #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <update id="updateBdcDyaqForZxdj" parameterType="cn.gtmap.estateplat.model.server.core.BdcDyaq">
+        UPDATE bdc_dyaq SET zxdyywh=#{zxdyywh,jdbcType=VARCHAR},zxdyyy=#{zxdyyy,jdbcType=VARCHAR},zxsj=#{zxsj,jdbcType=DATE},zxdbr=#{zxdbr,jdbcType=VARCHAR}
+        WHERE qlid = #{qlid,jdbcType=VARCHAR}
+    </update>
+    <insert id="saveBdcDyaq" parameterType="cn.gtmap.estateplat.model.server.core.BdcDyaq">
+        INSERT INTO bdc_dyaq(qlid,bdcdyid,dw,zwr,dyfs,zjgczl,zjgcdyfw,bdbzzqse,zwlxksqx,zwlxjsqx,zgzqqdss,
+        zgzqqdse,zxdyywh,zxdyyy,zxsj,zxdbr,iszx,ywh,qllx,proid,gyqk,djsj,dbr,fj,bh,qszt)
+        VALUES(#{qlid,jdbcType=VARCHAR},#{bdcdyid,jdbcType=VARCHAR},#{dw,jdbcType=VARCHAR}
+        ,#{zwr,jdbcType=VARCHAR},#{dyfs,jdbcType=VARCHAR},#{zjgczl,jdbcType=VARCHAR}
+        ,#{zjgcdyfw,jdbcType=VARCHAR},#{bdbzzqse,jdbcType=DOUBLE},#{zwlxksqx,jdbcType=DATE},#{zwlxjsqx,jdbcType=DATE}
+        ,#{zgzqqdss,jdbcType=VARCHAR},#{zgzqqdse,jdbcType=DOUBLE},#{zxdyywh,jdbcType=VARCHAR},#{zxdyyy,jdbcType=VARCHAR}
+        ,#{zxsj,jdbcType=DATE},#{zxdbr,jdbcType=VARCHAR},#{iszx,jdbcType=INTEGER},#{ywh,jdbcType=VARCHAR}
+        ,#{qllx,jdbcType=VARCHAR},#{proid,jdbcType=VARCHAR},#{gyqk,jdbcType=VARCHAR},#{djsj,jdbcType=DATE}
+        ,#{dbr,jdbcType=VARCHAR},#{fj,jdbcType=VARCHAR},#{bh,jdbcType=VARCHAR},#{qszt,jdbcType=INTEGER})
+    </insert>
+
+    <select id="queryYdyaqByProid"  resultType="cn.gtmap.estateplat.model.server.core.BdcDyaq">
+        SELECT t.qlid,t.bdcdyid,t.dw,t.zwr,t.dyfs,t.zjgczl,t.zjgcdyfw,t.bdbzzqse,t.zwlxksqx,t.zwlxjsqx,t.zgzqqdss,t.zgzqqdse,t.zxdyyy,t.zxsj,t.zxdbr,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.dbfw,t.dysw,t.qlqssj,t.qljssj,t.dkfs,t.jezl,t.qt,t.ysxkzmh,t.fwpgjg,t.tdpgjg,t.fttdmj,t.fwdyjg,t.tddyjg,t.tddymj,t.fwdymj,t.dyhtbh,t.sfgtdb,t.dytdmj,t.tddymjsum,t.fwdymjsum,t.sydyje,t.sydymj,t.sfrz
+        FROM bdc_dyaq t
+        LEFT JOIN bdc_xm a ON a.proid=t.proid
+        <where>
+            <if test="proid != null and proid !=''">
+                AND a.wiid = (SELECT DISTINCT c.wiid FROM  bdc_xm c
+                LEFT JOIN bdc_xm_rel d ON c.proid=d.yproid
+                WHERE d.proid=#{proid} )
+            </if>
+            <if test="qszt != null and qszt !=''">
+                AND nvl(t.qszt,'0') =  #{qszt}
+            </if>
+        </where>
+    </select>
+	<select id="queryBdcDyaqByPage" parameterType="java.util.Map"
+		resultType="map">
+		SELECT DISTINCT a.qlid
+		FROM bdc_dyaq a
+		WHERE 1=1
+		<if test="bdcdyid != null and bdcdyid !='' ">AND a.bdcdyid= #{bdcdyid} </if>
+		<if test="qszt != null "> AND a.qszt = #{qszt} </if>
+	    UNION ALL
+	    SELECT DISTINCT e.dyid
+      	FROM gd_dy e
+        INNER JOIN gd_bdc_ql_rel f ON e.dyid = f.qlid
+        WHERE e.isjy = 0
+		<if test="bdcdyid != null and bdcdyid !='' ">AND f.bdcid = #{bdcdyid}</if>
+		UNION ALL
+		SELECT DISTINCT n.qlid
+              FROM GD_FWSYQ i
+              INNER JOIN gd_bdc_ql_rel j  ON j.qlid = i.qlid
+              INNER JOIN gd_fw k  ON k.fwid = j.bdcid
+              LEFT JOIN gd_dyh_rel l ON l.gdid = k.fwid
+              LEFT JOIN bdc_bdcdy  m ON m.bdcdyh = l.bdcdyh
+              LEFT JOIN bdc_dyaq n ON n.bdcdyid = m.bdcdyid
+              WHERE n.qszt=1 AND i.iszx = 0
+			 <if test="bdcdyid != null and bdcdyid !='' "> AND k.fwid = #{bdcdyid} </if>
+		UNION ALL
+		SELECT DISTINCT t.qlid
+              FROM GD_yg o
+              INNER JOIN gd_bdc_ql_rel p ON o.ygid = p.qlid
+              INNER JOIN gd_fw q  ON q.fwid = p.bdcid
+              LEFT JOIN gd_dyh_rel r ON r.gdid = q.fwid
+              LEFT JOIN bdc_bdcdy  s ON s.bdcdyh = r.bdcdyh
+              LEFT JOIN bdc_dyaq t ON t.bdcdyid = s.bdcdyid
+              WHERE t.qszt=1 AND o.iszx = 0
+			  <if test="bdcdyid != null and bdcdyid !='' ">AND q.fwid = #{bdcdyid} </if>
+	</select>
+
+    <select id="queryBdcDyaqByFwid"  parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcDyaq">
+        SELECT t.qlid,t.bdcdyid,t.dw,t.zwr,t.dyfs,t.zjgczl,t.zjgcdyfw,t.bdbzzqse,t.zwlxksqx,t.zwlxjsqx,t.zgzqqdss,t.zgzqqdse,t.zxdyyy,t.zxsj,t.zxdbr,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.dbfw,t.dysw,t.qlqssj,t.qljssj,t.dkfs,t.jezl,t.qt,t.ysxkzmh,t.fwpgjg,t.tdpgjg,t.fttdmj,t.fwdyjg,t.tddyjg,t.tddymj,t.fwdymj,t.dyhtbh,t.sfgtdb,t.dytdmj,t.tddymjsum,t.fwdymjsum,t.sydyje,t.sydymj,t.sfrz
+        FROM bdc_dyaq t
+        LEFT JOIN bdc_spxx s ON t.proid=s.proid
+        LEFT JOIN gd_dyh_rel r ON s.bdcdyh=r.bdcdyh
+        LEFT JOIN bdc_xm x  ON t.proid=x.proid
+        LEFT JOIN bdc_xm_rel l ON l.proid = x.proid
+        WHERE 1=1
+        <if test="gdid != null and gdid !=''">
+            AND r.gdid = #{gdid}
+        </if>
+        <if test="wiid != null and wiid !=''">
+            AND x.wiid = #{wiid}
+        </if>
+        <if test="yproid != null and yproid !=''">
+            AND l.yproid = #{yproid}
+        </if>
+    </select>
+
+    <select id="queryBdcDyaqByProid" parameterType="java.lang.String" resultType="cn.gtmap.estateplat.model.server.core.BdcDyaq">
+        SELECT t.qlid,t.bdcdyid,t.dw,t.zwr,t.dyfs,t.zjgczl,t.zjgcdyfw,t.bdbzzqse,t.zwlxksqx,t.zwlxjsqx,t.zgzqqdss,t.zgzqqdse,t.zxdyyy,t.zxsj,t.zxdbr,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.dbfw,t.dysw,t.qlqssj,t.qljssj,t.dkfs,t.jezl,t.qt,t.ysxkzmh,t.fwpgjg,t.tdpgjg,t.fttdmj,t.fwdyjg,t.tddyjg,t.tddymj,t.fwdymj,t.dyhtbh,t.sfgtdb,t.dytdmj,t.tddymjsum,t.fwdymjsum,t.sydyje,t.sydymj,t.sfrz,t.qlqtzk
+        FROM bdc_dyaq t
+        WHERE proid = #{proid}
+    </select>
+
+    <select id="getDyaqxxForPrint" parameterType="java.lang.String" resultType="map">
+        SELECT qlid,bdbzzqse,zwlxksqx,zwlxjsqx,zjgcdyfw,dbfw,fwdymj,tddymj,fwdyjg,tddyjg,zgzqqdse FROM (SELECT qlid,bdbzzqse,zwlxksqx,zwlxjsqx,zjgcdyfw,dbfw,fwdymj,tddymj,fwdyjg,tddyjg,zgzqqdse FROM BDC_DYAQ where proid = #{proid}
+        UNION ALL
+        SELECT qlid,bdbzzqse,zwlxksqx,zwlxjsqx,zjgcdyfw,dbfw,fwdymj,tddymj,fwdyjg,tddyjg,zgzqqdse FROM BDC_DYAQ t
+        LEFT JOIN bdc_xm_rel a ON t.proid=a.yproid
+        WHERE a.proid=#{proid}
+        UNION ALL
+        SELECT '' qlid,bdbzzqse,dyksrq zwlxksqx,dyjsrq zwlxjsqx,zjgcdyfw,dbfw,to_number(''),to_number(''),to_number(''),to_number(''),zgzqqdse FROM gd_dy t
+        LEFT JOIN bdc_xm_rel a ON t.proid=a.yproid
+        WHERE a.proid=#{proid}) t
+        WHERE rownum=1
+    </select>
+
+</mapper>

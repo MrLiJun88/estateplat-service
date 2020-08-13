@@ -1,0 +1,586 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin: 0px;
+	padding: 0px;
+	
+}
+/* 下拉框chosen插件样式 */
+.chosen-container-single .chosen-single,.chosen-container-multi .chosen-choices {
+	border: 1px solid #d5d5d5!important;
+	border-radius: 4px!important;
+	background-color: #fff!important;
+}
+
+.clearfix:after {
+	clear: both;
+	content: "\20";
+	display: block;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+.zoom {
+	zoom: 1
+}
+
+a:hover {
+	text-decoration:none;
+}
+
+ul,li,ol {
+	list-style: none;
+}
+.clear {
+	clear: both;
+}
+input,select{
+	font-size:12px;	
+}
+
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+.fa-leaf{
+	font-size:200%;
+	float:left;
+	}
+.LOGO{
+	float:left;
+	padding:6px 0px 0px 10px;
+	
+	}
+.radiusRhape{
+	border-radius: 100%;
+	position:relative;
+	} 
+.radiusRhape .wordPosition{
+	position:absolute;
+	top:0;
+	left:30px;
+	z-index:2;
+	display:block;
+	}
+.leftNavLabel{
+	font-family:'\5FAE\8F6F\96C5\9ED1';
+	font-size:120%;
+	}
+.table tr th,.table tr td{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	}
+.textInterception span{	
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width:200px;
+	display:block;
+	
+	}
+/* 列表居中 */
+ .tools{
+	text-align:center;
+	padding:8px 10px 8px 10px;
+	width:60px;
+	}
+/* 数字居右 */
+.table .number{
+	text-align:right;
+	padding:8px 10px 8px 10px;
+	}
+/*表单序列*/
+.selectWidth{
+	width:72px;
+	}
+
+.people{
+	width:100px;
+	text-align:center;
+	}
+/*表单头部工具栏*/
+.tableHeader{
+	background:#408fc6 url(../img/tableHeader.png) repeat-x bottom ;
+	margin:0px;
+	padding:0px;
+	height:40px;
+	
+	}
+.tableHeader ul{
+	margin:0;
+	}
+.tableHeader ul li{
+	float:left;
+	margin:10px 0px 0px 10px;
+	
+	}
+
+.tableHeader ul li button{
+	color:#333;
+	display:block;
+	border:1px solid #84a1c4;
+	background:#f2f2f2;
+	padding:2px 10px 2px 10px;
+    line-height: 18px;
+    font-size: 12px;
+    border-radius: 4px;
+	}
+.tableHeader ul li button:hover{
+	background:#85b357;
+	border:1px solid #4f877c;
+	color:#fff;
+	}
+.tablePagination{
+	background:#f2f2f2;
+	padding:8px 0px 8px 20px;
+	margin:0px;
+	border: 1px solid #ddd;
+	
+	}
+
+.tablePagination .ui-pg-input{
+	padding:2px 3px;
+	}
+.tablePagination .ui-icon{
+	cursor:pointer
+	}
+.tablePagination .PaginationInterval{
+	padding:0px 0px 0px 20px;
+	}
+/*简单搜索*/
+.simpleSearch{
+	width:900px;
+	height:36px;
+	margin:0px 0px 10px 0px;
+	position:relative;
+	}
+.simpleSearch table{
+	
+	}
+.simpleSearch table tr td{
+	border:1px solid #ddd;
+	}
+.simpleSearch .select{
+	border:0px;
+	height:34px;
+	}
+.simpleSearch .SSinput{
+	border:0px;
+	height:34px;
+	min-width:430px;
+	font-size:12px;
+	text-indent:10px;
+	}
+.simpleSearch td{
+	
+	}
+
+.simpleSearch .Search a{
+	display:block;
+	width:90px;
+	line-height:34px;
+	height:34px;
+	text-align:center;
+	background:#155e96;
+	color:#fff;
+	word-spacing:10px;
+	}
+.simpleSearch  .AdvancedSearch{
+	border:0;
+	padding:8px 0px 0px 10px;
+	display:block;
+	}
+/*zdd 2015-11-12*/
+.simpleSearch button:hover {
+	background-color: #c7c7c7;
+	text-decoration: none;
+	color: #333;
+}
+
+.simpleSearch button {
+	display: inline-block;
+	padding: 4px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	color: #333333;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	background-color: #f2f2f2;
+	border: 1px solid #aaa;
+	webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	border-radius: 0px !important;
+}
+/*高级搜索样式添加 begin 移动modal样式*/
+.modal-dialog {
+	width: 650px;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1050;
+	-webkit-overflow-scrolling: touch;
+	outline: 0;
+}
+
+.modal-dialog .modal-content .modelFooter {
+	background: none;
+	border-top: 1px solid #e5e5e5;
+	padding: 10px;
+	text-align: center;
+}
+.modal-dialog .modal-content form input[type='text'],.modal-dialog .modal-content form select,.modal-dialog .modal-content form textarea {
+	border-radius: 4px !important;
+	width:100% !important;
+	margin: 0px 5px 0px 0px;
+}
+.modal-dialog .modal-content .form .row {
+	margin: 10px 0px 10px 0px;
+}
+
+.modal-dialog .modal-content .form .row .rowLabel {
+	padding-left: 0px;
+	padding-right: 4px;
+	text-align: right;
+}
+
+.modal-dialog .modal-content .form .row .rowContent {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.modal-dialog .modal-content label {
+	font-weight: bold;
+}
+/*高级搜索样式添加 end*/
+
+/*高级搜索*/
+
+.simpleSearch .SearchFloat{
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:2;
+	}
+.simpleSearch .ASinput{
+	width:570px;
+	border:0;
+	font-size:12px;
+	text-indent:10px;
+	}
+ .SearchFloat h2{
+	display:block;
+	margin:0;
+	background:#f5f5f5;
+	font-size:12px;
+	font-family:'\5FAE\8F6F\96C5\9ED1';
+	border-top:1px solid #ddd;
+	border-left:1px solid #ddd;
+	border-right:1px solid #ddd;
+	padding:10px;
+	position:absolute;
+	top:0px;
+	left:680px;
+	z-index:3;
+	width:70px;
+	box-shadow: 0 -2px 3px 0 rgba(0,0,0,0.15);
+	
+	 }
+ .SearchFloat .SFContent{
+	position:absolute;
+	top:32px;
+	left:0px;
+	z-index:2;
+	width:750px;
+	border:1px solid #ddd;
+	background:#f5f5f5;
+	padding:20px;
+	box-shadow: 0 -2px 3px 0 rgba(0,0,0,0.15);
+	line-height:24px;
+	}
+ .SearchFloat .SFContent td{
+	border:0;
+	
+	}
+.SFContent label{
+	font-size:12px;
+	}
+.SFContent table{
+	width:100%;
+	}
+.SFContent table tr td{
+	padding:10px 0px 10px 0px;
+	}
+.SFContent table tr td input{
+	text-indent:10px;
+	font-size:12px;
+	margin:0px;
+	position:relative;
+	top:0px;
+	margin:0px 4px 0px 0px;
+	}
+.SFContent>table>tbody>tr>td:nth-child(odd){
+	text-align:right;
+	width:120px;
+	padding:0px 10px 0px 0px;
+	}
+.times input[type="text"]{
+	height:24px;
+	}
+.times .input-group,.times label{
+	float:left;
+	height:24px;
+	padding:0;
+	margin:0;
+	position:relative;
+	}
+.times  span{
+	position:absolute;
+	top:0px;
+	right:10px;
+	}
+.times label{
+	margin:0px 10px 0px 8px;
+	}
+/*多项选择列表*/
+.HasOptional{
+	
+	}
+.choiceList{
+	
+	}
+.choiceList ul{
+	padding:0;
+	margin:0;
+	}
+.choiceList ul li{
+	float:left;
+	background:#fff;
+	margin:5px;
+	padding:2px;
+	border:1px solid #ddd;
+	
+	}
+.choiceList ul li a{
+	color:#333;
+	
+	}
+.choiceList .glyphiconColor{
+	color:#ddd;
+	cursor:pointer;
+	font-size:10px;
+	}
+.choiceList .glyphiconColor:hover{
+	color:#000;
+	}
+.HasOptional{
+	
+	}
+.HasOptional table tr td{
+	padding:0px 0px 10px 0px;
+	
+	}
+
+.HasOptional >table>tbody>tr>td:nth-child(odd){
+	text-align:right;
+	padding:0px 10px 10px 0px;
+	}
+.Options{
+	
+	}
+.Options ul{
+	padding:0px;
+	margin:0px;
+	
+	}
+.Options ul li{
+	float:left;
+	margin:0px 10px 0px 10px;
+	line-height:24px;
+	}
+.Options ul li a{
+	color:#333;
+	}
+.Options ul li a:hover{
+	border-bottom:2px solid #428bca;
+	}
+.OptionsChildParent>ul{
+	margin:0px;
+	}
+.OptionsChildParent>ul>li{
+	float:left;
+	margin:0px 20px 0px 0px;
+	}
+.OptionsChildParent .btn{
+	padding:2px 4px 2px 4px;
+	}
+/*数据条件分析*/
+.Screening{
+	border-bottom:1px solid #ddd;
+	padding:1px 0px 10px 20px;
+	background:#fafafa;
+	}
+.Screening h2{
+	font-size:16px;
+	font-family:'\5FAE\8F6F\96C5\9ED1';
+	}
+.page-header .pageH1 span{
+	font-size:12px;
+	}
+.ScreeningTable{
+	margin:10px 0px 10px 0px;
+	}
+.ToSumUp{
+	margin:20px 0px 20px 0px;
+	display:block;
+	color:#428bca;
+	}
+.middleContent{
+	margin:10px 20px 0px 20px;
+	}
+.ScreeningH2{
+	font-size:16px;
+	font-family:'\5FAE\8F6F\96C5\9ED1';
+	}
+.ScreeningH2 span{
+	font-size:12px;
+	}
+/*弹出框*/
+.Pop-upBox{
+	display:block;
+	font-family:'\5FAE\8F6F\96C5\9ED1';
+	
+	}
+.Pop-upBox .modal-content{
+	border-radius:4px;
+	
+	}
+.Pop-upBox .modal-header{
+	background:url(../img/modal-header.png) repeat-x;
+	border-radius:4px;
+	border:1px solid #fafafa;
+	color:#fff;
+	font-family:'\5FAE\8F6F\96C5\9ED1';
+	padding:8px 0px 0px 10px;
+	margin:0px;
+	height:40px;
+	}
+.Pop-upBox .modal-header h4,.Pop-upBox .modal-header span{
+	float:left;
+	font-family:'\5FAE\8F6F\96C5\9ED1';
+	}
+.Pop-upBox .modal-header button{
+	float:right;
+	color:#fff;
+	margin:0px 10px 0px 0px;
+	background:none;
+	border:0;
+	}
+.Pop-upBox .modal-header button:hover{
+	color:#000;
+	}
+.Pop-upBox .modal-body{
+	padding:0px;
+	}
+.Pop-upBox .bootbox-body{
+	padding:10px;
+	}
+.PBTools{
+	background:#fafafa;
+	border-bottom:1px solid #ddd;
+	height:30px;
+	}
+.PBTools ul{
+	padding:0px;
+	margin:0px;
+	}
+.PBTools ul li{
+	float:left;
+	padding:4px 0px 0px 20px;
+	}
+.PBTools ul li a{
+	color:#666;
+	
+	}
+.PBTools ul li a:hover{
+	color:#87b87f;
+	}
+.modal-header .label{
+	padding:3px 10px 0px 10px;
+	margin:2px 0px 0px 10px;
+	}
+/*填写表格*/
+.UItable{
+	
+	}
+.UItable table{
+	width:100%;
+	margin:0px 0px 10px 0px;
+	}
+.UItable table>tbody>tr>td{
+	border:1px solid #ddd;
+	padding:5px 10px 5px 10px;
+	}
+.UItable input,.UItable textarea{
+	border:none;
+	width:100%;
+	line-height:24px;
+	}
+
+.tableA>tbody>tr>td:nth-child(odd){
+	text-align:right;
+	width:20%;
+	background:#f9f9f9;
+	}
+.tableB>tbody>tr>th{
+	border:1px solid #ddd;
+	text-align:center;
+	padding:5px 10px 5px 10px;
+	background:#eee;
+	}
+.tableB input[type="text"],.tableB input[type="botton"],.tableB textarea{
+	background:#fdfdfd;
+	}
+.tableB>tbody>tr>td:nth-child(1){
+	background:#f9f9f9;
+	text-align:right;
+	width:20%;
+	}
+.tableB tr td{
+	background:#fdfdfd;
+	}
+.tableB>tbody>tr>td:nth-child(2){
+	width:40%;
+	
+	}
+.tableB>tbody>tr>td:nth-child(3){
+	text-align:center;
+	
+	}
+.tableB>tbody>tr>td:nth-child(4){
+	text-align:center;
+	width:90px;
+	}
+
+.circuit{
+	
+	}
+.circuit .table tr th,.circuit .table tr td{
+	text-align:center;
+	}
+.circuit .table>tbody>tr>td:nth-child(1){
+	background:#eee;
+	
+	}
+.Accessories .table tr th,.Accessories .table tr td{
+	text-align:center;
+	padding:5px 10px 5px 10px;
+	}
+.Accessories .Success{
+	color:#82af6f;
+	}
+.Accessories .Failure{
+	color:#d15b47;
+	}
+

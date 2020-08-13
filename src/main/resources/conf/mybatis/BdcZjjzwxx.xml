@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//在建建筑物信息表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZjjzwxxMapper">
+
+    <select id="getBdcZjjzwxx" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcZjjzwxx">
+        SELECT zjwid,proid,xh,zl,yt,jzmj,jzjg,fjh,zcs,szc,jyjg,dymj,zrzh,dw,dyzt,jyyy,jyr,jyrq,bdcdyh,fwbm,ftmj,zxproid
+        FROM bdc_zjjzwxx
+        WHERE 1=1
+        <if test="proid != null and proid !=''">
+            AND proid = #{proid}
+        </if>
+        <if test="proids != null and proids !=''">
+            AND
+            <foreach collection="proids" item="item" open="(" separator=" or " close=")">
+                proid = #{item}
+            </foreach>
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND bdcdyh = #{bdcdyh}
+        </if>
+        <if test="fwbm != null and fwbm !=''">
+            AND fwbm = #{fwbm}
+        </if>
+        <if test="zjwid != null and zjwid !=''">
+            AND zjwid = #{zjwid}
+        </if>
+        <if test="dyzt != null and dyzt !=''">
+            AND nvl(dyzt,0) = #{dyzt}
+        </if>
+    </select>
+
+    <select id="getSameWFZjjzwxx" parameterType="java.lang.String" resultType="cn.gtmap.estateplat.model.server.core.BdcZjjzwxx">
+SELECT t1.zjwid,t1.proid,t1.xh,t1.zl,t1.yt,t1.jzmj,t1.jzjg,t1.fjh,t1.zcs,t1.szc,t1.jyjg,t1.dymj,t1.zrzh,t1.dw,t1.dyzt,t1.jyyy,t1.jyr,t1.jyrq,t1.bdcdyh,t1.fwbm,t1.ftmj,t1.zxproid FROM bdc_zjjzwxx t1, bdc_xm t2, bdc_xm t3
+         WHERE t1.proid = t2.proid
+           AND t2.wiid = t3.wiid
+           AND t3.proid = #{proid}
+    </select>
+
+    <!--查询是否有存在处于现势状态的在建建筑物清单-->
+    <select id="getDyBdcZjjzwxxByBdcdyh" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(t.zjwid) FROM bdc_zjjzwxx t
+        LEFT JOIN bdc_dyaq t1 ON t.proid = t1.proid
+        WHERE (t1.qszt = '0' OR t1.qszt = '1') AND t.bdcdyh=#{value}
+    </select>
+
+
+    <select id="getBdcZjjzwxxByProid" parameterType="java.lang.String" resultType="cn.gtmap.estateplat.model.server.core.BdcZjjzwxx">
+        SELECT t1.zjwid,t1.proid,t1.xh,t1.zl,t1.yt,t1.jzmj,t1.jzjg,t1.fjh,t1.zcs,t1.szc,t1.jyjg,t1.dymj,t1.zrzh,t1.dw,t1.dyzt,t1.jyyy,t1.jyr,t1.jyrq,t1.bdcdyh,t1.fwbm,t1.ftmj,t1.zxproid FROM bdc_zjjzwxx t1
+         WHERE t1.proid=#{proid}
+    </select>
+
+    <update id="updateZjjzwDyzt" parameterType="map">
+        UPDATE bdc_zjjzwxx t SET t.dyzt=#{dyzt}
+        <where>
+            <if test="proid != null and proid !=''">
+                AND t.proid=#{proid}
+            </if>
+        </where>
+    </update>
+</mapper>

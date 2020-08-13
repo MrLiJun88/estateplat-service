@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//过渡权利人-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdQlrMapper">
+
+    <delete id="delGdQlrByQlid" parameterType="String">
+               DELETE gd_qlr
+               WHERE qlid = #{qlid}
+    </delete>
+
+</mapper>

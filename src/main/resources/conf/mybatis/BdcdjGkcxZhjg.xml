@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//不动产单元-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcdjGkcxZhjgMapper">
+    <select id="getDeatilsBYzsidZhjg" parameterType="java.util.Map" resultType="map">
+				  SELECT distinct strcat(bdcdyh) bdcdyh,strcat(qlr) qlr,strcat(zl) zl
+                  FROM (SELECT distinct b.bdcdyh,b.zl,k.qlrmc qlr,z.zsid
+                          FROM bdc_zs z
+                          LEFT JOIN bdc_xmzs_rel x ON z.zsid = x.zsid
+                          LEFT JOIN bdc_zs_qlr_rel g ON g.zsid = z.zsid
+                          LEFT JOIN bdc_qlr k ON k.qlrid = g.qlrid
+                          LEFT JOIN bdc_spxx b ON x.proid = b.proid
+                          WHERE 1 = 1 AND k.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">
+							 AND z.zsid = #{zsid}
+						 </if>
+                         <if test="zsid == null or zsid == ''">
+							 AND 1=2
+						 </if>
+                        union all
+                        SELECT distinct f0.bdcdyh,e0.fwzl zl,i0.qlr,d0.fczh zsid
+                          FROM gd_bdc_ql_rel c0
+                          INNER JOIN gd_fwsyq d0 ON c0.qlid = d0.qlid
+                          INNER JOIN gd_fw e0 ON e0.fwid = c0.bdcid
+                          LEFT JOIN gd_dyh_rel f0 ON f0.gdid = c0.bdcid
+                          LEFT JOIN gd_qlr i0 ON i0.qlid = c0.qlid
+                        WHERE 1 = 1 AND i0.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">
+							 AND d0.fczh = #{zsid}
+						 </if>
+                         <if test="zsid == null or zsid == ''">
+							 AND 1=2
+						 </if>
+						union all
+                        SELECT distinct f1.bdcdyh, e1.fwzl zl, i1.qlr, d1.dydjzmh zsid
+                          FROM gd_bdc_ql_rel c1
+                          INNER JOIN gd_dy d1 ON c1.qlid = d1.dyid
+                          INNER JOIN gd_fw e1 ON e1.fwid = c1.bdcid
+                          LEFT JOIN gd_dyh_rel f1 ON f1.gdid = c1.bdcid
+                          LEFT JOIN gd_qlr i1 ON i1.qlid = c1.qlid
+                        WHERE 1 = 1 AND i1.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">
+							 AND d1.dydjzmh = #{zsid}
+						 </if>
+                         <if test="zsid == null or zsid == ''">
+							 AND 1=2
+						 </if>
+                        union all
+                        SELECT distinct f2.bdcdyh, e2.fwzl zl, i2.qlr, d2.ygdjzmh zsid
+                          FROM gd_bdc_ql_rel c2
+                          INNER JOIN gd_yg d2 ON c2.qlid = d2.ygid
+                          INNER JOIN gd_fw e2 ON e2.fwid = c2.bdcid
+                          LEFT JOIN gd_dyh_rel f2 ON f2.gdid = c2.bdcid
+                          LEFT JOIN gd_qlr i2 ON i2.qlid = c2.qlid
+                         WHERE 1 = 1 AND i2.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">
+                          AND d2.ygdjzmh = #{zsid}
+						 </if>
+                         <if test="zsid == null or zsid == ''">
+							 AND 1=2
+						 </if>
+                        union all
+                        SELECT distinct f3.bdcdyh, e3.fwzl zl, i3.qlr, d3.cfid zsid
+                          FROM gd_bdc_ql_rel c3
+                          INNER JOIN gd_cf d3 ON c3.qlid = d3.cfid
+                          INNER JOIN gd_fw e3 ON e3.fwid = c3.bdcid
+                          LEFT JOIN gd_dyh_rel f3 ON f3.gdid = c3.bdcid
+                          LEFT JOIN gd_qlr i3 ON i3.qlid = c3.qlid
+                         WHERE 1 = 1 AND i3.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">
+							 AND d3.cfid = #{zsid}
+						 </if>
+                         <if test="zsid == null or zsid == ''">
+							 AND 1=2
+						 </if>
+                        union all
+                        SELECT distinct f4.bdcdyh, e4.fwzl zl, i4.qlr, d4.yyid zsid
+                          FROM gd_bdc_ql_rel c4
+                          INNER JOIN gd_yy d4 ON c4.qlid = d4.yyid
+                          INNER JOIN gd_fw e4 ON e4.fwid = c4.bdcid
+                          LEFT JOIN gd_dyh_rel f4 ON f4.gdid = c4.bdcid
+                          LEFT JOIN gd_qlr i4 ON i4.qlid = c4.qlid
+                         WHERE 1 = 1 AND i4.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">AND d4.yyid = #{zsid}</if>
+                         <if test="zsid == null or zsid == ''">AND 1=2</if>
+                        union all
+                        SELECT distinct p0.bdcdyh, o0.zl zl, q0.qlr, n0.tdzh zsid
+                          FROM gd_bdc_ql_rel m0
+                          INNER JOIN gd_tdsyq n0 ON m0.qlid = n0.qlid
+                          INNER JOIN gd_td o0 ON o0.tdid = m0.bdcid
+                          LEFT JOIN gd_dyh_rel p0 ON p0.gdid = m0.bdcid
+                          LEFT JOIN gd_qlr q0 ON q0.qlid = m0.qlid
+                         WHERE 1 = 1 AND q0.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">AND n0.tdzh = #{zsid}</if>
+                         <if test="zsid == null or zsid == ''">AND 1=2</if>
+                        union all
+                        SELECT distinct p1.bdcdyh, o1.zl zl, q1.qlr, n1.dydjzmh zsid
+                          FROM gd_bdc_ql_rel m1
+                          INNER JOIN gd_dy n1 ON m1.qlid = n1.dyid
+                          INNER JOIN gd_td o1 ON o1.tdid = m1.bdcid
+                          LEFT JOIN gd_dyh_rel p1 ON p1.gdid = m1.bdcid
+                          LEFT JOIN gd_qlr q1 ON q1.qlid = m1.qlid
+                         WHERE 1 = 1 AND q1.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">AND n1.dydjzmh = #{zsid}</if>
+                         <if test="zsid == null or zsid == ''">AND 1=2</if>
+                        union all
+                        SELECT distinct p2.bdcdyh, o2.zl zl, q2.qlr, n2.ygdjzmh zsid
+                          FROM gd_bdc_ql_rel m2
+                          INNER JOIN gd_yg n2 ON m2.qlid = n2.ygid
+                          INNER JOIN gd_td o2 ON o2.tdid = m2.bdcid
+                          LEFT JOIN gd_dyh_rel p2 ON p2.gdid = m2.bdcid
+                          LEFT JOIN gd_qlr q2 ON q2.qlid = m2.qlid
+                         WHERE 1 = 1 AND q2.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">AND n2.ygdjzmh = #{zsid}</if>
+                         <if test="zsid == null or zsid == ''">AND 1=2</if>
+                        union all
+                        SELECT distinct p3.bdcdyh, o3.zl zl, q3.qlr, n3.cfid zsid
+                          FROM gd_bdc_ql_rel m3
+                          INNER JOIN gd_cf n3 ON m3.qlid = n3.cfid
+                          INNER JOIN gd_td o3 ON o3.tdid = m3.bdcid
+                          LEFT JOIN gd_dyh_rel p3 ON p3.gdid = m3.bdcid
+                          LEFT JOIN gd_qlr q3 ON q3.qlid = m3.qlid
+                         WHERE 1 = 1 AND q3.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''">AND n3.cfid = #{zsid}</if>
+                         <if test="zsid == null or zsid == ''">AND 1=2</if>
+                        union all
+                        SELECT distinct p4.bdcdyh, o4.zl zl, q4.qlr, n4.yyid zsid
+                          FROM gd_bdc_ql_rel m4
+                          INNER JOIN gd_yy n4 ON m4.qlid = n4.yyid
+                          INNER JOIN gd_td o4 ON o4.tdid = m4.bdcid
+                          LEFT JOIN gd_dyh_rel p4 ON p4.gdid = m4.bdcid
+                          LEFT JOIN gd_qlr q4 ON q4.qlid = m4.qlid
+                         WHERE 1 = 1 AND q4.qlrlx != 'ywr'
+                         <if test="zsid != null and zsid != ''"> AND n4.yyid = #{zsid}</if>
+                         <if test="zsid == null or zsid == ''">AND 1=2</if> )
+                           group by zsid
+    </select>
+</mapper>

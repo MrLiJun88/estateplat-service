@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcXtLogMapper">
+    <select id="getBdcXtLogListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.logid,t.username,t.userid,t.czrq,t.parmjson FROM BDC_XT_LOG t
+        <where>
+            <if test="username != null and username !=''">
+                AND t.username LIKE '%'||#{username}||'%'
+            </if>
+            <if test="controllerMsg != null and controllerMsg !=''">
+                AND t.parmjson LIKE '%'||#{controllerMsg}||'%'
+            </if>
+            <if test="jsrq != null and jsrq !='' and qsrq != null and qsrq !=''">
+                AND t.czrq BETWEEN #{qsrq} AND #{jsrq}
+            </if>
+        </where>
+        ORDER BY t.czrq DESC
+    </select>
+
+</mapper>

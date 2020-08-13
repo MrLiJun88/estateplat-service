@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <mapping map-null="false">
+        <class-a>cn.gtmap.estateplat.model.exchange.transition.QzYwxx</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcXm</class-b>
+        <field>
+            <a>djlx</a>
+            <b>djlx</b>
+        </field>
+        <field>
+            <a>bz</a>
+            <b>bz</b>
+        </field>
+        <field>
+            <a>djyy</a>
+            <b>djyy</b>
+        </field>
+        <field>
+            <a>ywzt</a>
+            <b>xmzt</b>
+        </field>
+        <field>
+            <a>xzqdm</a>
+            <b>dwdm</b>
+        </field>
+        <field>
+            <a>djsj</a>
+            <b>cjsj</b>
+        </field>
+        <field>
+            <a>ywmc</a>
+            <b>xmmc</b>
+        </field>
+    </mapping>
+    <mapping map-null="false">
+        <class-a>cn.gtmap.estateplat.model.exchange.transition.QzZd</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcXm</class-b>
+        <field>
+            <a>qllx</a>
+            <b>qllx</b>
+        </field>
+        <!--<field>-->
+            <!--<a>mjdw</a>-->
+            <!--<b>dw</b>-->
+        <!--</field>-->
+    </mapping>
+    <!--<mapping map-null="false">-->
+        <!--<class-a>cn.gtmap.estateplat.model.exchange.transition.QzH</class-a>-->
+        <!--<class-b>cn.gtmap.estateplat.model.server.core.BdcXm</class-b>-->
+        <!--<field>-->
+            <!--<a>mjdw</a>-->
+            <!--<b>dw</b>-->
+        <!--</field>-->
+    <!--</mapping>-->
+</mappings>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcPpdMapper">
+
+    <select id="getPpdxxMapByBdcdyh" parameterType="java.util.HashMap" resultType="java.util.Map">
+        SELECT strcat(f.qlr) qlr,substr(t.bdcdyh,0,6)||' '||substr(t.bdcdyh,7,6)||' '||substr(t.bdcdyh,13,7)||' '||substr(t.bdcdyh,20) bdcdyh,
+        strcat(CASE WHEN b.fwzl IS NULL THEN c.tdzl ELSE b.fwzl END) zl,
+        strcat(b.fczh) fczh,strcat(c.tdzh) tdzh,strcat(e.tdzh) tdz FROM gd_dyh_rel t
+        LEFT JOIN gd_bdc_ql_rel a ON t.gdid=a.bdcid
+        LEFT JOIN gd_fw_ql b ON a.qlid=b.qlid AND b.zslx='房屋所有权'
+        LEFT JOIN gd_td_ql c ON a.qlid=c.qlid AND c.zslx IN ('土地使用权','土地所有权')
+        LEFT JOIN gd_bdc_ql_rel d ON t.tdid=d.bdcid
+        LEFT JOIN gd_td_ql e ON d.qlid=e.qlid AND e.zslx IN ('土地使用权','土地所有权')
+        LEFT JOIN gd_qlr f ON a.qlid=f.qlid AND f.qlrlx='qlr' and f.qlid NOT IN (SELECT t.dyid FROM gd_dy t)
+        LEFT JOIN gd_fwsyq fw ON a.qlid=fw.qlid
+        LEFT JOIN gd_tdsyq td ON a.qlid=td.qlid
+        WHERE (fw.iszx='0' OR td.iszx='0')
+        <if test="bdcdyhs != null and bdcdyhs != ''">
+            AND t.bdcdyh IN
+            <foreach collection="bdcdyhs" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="bdcdyh != null and bdcdyh != ''">
+            AND t.bdcdyh = #{bdcdyh}
+        </if>
+        group by t.bdcdyh
+    </select>
+
+    <select id="getYwlxMapByQlid" parameterType="java.util.HashMap" resultType="java.util.Map">
+        SELECT t.bz FROM GD_FWSYQ t WHERE t.qlid=#{qlid}
+        UNION ALL
+        SELECT t.bz FROM gd_cf t WHERE t.cfid=#{qlid}
+        UNION ALL
+        SELECT t.bz FROM gd_dy t WHERE t.dyid=#{qlid}
+        UNION ALL
+        SELECT t.bz FROM gd_yg t WHERE t.ygid=#{qlid}
+        UNION ALL
+        SELECT t.bz FROM gd_yy t WHERE t.yyid=#{qlid}
+        UNION ALL
+        SELECT t.bz FROM gd_tdsyq t WHERE t.qlid=#{qlid}
+    </select>
+
+</mapper>

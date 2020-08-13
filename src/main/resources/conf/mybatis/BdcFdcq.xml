@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcFdcqMapper">
+
+    <select id="getBdcFdcq" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcFdcq">
+        SELECT
+        t.*
+        FROM bdc_fdcq t
+        WHERE 1=1
+        <if test="proid != null and proid !=''">
+            AND t.proid = #{proid}
+        </if>
+        <if test="bdcdyid != null and bdcdyid !=''">
+            AND t.bdcdyid = #{bdcdyid}
+        </if>
+        <if test="qszt != null and qszt !=''">
+            AND nvl(t.qszt,'1') = #{qszt}
+        </if>
+    </select>
+    <select id="getBdcFdcqByProid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcFdcq">
+        SELECT T.*
+        FROM BDC_FDCQ T
+        WHERE t.proid = #{proid}
+    </select>
+
+    <select id="getzrddh" parameterType="String" resultType="String">
+        SELECT t.zrzh
+        FROM bdc_fdcq t
+        LEFT JOIN bdc_xm a ON a.bdcdyid=t.bdcdyid
+        WHERE a.proid=#{proid}
+    </select>
+
+    <select id="getFdcqZdJosnByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT distinct substr(a.bdcdyh,0,19) djh,b.tdzl,b.fzmj,c.MC
+        FROM bdc_fdcq t
+        LEFT JOIN bdc_bdcdy a ON t.bdcdyid=a.bdcdyid
+        LEFT JOIN DJSJ_ZD_DCB b ON substr(a.bdcdyh,0,19)=b.djh
+        LEFT JOIN Djsj_Zd_Dldm c ON b.tdyt=c.dm
+        WHERE a.bdcdyh is not null
+        <if test="hhSearch != null and hhSearch !=''">
+            AND (instr(substr(a.bdcdyh,0,19),#{hhSearch} )>0 or instr(b.tdzl ,#{hhSearch} )>0)
+        </if>
+    </select>
+
+    <select id="getFdcqJsonByPage" parameterType="java.util.HashMap" resultType="map">
+         SELECT a.bdcdyh,a.zl,b.mc,t.jzmj,t.szc,t.zcs,t.fttdmj,t.szmyc
+         FROM BDC_FDCQ t
+        LEFT JOIN bdc_xm x ON t.proid=x.proid
+        LEFT JOIN bdc_spxx a ON a.proid=x.proid
+        LEFT JOIN bdc_zd_fwyt b ON t.ghyt=b.dm
+        WHERE substr(a.bdcdyh,0,19)=#{djh} AND x.xmzt='1' AND nvl(t.qszt,'1')!='2'
+    </select>
+
+    <select id="getTdsyqx" parameterType="String" resultType="map">
+        SELECT t.* FROM (SELECT t.syksqx syksqx,t.syjsqx syjsqx,t.proid,t.qlid
+        FROM BDC_JSYDZJDSYQ t
+        UNION ALL
+        SELECT t.tdsyksqx syksqx,t.tdsyjsqx syjsqx,t.proid,t.qlid FROM bdc_fdcq t
+        UNION ALL
+        SELECT t.tdsyksqx syksqx,t.tdsyjsqx syjsqx,t.proid,t.qlid FROM bdc_fdcq_dz t) t
+        WHERE t.proid = #{proid}
+    </select>
+
+    <select id="getSpfscdjHsFzlx" parameterType="java.util.HashMap" resultType="String">
+        SELECT fzlx
+        FROM bdc_fdcq q
+        LEFT JOIN bdc_bdcdy y ON q.bdcdyid=y.bdcdyid
+        LEFT JOIN bdc_xm x ON x.bdcdyid=y.bdcdyid
+        WHERE nvl(q.qszt,0)=1
+        <if test="sqlx != null and sqlx !=''">
+            AND x.sqlx=#{sqlx}
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND y.bdcdyh=#{bdcdyh}
+        </if>
+    </select>
+
+
+    <delete id="batchDelBdcFdcqByBdcXmList" parameterType="java.util.List">
+        DELETE FROM bdc_fdcq t WHERE t.proid IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item.proid}
+        </foreach>
+    </delete>
+
+    <update id="batchChangeQllxZt" parameterType="java.util.Map">
+        UPDATE bdc_fdcq t SET t.qszt=#{qszt},t.qlqssj=#{qlqssj} WHERE t.proid IN
+        <foreach collection="bdcXmList" item="item" index="index" open="(" separator="," close=")">
+            #{item.proid}
+        </foreach>
+    </update>
+
+    <select id="getFdcqxxByPage" parameterType="java.util.Map" resultType="map">
+        select t.proid,b.bdcdyh,b.fwbm,s.zl,f.jzmj,d.mc yt from bdc_xm t
+        inner join bdc_fdcq f on f.proid=t.proid
+        inner join bdc_bdcdy b on b.bdcdyid=t.bdcdyid
+        left join bdc_spxx s on s.proid=t.proid
+        left join bdc_zd_fwyt d on d.dm=f.ghyt
+        <where>
+            <if test="proidList != null and proidList != ''">
+                AND
+                <foreach collection="proidList" item="proid" open="(" separator=" or " close=")">
+                    t.proid = #{proid}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

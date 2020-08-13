@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcYyMapper">
+
+    <select id="getBdcYyByProid" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcYy">
+        SELECT t.qlid,t.bdcdyid,t.yysx,t.zxyyh,t.zxyyyy,t.zxsj,t.zxdbr,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.qlqssj,t.qljssj,t.qt,t.bz,t.issx FROM bdc_yy t
+        WHERE t.proid=#{proid}
+    </select>
+
+    <insert id="saveBdcYy" parameterType="cn.gtmap.estateplat.model.server.core.BdcYy">
+        INSERT INTO bdc_yy(qlid,bdcdyid,yysx,zxyyh,zxyyyy,zxsj,zxdbr,ywh,qllx,proid,qszt,gyqk,djsj,dbr,fj)
+        VALUES(#{qlid,jdbcType=VARCHAR},#{bdcdyid,jdbcType=VARCHAR},#{yysx,jdbcType=VARCHAR},#{zxyyh,jdbcType=VARCHAR}
+        ,#{zxyyyy,jdbcType=VARCHAR},#{zxsj,jdbcType=DATE},#{zxdbr,jdbcType=DOUBLE},#{ywh,jdbcType=DOUBLE}
+        ,#{qllx,jdbcType=VARCHAR},#{proid,jdbcType=VARCHAR},#{qszt,jdbcType=INTEGER},#{gyqk,jdbcType=VARCHAR}
+        ,#{djsj,jdbcType=DATE},#{dbr,jdbcType=VARCHAR},#{fj,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="getBdcYyBybdcdyh" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcYy">
+        SELECT t.qlid,t.bdcdyid,t.yysx,t.zxyyh,t.zxyyyy,t.zxsj,t.zxdbr,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.qlqssj,t.qljssj,t.qt,t.bz,t.issx FROM bdc_yy t
+        LEFT JOIN bdc_bdcdy s ON t.bdcdyid=s.bdcdyid
+        <where>
+            <if test="bdcdyh !=null and bdcdyh !=''">
+                AND s.bdcdyh=#{bdcdyh}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBdcYy" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcYy">
+        SELECT t.* FROM bdc_yy t
+        <if test="bdcDyh != null and bdcDyh !=''">
+            LEFT JOIN bdc_bdcdy b ON t.bdcdyid=b.bdcdyid
+        </if>
+        <where>
+            <if test="bdcDyh != null and bdcDyh !=''">
+                AND b.bdcDyh =  #{bdcDyh}
+            </if>
+            <if test="bdcdyid != null and bdcdyid !=''">
+                AND t.bdcdyid =  #{bdcdyid}
+            </if>
+            <if test="proid != null and proid !=''">
+                AND t.proid =  #{proid}
+            </if>
+            <if test="qszt != null and qszt !=''">
+                AND nvl(t.qszt,'1') =  #{qszt}
+            </if>
+            <if test="proids != null and proids !=''">
+                AND
+                <foreach collection="proids" item="item" open="(" separator=" or " close=")">
+                    t.proid = #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

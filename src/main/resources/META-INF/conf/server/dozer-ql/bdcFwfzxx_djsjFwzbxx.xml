@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--房屋分幢信息-->
+    <mapping map-empty-string="false" map-null="false">
+        <class-a>cn.gtmap.estateplat.model.server.core.DjsjFwzbxx</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcFwfzxx</class-b>
+        <!--竣工时间-->
+        <field>
+            <a>jgsj</a>
+            <b>jgsj</b>
+        </field>
+        <!--房屋结构-->
+        <field>
+            <a>fwjg</a>
+            <b>fwjg</b>
+        </field>
+        <!--建筑面积-->
+        <field>
+            <a>jzmj</a>
+            <b>jzmj</b>
+        </field>
+        <!--幢号-->
+        <field>
+            <a>dh</a>
+            <b>zh</b>
+        </field>
+        <!--总套数-->
+        <field>
+            <a>zts</a>
+            <b>zts</b>
+        </field>
+        <!--项目名称-->
+        <field>
+            <a>xmmc</a>
+            <b>xmmc</b>
+        </field>
+        <!--规划用途-->
+        <field>
+            <a>ghyt</a>
+            <b>ghyt</b>
+        </field>
+        <!--总层数-->
+        <field>
+            <a>zcs</a>
+            <b>zcs</b>
+        </field>
+        <!--不动产单元编号-->
+        <field>
+            <a>bdcdybh</a>
+            <b>bdcdybh</b>
+        </field>
+    </mapping>
+
+</mappings>

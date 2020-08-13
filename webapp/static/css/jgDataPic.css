@@ -1,0 +1,185 @@
+.filesub {
+    display: block;
+    width: 90px;
+    line-height: 34px;
+    height: 34px;
+    text-align: center;
+    background: #155e96;
+    color: #fff;
+    word-spacing: 10px;
+}
+
+a:visited {
+    color: #FFF;
+}
+
+a:hover {
+    color: #FFF;
+}
+
+.col-xs-11 {
+    width: 100%
+}
+
+.tab-content {
+    overflow: hidden;
+    height: auto;
+    width: auto;
+}
+
+.tableHeader {
+    width: 100%;
+}
+
+.ace-settings-box.open {
+    max-width: 1000px;
+    padding: 0 0px;
+}
+
+.modal-dialog {
+    width: 600px;
+    margin: 30px auto;
+}
+
+.profile-user-info-striped .profile-info-name {
+    color: #fff;
+    background-color: #408fc6;
+    border-top: 1px solid #408fc6;
+    width: 100px;
+}
+
+.SSinput {
+    min-width: 100px !important;
+}
+
+/*移动modal样式*/
+#gjSearchPop .modal-dialog {
+    width: 1175px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+#fileInput .modal-dialog {
+    width: 500px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+#fileInput1 .modal-dialog {
+    width: 620px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+/*高级搜索的样式修改*/
+.btn01:hover {
+    background-color: #c7c7c7;
+    text-decoration: none;
+    color: #333;
+}
+
+.title {
+    font-size: 18pt;
+    text-align: center;
+    padding-left: 2px;
+    position: absolute;
+    margin-left: 40px;
+    margin-top: 5px;
+}
+
+span.label {
+    border-radius: 3px !important;
+}
+
+.tab-content {
+    overflow: hidden;
+    height: auto;
+}
+
+.ace-settings-box.open {
+    max-width: 1000px;
+    padding: 0 0px;
+}
+
+.modal-dialog {
+    width: 600px;
+    margin: 30px auto;
+}
+
+.profile-user-info-striped .profile-info-name {
+    color: #fff;
+    background-color: #408fc6;
+    border-top: 1px solid #408fc6;
+    width: 100px;
+}
+
+.ace-settings-btn {
+    top: 38px;
+}
+
+.SSinput {
+    min-width: 330px !important;
+}
+
+.tooltips {
+    border-width: 1px;
+    border-style: solid;
+    position: absolute;
+    display: none;
+    border-radius: 3px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 999;
+}
+
+.tooltips p.content {
+    padding: 5px;
+}
+
+.tooltips .triangle-front, .tooltips .triangle-back {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    border-width: 8px;
+    border-style: solid;
+    position: absolute;
+    border-color: transparent;
+    top: 100%;
+    left: 50%;
+    margin-left: -8px;
+}
+
+.tooltips .triangle-back {
+    margin-top: -1px;
+}
+
+.yellow {
+    border-color: #c7c08d;
+    background-color: #fffac3;
+}
+
+.yellow .triangle-front {
+    border-top-color: #c7c08d;
+}
+
+.yellow .triangle-back {
+    border-top-color: #fffac3;
+}

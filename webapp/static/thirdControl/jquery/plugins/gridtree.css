@@ -1,0 +1,55 @@
+._treetoggle{
+	cursor: pointer;
+}
+._gridtree > tr .ico{
+	display: inline-block;
+	position: relative;
+	width: 14px;
+	height: 14px;
+}
+._gridtree > tr ._open {
+	background: url(/useplan/static/img/down.png) 0 0 no-repeat;
+	top: 2px;
+	margin-right: 3px;
+}
+._gridtree > tr ._close {
+	background: url(/useplan/static/img/right.png) 0 0 no-repeat;
+	top: 2px;
+	left: -1px;
+	margin-right: 3px;
+}
+._gridtree > tr ._root{
+	background: url(/useplan/static/img/groot.png) 0 0 no-repeat;
+	top: 1px;
+	margin-right: 1px;
+}
+
+.blank-icon {
+    width: 6px;
+    height: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 10px 10px 0;
+    border-radius: 1px;
+}
+.gridtree-open {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 1px;
+    width: 14px;
+    height: 14px;
+    background: url(/useplan/static/img/down.png) 0 0 no-repeat;
+    top: 2px;
+    margin-right: 3px;
+}
+.gridtree-close {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 1px;
+    width: 14px;
+    height: 14px;
+    background: url(/useplan/static/img/right.png) 0 0 no-repeat;
+    top: 2px;
+    left: -1px;
+    margin-right: 3px;
+}

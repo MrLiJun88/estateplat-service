@@ -1,0 +1,152 @@
+{
+  "mulToOneSqlx":"130,806,9979902,9979912",
+  "130": [
+     {
+      "sql": "select bh ywh,dwdm,zl,djsj,bdcdyh,bdcqzh from bdc_xm where proid=@proid"
+    },
+    {
+      "sql": "select t.tdsyksqx,t.tdsyjsqx from bdc_fdcq t where t.proid=@proid"
+    },
+	{
+      "sql": "select (listagg(qlrmc,',')within group (order by sxh))||'等' qlrmc from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+	{
+      "sql": "select (listagg(qlrzjh,',')within group (order by sxh))||'等' qlrzjh from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+	{
+      "sql": "select max(qlrsfzjzl) qlrsfzjzl from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+	{
+      "sql": "select fwbm from bdc_bdcdy  where bdcdyid =(select bdcdyid from bdc_xm where proid =@proid)"
+    },
+	{
+      "sql": "select mc sqlx from bdc_zd_sqlx where dm = (select sqlx from bdc_xm where proid=@proid)"
+    }
+  ],
+ "9979912":[
+    {
+      "sql": "select t.bh ywh,t.dwdm,t.zl,t.djsj,case when cs>1 then t.bdcdyh||'等' else t.bdcdyh end  bdcdyh,case when cs>1 then t.ybdcqzh||'等' else t.ybdcqzh end  bdcqzh from bdc_xm t inner join (select wiid ,count(1) cs from bdc_xm group by wiid  ) t2 on t.wiid=t2.wiid where t.proid=@proid"
+    },
+    {
+      "sql": "select t.tdsyksqx,t.tdsyjsqx from bdc_fdcq t where t.proid=@proid"
+    },
+  {
+      "sql": "select qlrmc, qlrmc as cqdw,cqxm from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+  {
+      "sql": "select fwbm from bdc_bdcdy  where bdcdyid =(select bdcdyid from bdc_xm where proid =@proid)"
+    },
+  {
+      "sql": "select mc sqlx from bdc_zd_sqlx where dm = (select sqlx from bdc_xm where proid=@proid)"
+    }
+  ],
+
+  "Cqdj": [
+    {
+      "sql": "select bh ywh,dwdm,zl,djsj,bdcdyh,bdcqzh from bdc_xm where proid=@proid"
+    },
+    {
+      "sql": "select t.tdsyksqx,t.tdsyjsqx from bdc_fdcq t where t.proid=@proid"
+    },
+	{
+      "sql": "select listagg(qlrmc,',')within group (order by sxh) qlrmc from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+	{
+      "sql": "select listagg(qlrzjh,',')within group (order by sxh) qlrzjh from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+	{
+      "sql": "select max(qlrsfzjzl) qlrsfzjzl from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+	{
+      "sql": "select fwbm from bdc_bdcdy  where bdcdyid =(select bdcdyid from bdc_xm where proid =@proid)"
+    },
+	{
+      "sql": "select mc sqlx from bdc_zd_sqlx where dm = (select sqlx from bdc_xm where proid=@proid)"
+    }
+  ],
+    "Cqzx": [
+    {
+      "sql": "select bh ywh,dwdm,zl,djsj,bdcdyh,bdcqzh from bdc_xm where proid=@proid"
+    },
+    {
+      "sql": "select t.tdsyksqx,t.tdsyjsqx from bdc_fdcq t where t.proid=@proid"
+    },
+	{
+      "sql": "select listagg(qlrmc,',')within group (order by sxh) qlrmc from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+	{
+      "sql": "select listagg(qlrzjh,',')within group (order by sxh) qlrzjh from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+	{
+      "sql": "select max(qlrsfzjzl) qlrsfzjzl from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    },
+	{
+      "sql": "select fwbm from bdc_bdcdy  where bdcdyid =(select bdcdyid from bdc_xm where proid =@proid)"
+    },
+	{
+      "sql": "select mc sqlx from bdc_zd_sqlx where dm = (select sqlx from bdc_xm where proid=@proid)"
+    }
+  ],
+    "Zxdydj": [
+    {
+      "sql": "select bh ywh,dwdm,zl,djsj,ybdcqzh bdcqzh,bdcdyh from bdc_xm where proid=@proid"
+    },
+    {
+      "sql": "select x.bdcqzmh as zm,x.dbr,x.dyqr qlr,x.tddymj,x.tddyjg,x.fwdyjg,x.zwlxksqx,x.zwlxjsqx,x.dyr qlrmc,x.zxdyywh,x.zxdyyy as zxyy,x.zxsj,x.zxdbr from bdc_dyaq  x  where x.proid=@proid"
+    },
+	{
+      "sql": "select fwbm from bdc_bdcdy  where bdcdyid =(select bdcdyid from bdc_xm where proid =@proid)"
+    },
+	{
+      "sql": "select mc sqlx from bdc_zd_sqlx where dm = (select sqlx from bdc_xm where proid=@proid)"
+    },
+	{
+      "sql": "select mc qlrsfzjzl from bdc_zd_zjlx where dm = (select dyrzjzl from bdc_dyaq  where proid=@proid)"
+    }
+  ],
+  "1014": [
+    {
+      "sql": "select x.zxdyywh,x.zxdyyy  zxyy,nvl(x.zxsj,sysdate) zxsj,x.zxdbr zxdbr,x1.daid id from bdc_dyaq  x inner join bdc_xm_rel x0 on x.proid=x0.yproid inner join bdc_gdxx x1 on x.proid=x1.xmid where x0.proid=@proid"
+    }
+  ],
+  "Cfdj": [
+    {
+      "sql": "select bh ywh,dwdm,zl,djsj,bdcdyh,bdcqzh from bdc_xm where proid=@proid"
+    },
+    {
+      "sql": "select cfjg,cfwh,cfsj,jfwh,jfsj,cfksqx,cfjsqx,dbr from bdc_cf  where proid=@proid"
+    },
+	{
+      "sql": "select fwbm from bdc_bdcdy  where bdcdyid =(select bdcdyid from bdc_xm where proid =@proid)"    
+    },
+	{
+      "sql": "select mc sqlx from bdc_zd_sqlx where dm = (select sqlx from bdc_xm where proid=@proid)"
+    },
+	{
+      "sql": "select mc cflx from bdc_zd_cflx where dm = (select cflx from bdc_cf where proid =@proid)"
+    },
+	{
+      "sql": "select listagg(qlrzjh,',')within group (order by sxh) qlrzjh from bdc_qlr where qlrlx='qlr' and proid=@proid"
+    },
+	{
+      "sql": "select listagg(qlrmc,',')within group (order by sxh) qlrmc from bdc_qlr where qlrlx='qlr' and proid=@proid"  
+    }
+  ],
+    "Yydj": [
+    {
+      "sql": "select bh ywh,dwdm,zl,djsj,bdcdyh,bdcqzh from bdc_xm where proid=@proid"
+    },
+	{
+      "sql": "select fwbm from bdc_bdcdy  where bdcdyid =(select bdcdyid from bdc_xm where proid =@proid)"  
+    },
+	{
+      "sql": "select mc sqlx from bdc_zd_sqlx where dm = (select sqlx from bdc_xm where proid=@proid)"
+    },
+	{
+      "sql": "select mc qlrsfzjzl from bdc_zd_zjlx  where dm = (select  qlrsfzjzl from bdc_qlr where proid = @proid )"
+    },
+	{
+      "sql": "select qlrmc,qlrzjh from bdc_qlr  where proid=@proid"  
+    }
+  ]
+}

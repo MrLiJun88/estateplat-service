@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--建设用地、宅基地使用权-->
+    <mapping map-empty-string="false" map-null="false">
+        <class-a>cn.gtmap.estateplat.model.server.core.DjsjZdxx</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcJsydzjdsyq</class-b>
+        <!--取得价格-->
+        <field>
+            <a>qdjg</a>
+            <b>qdjg</b>
+        </field>
+        <!--土地使用权开始期限-->
+        <field>
+            <a>gysyqqh</a>
+            <b>gyqk</b>
+        </field>
+        <!--土地使用权开始期限-->
+        <field>
+            <a>qsrq</a>
+            <b>syksqx</b>
+        </field>
+        <!--土地使用权结束期限-->
+        <field>
+            <a>zzrq</a>
+            <b>syjsqx</b>
+        </field>
+    </mapping>
+
+</mappings>

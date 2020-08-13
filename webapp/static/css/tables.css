@@ -1,0 +1,117 @@
+@charset "utf-8";
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+.main-container {
+    margin-left: 200px;
+    margin-right: 200px;
+}
+.firstTitle>h1{
+    text-align: center;
+    font-weight: bold;
+}
+.page-content{
+    margin: 0;
+    padding: 0;
+}
+.simpleSearch{
+    margin: 0;
+    padding: 0;
+    width: 949px;
+}
+.openSjd{
+     margin-left: 665px;
+ }
+.demonstrative{
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 0px;
+}
+.row{
+    width: 949px;
+    margin: 0px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.col-xs-2{
+    padding: 0px;
+    width: 170px;
+}
+#addQlr,#addBdcdy,#addQlxx,#addSqcl{
+    margin-left: 725px;
+    background-color:#429842 !important;
+}
+.btn{
+    margin-left: 10px;
+    border: 0px;
+}
+.save{
+    margin-left: 0px;
+}
+.openSjd{
+    margin-left: 644px;
+}
+.dw{
+    margin-left: 470px;
+}
+.form-control{
+    width:82px;
+    margin-top: 3px;
+}
+.dwh2{
+    margin: 0px;
+    padding: 0px;
+    width: 70px;
+}
+.mjdwCol{
+    width: 200px;
+    padding: 0px;
+}
+.sfzjzlCol{
+    width: 200px;
+    padding: 0px;
+}
+.form-control1{
+    width:300px;
+    margin-top: 3px;
+    border: 0px;
+}
+.gyfsCol{
+    width: 200px;
+    padding: 0px;
+}
+.bdcdyxzCol{
+    width: 200px;
+    padding: 0px;
+}
+.form-control2{
+    width:740px;
+    margin-top: 3px;
+    border: 0px;
+}
+.form-control3{
+    width:280px;
+    margin-top: 3px;
+    border: 0px;
+}
+.search{
+    margin-left: 625px;
+}
+
+.dykan{
+    padding-left: 20px;
+}
+tr{
+    height:39px;
+}
+td{
+    /*text-align: left;*/
+    text-align: right;
+    width: 20%;
+    background: #f9f9f9;
+}

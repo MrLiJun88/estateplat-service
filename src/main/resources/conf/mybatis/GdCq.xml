@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdFwMapper">
+
+    <select id="getGdCqJsonByPage" parameterType="java.util.HashMap" resultType="map">
+        SELECT t.*
+        FROM GD_CQ t
+        <where>
+            <if test="cqzh != null and cqzh !=''">
+                AND t.cqzh  LIKE '%'||#{cqzh}||'%'
+            </if>
+            <if test="zl != null and zl !=''">
+                AND t.zl LIKE  '%'||#{zl}||'%'
+            </if>
+            <if test="hhSearch != null and hhSearch !=''">
+                AND (a.rf1dwmc LIKE '%'||#{hhSearch}||'%' or  t.zl LIKE  '%'||#{hhSearch}||'%' OR  t.cqzh LIKE  '%'||#{hhSearch}||'%')
+            </if>
+            <if test="cbmj != null and cbmj !=''">
+                AND t.cbmj =#{cbmj}
+            </if>
+        </where>
+    </select>
+    <select id="getGdCqByCqid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.GdCq">
+                      SELECT t.*
+                      FROM gd_cq t
+                      WHERE t.cqid=#{cqid}
+    </select>
+</mapper>

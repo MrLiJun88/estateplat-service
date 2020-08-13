@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--相关权利类型对应颜色配置-->
+<props>
+    <qllx>
+        <dm>0</dm>
+        <mc>未设权利</mc>
+        <color>#FFFFFF</color>
+        <sxh>11</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>1</dm>
+        <mc>已设权利</mc>
+        <color>#5CB85C</color>
+        <sxh>10</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>2</dm>
+        <mc>权利抵押</mc>
+        <color>#F0AD4E</color>
+        <sxh>5</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>3</dm>
+        <mc>权利查封</mc>
+        <color>#D9534F</color>
+        <sxh>1</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>4</dm>
+        <mc>权利预告</mc>
+        <color>#00FF00</color>
+        <sxh>4</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>5</dm>
+        <mc>预告抵押</mc>
+        <color>#765CF0</color>
+        <sxh>3</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>6</dm>
+        <mc>权利异议</mc>
+        <color>#ED5FB0</color>
+        <sxh>2</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>7</dm>
+        <mc>地役权</mc>
+        <color>#52E4EA</color>
+        <sxh>6</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>8</dm>
+        <mc>信息表</mc>
+        <color>#FFFF00</color>
+        <sxh>7</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>9</dm>
+        <mc>不动产权证</mc>
+        <color>#B3EE3A</color>
+        <sxh>8</sxh>
+    </qllx>
+
+    <qllx>
+        <dm>10</dm>
+        <mc>不发证</mc>
+        <color>#B0B0B0</color>
+        <sxh>9</sxh>
+    </qllx>
+    <qllx>
+        <dm>11</dm>
+        <mc>待售</mc>
+        <color>#C606C3</color>
+        <sxh>9</sxh>
+    </qllx>
+    <qllx>
+        <dm>12</dm>
+        <mc>备案</mc>
+        <color>#955D92</color>
+        <sxh>9</sxh>
+    </qllx>
+</props>

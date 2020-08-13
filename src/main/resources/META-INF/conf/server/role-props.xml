@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!--
+配置申请类型代码和
+sqlx：申请类型代码
+node：流程节点名称
+roleid：流程节点办理角色id
+-->
+<props>
+    <role>
+        <sqlx>212</sqlx>
+        <node>受理（初审）</node>
+        <roleid>3D02C421E8B94CA3AD739D2A202A0837</roleid>
+    </role>
+    <role>
+        <sqlx>9980424</sqlx>
+        <node>受理（初审）</node>
+        <roleid>796546EB804C44A3B70A932875AB567F</roleid>
+    </role>
+</props>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdDyMapper">
+
+    <select id="getTddyqByPage" parameterType="java.util.Map" resultType="map">
+          SELECT   dy.dyid    dyid,
+                   dy.isjy    isjy,
+                   dy.djlx    djlx,
+                   dy.dydjzmh dydjzmh,
+                   td.zl      zl,
+                   td.zdmj    zdmj,
+                   td.yt      yt,
+                   s.tdzh     tdzh
+          FROM gd_dy dy
+          LEFT JOIN gd_bdc_ql_rel r ON dy.dyid = r.qlid
+          LEFT JOIN gd_td td ON r.bdcid = td.tdid
+          LEFT JOIN gd_tdsyq s ON td.tdid = s.tdid
+        <where>
+            td.tdid IS NOT NULL AND dy.bdclx='TD'
+            <if test="dcxc != null and dcxc !=''">
+                AND (
+                    td.zl LIKE '%'||#{dcxc}||'%' or
+                    s.tdzh LIKE '%'||#{dcxc}||'%' or
+                    dy.dydjzmh LIKE '%'||#{dcxc}||'%'
+                )
+            </if>
+            <if test="dyqr != null and dyqr !=''">
+                AND dy.dyid IN (SELECT qlr.qlid qlid FROM gd_qlr qlr WHERE instr(qlr.qlr ,#{dyqr})>0 AND qlr.qlrlx='qlr')
+            </if>
+            <if test="dyr != null and dyr !=''">
+                AND dy.dyid IN (SELECT qlr.qlid qlid FROM gd_qlr qlr WHERE instr(qlr.qlr ,#{dyr})>0 AND qlr.qlrlx='ywr')
+            </if>
+            <if test="tdzh != null and tdzh !=''">
+                AND  instr(s.tdzh ,#{tdzh} ) >0
+            </if>
+            <if test="zl != null and zl !=''">
+                AND  instr(td.zl ,#{zl} ) >0
+            </if>
+            <if test="dydjzmh != null and dydjzmh !=''">
+                AND  instr(dy.dydjzmh ,#{dydjzmh} ) >0
+            </if>
+        </where>
+    </select>
+
+</mapper>

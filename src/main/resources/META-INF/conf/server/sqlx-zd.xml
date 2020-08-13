@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--配置流程（申请类型）要对比的字段-->
+<sqlxs>
+    <sqlx dm="111">
+        <zd>
+            <zdmc>dzwyt</zdmc>
+            <qjzdmc>fwyt</qjzdmc>
+        </zd>
+        <zd>
+            <zdmc>zdzhyt</zdmc>
+            <qjzdmc>tdyt</qjzdmc>
+        </zd>
+        <zd>
+            <zdmc>djzwmj</zdmc>
+            <qjzdmc>jzmj</qjzdmc>
+        </zd>
+        <zd>
+            <zdmc>zdzhmj</zdmc>
+            <qjzdmc>scmj</qjzdmc>
+        </zd>
+        <zd>
+            <zdmc>zdzhqlxz</zdmc>
+            <qjzdmc>syqlx</qjzdmc>
+        </zd>
+    </sqlx>
+    <sqlx dm="211">
+        <zd>
+            <zdmc>dzwyt</zdmc>
+            <qjzdmc>fwyt</qjzdmc>
+        </zd>
+        <zd>
+            <zdmc>zdzhyt</zdmc>
+            <qjzdmc>tdyt</qjzdmc>
+        </zd>
+        <zd>
+            <zdmc>djzwmj</zdmc>
+            <qjzdmc>jzmj</qjzdmc>
+        </zd>
+        <zd>
+            <zdmc>zdzhmj</zdmc>
+            <qjzdmc>scmj</qjzdmc>
+        </zd>
+        <zd>
+            <zdmc>zdzhqlxz</zdmc>
+            <qjzdmc>syqlx</qjzdmc>
+        </zd>
+    </sqlx>
+</sqlxs>

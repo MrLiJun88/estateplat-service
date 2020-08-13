@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.DjxxMapper">
+
+    <!--<select id="getLpbByPage" parameterType="java.util.Map" resultType="map">-->
+        <!--select distinct t.xmjc,t.zl,t.lszd,t.fwmc from djsj_fwxx t-->
+        <!--<where>-->
+            <!--<if test="dcxc != null and dcxc !=''">-->
+                <!--and t.xmjc like '%' || #{dcxc} || '%' or t.zl like '%' || #{dcxc} || '%' or t.lszd like '%' || #{dcxc} || '%'-->
+            <!--</if>-->
+            <!--<if test="xmjc != null and xmjc !=''">-->
+                <!--and t.xmjc like '%' || #{xmjc} || '%'-->
+            <!--</if>-->
+            <!--<if test="zl != null and zl !=''">-->
+                <!--and t.zl like '%' || #{zl} || '%'-->
+            <!--</if>-->
+            <!--<if test="zdh != null and zdh !=''">-->
+                <!--and t.lszd like '%' || #{zdh} || '%'-->
+            <!--</if>-->
+        <!--</where>-->
+    <!--</select>-->
+
+    <select id="getLpbListByPage" parameterType="java.util.Map" resultType="map">
+        <!--zdd 不选择独幢 和 多幢
+        t.bdcdyfwlx!=1 and  t.bdcdyfwlx!=2 and (t.FWMC is not null or t.ZLDZ is not null or t.LSZD is not null) 苏州有大别墅 取消过滤
+        -->
+        SELECT t.fw_xmxx_index,t.bdcdyfwlx,t.bdcdyh,t.fw_dcb_index,t.lszd,t.dh,t.fwmc,t.zldz,t.fwjg,t.fwcs,t.bz,t.fwyt,t.jgrq,t.zrzh,t.ycjzmj,t.ycdxmj,t.ycqtmj,t.scjzmj,t.scdxmj,t.scqtmj,t.xmmc,t.zts,t.mph,t.ljzh,t.jzwzt,t.zzdmj,t.zydmj,t.dscs,t.dxcs
+        FROM djsj_fw_ljz t
+        <if test="isfilter=='true'">
+            INNER JOIN bdc_bdcdy y ON t.bdcdyh=y.bdcdyh
+            LEFT JOIN bdc_xm m ON m.bdcdyid=y.bdcdyid AND m.sqlx='111'
+        </if>
+        WHERE (t.FWMC IS NOT NULL OR t.ZLDZ IS NOT NULL OR t.LSZD IS NOT NULL)
+            <if test="isfilter=='true'">
+                 AND m.xmzt='1'
+            </if>
+            <if test="dcxc != null and dcxc !=''">
+                AND t.fwmc LIKE '%' || #{dcxc} || '%' OR t.zldz LIKE '%' || #{dcxc} || '%' OR t.lszd LIKE '%' || #{dcxc} || '%'
+            </if>
+            <if test="fwmc != null and fwmc !=''">
+                AND t.fwmc LIKE '%' || #{fwmc} || '%'
+            </if>
+            <if test="zl != null and zl !=''">
+                AND t.zldz LIKE '%' || #{zl} || '%'
+            </if>
+            <if test="zdh != null and zdh !=''">
+                AND t.lszd LIKE '%' || #{zdh} || '%'
+            </if>
+            <if test="xzqdm != null and xzqdm !=''">
+                AND t.lszd LIKE  #{xzqdm} || '%'
+            </if>
+            <if test="lpbtype != null and lpbtype !=''">
+                AND EXISTS (SELECT 1 FROM djsj_fwychs a WHERE t.fw_dcb_index=a.fw_dcb_index)
+            </if>
+            <if test="lpbtype == null or lpbtype ==''">
+                AND NOT EXISTS (SELECT 1 FROM djsj_fwychs a WHERE t.fw_dcb_index=a.fw_dcb_index)
+            </if>
+            <if test="zdtzm != null and zdtzm !=''">
+                AND
+                <foreach collection="zdtzm"  item="item" open="(" separator=" or " close=")">
+                    substr(t.lszd,13,4) LIKE #{item} || '%'
+                </foreach>
+            </if>
+
+    </select>
+
+    <select id="getDjFwDyh" parameterType="java.util.Map" resultType="map">
+        SELECT DISTINCT  t.dyh
+        FROM djsj_fwhs  t
+        <where>
+            <if test="dcbId != null and dcbId !=''">
+                AND t.fw_dcb_index = #{dcbId}
+            </if>
+            <if test="fwmc != null and fwmc !=''">
+                AND t.fwmc = #{fwmc}
+            </if>
+        </where>
+        ORDER BY  t.dyh DESC
+    </select>
+    <select id="getDjYcFwDyh" parameterType="java.util.Map" resultType="map">
+        SELECT DISTINCT  t.dyh
+        FROM djsj_fwychs  t
+        <where>
+            <if test="dcbId != null and dcbId !=''">
+                AND t.fw_dcb_index = #{dcbId}
+            </if>
+            <if test="fwmc != null and fwmc !=''">
+                AND t.fwmc = #{fwmc}
+            </if>
+        </where>
+        ORDER BY  t.dyh DESC
+    </select>
+
+    <select id="getDjFwWlcs" parameterType="java.util.Map" resultType="map">
+        SELECT DISTINCT  t.wlcs
+        FROM djsj_fwhs  t
+        <where>
+            <if test="dcbId != null and dcbId !=''">
+                AND t.fw_dcb_index = #{dcbId}
+            </if>
+            <if test="fwmc != null and fwmc !=''">
+                AND t.fwmc = #{fwmc}
+            </if>
+        </where>
+        ORDER BY wlcs DESC
+    </select>
+    <select id="getDjFwMaxSxh" parameterType="java.util.Map" resultType="Integer">
+        SELECT MAX(COUNT(*))
+        FROM djsj_fwhs
+        <where>
+            <if test="lszd != null and lszd !=''">
+                AND lszd = #{lszd}
+            </if>
+            <if test="dh != null and dh !=''">
+                AND dh = #{dh}
+            </if>
+            <if test="dyh != null and dyh !=''">
+                AND dyh = #{dyh}
+            </if>
+            <if test="dcbId != null and dcbId !=''">
+                AND fw_dcb_index = #{dcbId}
+            </if>
+        </where>
+        GROUP BY wlcs
+    </select>
+
+    <select id="getDjFwMaxSxhByDyhIsNull" parameterType="java.util.Map" resultType="Integer">
+        SELECT MAX(COUNT(*))
+        FROM djsj_fwhs WHERE dyh IS NULL
+        <if test="lszd != null and lszd !=''">
+            AND lszd = #{lszd}
+        </if>
+        <if test="dh != null and dh !=''">
+            AND dh = #{dh}
+        </if>
+        <if test="dcbId != null and dcbId !=''">
+            AND fw_dcb_index = #{dcbId}
+        </if>
+        GROUP BY wlcs
+    </select>
+
+    <select id="getYcDjFwMaxSxh" parameterType="java.util.Map" resultType="Integer">
+        SELECT MAX(COUNT(*))
+        FROM djsj_fwychs
+        <where>
+            <if test="lszd != null and lszd !=''">
+                AND lszd = #{lszd}
+            </if>
+            <if test="dh != null and dh !=''">
+                AND dh = #{dh}
+            </if>
+            <if test="dyh != null and dyh !=''">
+                AND dyh = #{dyh}
+            </if>
+            <if test="dcbId != null and dcbId !=''">
+                AND fw_dcb_index = #{dcbId}
+            </if>
+        </where>
+        GROUP BY wlcs
+    </select>
+    <select id="getDjFwHsCount" parameterType="java.util.Map" resultType="Integer">
+        SELECT COUNT(*)
+        FROM djsj_fwhs
+        <where>
+            <if test="lszd != null and lszd !=''">
+                AND lszd = #{lszd}
+            </if>
+            <if test="dh != null and dh !=''">
+                AND dh = #{dh}
+            </if>
+            <if test="dyh != null and dyh !=''">
+                AND dyh = #{dyh}
+            </if>
+            <if test="dcbId != null and dcbId !=''">
+                AND fw_dcb_index = #{dcbId}
+            </if>
+        </where>
+    </select>
+    <select id="getFwmcListByDcbId"  parameterType="String" resultType="map">
+        SELECT DISTINCT t.fwmc
+        FROM djsj_fw_ljz t
+        WHERE t.fw_dcb_index =#{dcbId}
+        ORDER BY t.fwmc
+    </select>
+
+    <select id="getFWDcbList" parameterType="java.util.Map" resultType="map">
+        SELECT a.fw_xmxx_index, a.bdcdyfwlx, nvl(a.bdcdyh,b.bdcdyh) bdcdyh, a.fw_dcb_index, a.lszd, a.dh, a.fwmc, a.zldz,
+        a.fwjg, a.fwcs, a.bz, a.fwyt, a.jgrq, a.zrzh, a.ycjzmj, a.ycdxmj, a.ycqtmj, a.scjzmj,
+        a.scdxmj, a.scqtmj, a.xmmc, a.zts
+        FROM djsj_fw_ljz a
+        LEFT JOIN djsj_fw_xmxx b  ON a.fw_xmxx_index=b.fw_xmxx_index
+
+        <where>
+            <if test="zrzh != null and zrzh !=''">
+                AND a.zrzh = #{zrzh}
+            </if>
+            <if test="lszd != null and lszd !=''">
+                AND a.lszd = #{lszd}
+            </if>
+            <if test="dcbid != null and dcbid !=''">
+                AND a.fw_dcb_index = #{dcbid}
+            </if>
+
+        </where>
+    </select>
+
+    <select id="getLpbList" parameterType="java.util.Map" resultType="map">
+        SELECT t.fw_xmxx_index,t.bdcdyfwlx,t.bdcdyh,t.fw_dcb_index,t.lszd,t.dh,t.fwmc,t.zldz,t.fwjg,t.fwcs,t.bz,t.fwyt,t.jgrq,t.zrzh,t.ycjzmj,t.ycdxmj,t.ycqtmj,t.scjzmj,t.scdxmj,t.scqtmj,t.xmmc,t.zts,t.mph,t.ljzh,t.jzwzt,t.zzdmj,t.zydmj,t.dscs,t.dxcs
+        FROM djsj_fw_ljz t
+        WHERE 1=1 AND (t.FWMC IS NOT NULL OR t.ZLDZ IS NOT NULL OR t.LSZD IS NOT NULL)
+        <if test="dcxc != null and dcxc !=''">
+            AND t.fwmc LIKE '%' || #{dcxc} || '%' OR t.zldz LIKE '%' || #{dcxc} || '%' OR t.lszd LIKE '%' || #{dcxc} || '%'
+        </if>
+        <if test="fwmc != null and fwmc !=''">
+            AND t.fwmc LIKE '%' || #{fwmc} || '%'
+        </if>
+        <if test="fw_dcb_index != null and fw_dcb_index !=''">
+            AND t.fw_dcb_index =#{fw_dcb_index}
+        </if>
+        <if test="zl != null and zl !=''">
+            AND t.zldz LIKE '%' || #{zl} || '%'
+        </if>
+        <if test="zdh != null and zdh !=''">
+            AND t.lszd LIKE '%' || #{zdh} || '%'
+        </if>
+        <if test="xzqdm != null and xzqdm !=''">
+            AND t.lszd LIKE  #{xzqdm} || '%'
+        </if>
+        <if test="lpbtype != null and lpbtype !=''">
+            AND t.fw_dcb_index in (SELECT fw_dcb_index FROM djsj_fwychs)
+        </if>
+        <if test="zdtzm != null and zdtzm !=''">
+            AND
+            <foreach collection="zdtzm"  item="item" open="(" separator=" or " close=")">
+                substr(t.lszd,13,4) LIKE #{item} || '%'
+            </foreach>
+        </if>
+
+    </select>
+</mapper>

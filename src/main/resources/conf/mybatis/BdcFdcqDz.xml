@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcFdcqDzMapper">
+
+    <select id="getBdcFdcqDz" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcFdcqDz">
+         SELECT t.*
+         FROM bdc_fdcq_dz t
+         WHERE t.proid = #{proid}
+    </select>
+
+    <select id="getBdcFdcqDzByBdcdyid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcFdcqDz">
+         SELECT t.qlid,t.bdcdyid,t.fwsyqr,t.tdsyqr,t.tdsyksqx,t.tdsyjsqx,t.dytdmj,t.fttdmj,t.fdcjyjg,t.ywh,t.qllx,t.proid,t.gyqk,t.djsj,t.dbr,t.fj,t.qszt,t.fwxz,t.zrzh,t.fwdah,t.cqly,t.lsyd,t.ftjzmj,t.tnjzmj,t.qljssj,t.qlqssj,t.jgsj,t.fwlx,t.tdsyqmj,t.zxyy,t.zxdbr,t.zxdbsj,t.bz,t.jznd,t.fdcjyhth,htje,htqdsj
+         FROM bdc_fdcq_dz t
+         WHERE t.bdcdyid = #{bdcdyid} AND qszt = 1
+    </select>
+
+    <delete id="delBdcFwfzxxByQlid" parameterType="String">
+               DELETE bdc_fwfzxx WHERE qlid = #{qlid}
+    </delete>
+
+    <select id="queryBdcFwfzxxlstByQlid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcFwfzxx">
+        SELECT t.fzid,t.qlid,t.xmmc,t.zh,t.zcs,t.ghyt,t.fwjg,t.jzmj,t.jgsj,t.zts,t.fwxz,t.szc FROM bdc_fwfzxx t
+        WHERE t.qlid = #{qlid}
+    </select>
+
+    <select id="getBdcFwfzxxPagesJson" parameterType="java.util.Map" resultType="map">
+        SELECT t.fzid,t.qlid,t.xmmc,t.zh,t.zcs,t.ghyt,t.fwjg,t.jzmj,t.jgsj,t.zts,t.fwxz,t.szc FROM bdc_fwfzxx t
+        <if test="qlid != null and qlid !=''">
+            WHERE t.qlid = #{qlid}
+        </if>
+        ORDER BY zh, zcs
+    </select>
+
+    <select id="queryBdcFwfzxxlstByProid" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcFwfzxx">
+        select t.* from bdc_fwfzxx t
+        inner join bdc_fdcq_dz a on a.qlid=t.qlid
+        where a.proid=#{proid}
+        order by zh, zcs
+    </select>
+
+    <select id="getBdcFdcqDzList" parameterType="java.util.Map" resultType="cn.gtmap.estateplat.model.server.core.BdcFdcqDz">
+        select t.* from bdc_fdcq_dz t  left join bdc_xm x on t.proid=x.proid where 1=1
+        <if test="proid != null and proid !=''">
+            and t.proid = #{proid}
+        </if>
+        <if test="bdcdyid != null and bdcdyid !=''">
+            and t.bdcdyid = #{bdcdyid}
+        </if>
+        <if test="qszt != null and qszt !=''">
+            and nvl(t.qszt,'1') = #{qszt}
+        </if>
+        <if test="wiid != null and wiid !=''">
+            and x.wiid=#{wiid}
+        </if>
+    </select>
+</mapper>

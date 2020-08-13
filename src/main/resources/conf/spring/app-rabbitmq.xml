@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.3.xsd">
+
+    <!--配置connection-factory，指定连接rabbit server参数 -->
+    <!--
+        publisher-confirms：确认开关，消息发送到交换器Exchange后触发回调。
+        publisher-returns：返回开关，如果消息从交换器发送到对应队列失败时触发（例如根据发送信息时指定的routingkey找不到队列时会触发）
+    -->
+    <rabbit:connection-factory id="connectionFactory" addresses="${bdcdj.rabbitmq.address}"  virtual-host="${bdcdj.rabbitmq.virtualhost}"  username="${bdcdj.rabbitmq.name}" password="${bdcdj.rabbitmq.password}"
+                               publisher-confirms="true" publisher-returns="true"/>
+    <!--通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器上自动生成 -->
+    <rabbit:admin id="connectAdmin" connection-factory="connectionFactory"/>
+
+    <!-- 设置Ack模式为手动 -->
+    <bean id="ackManual"
+          class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField"
+                  value="org.springframework.amqp.core.AcknowledgeMode.MANUAL" />
+    </bean>
+
+    <!--定义queue -->
+    <!-- durable:是否持久化
+        exclusive: 仅创建者可以使用的私有队列，断开后自动删除
+        auto_delete: 当所有消费客户端连接断开后，是否自动删除队列 -->
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.updateCxZsZmByCqzh.queue}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.updateCxZsZmByProid.queue}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.updateZszmZtByDeleteEnvent.queue}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.updateBdcdyZtByBdcdyh.queue}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.getcqztbywiid.queue.send}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.getcqztbywiid.queue.return}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidforback.queue.send}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidforback.queue.return}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidfordelet.queue.send}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidfordelet.queue.return}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.getgxlistbywiid.queue.send}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.getgxlistbywiid.queue.return}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.synchronizationgdfield.queue}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <rabbit:queue name="${bdcdj.rabbitmq.bdc.synchronizationbdcfield.queue}" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+
+
+    <!-- 定义direct exchange，绑定queueTest -->
+    <!-- 交换机的四种模式：
+        direct：转发消息到 routigKey 指定的队列。
+        topic：按规则转发消息（最灵活）。
+        headers：（这个还没有接触到）
+        fanout：转发消息到所有绑定队列 -->
+    <rabbit:direct-exchange name="bdcExchange" durable="true" auto-delete="false" declared-by="connectAdmin">
+        <!-- 设置消息queue匹配的key -->
+        <rabbit:bindings>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.updateCxZsZmByCqzh.queue}" key="${bdcdj.rabbitmq.bdc.updateCxZsZmByCqzh.queue}"></rabbit:binding>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.updateCxZsZmByProid.queue}" key="${bdcdj.rabbitmq.bdc.updateCxZsZmByProid.queue}"></rabbit:binding>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.updateZszmZtByDeleteEnvent.queue}" key="${bdcdj.rabbitmq.bdc.updateZszmZtByDeleteEnvent.queue}"></rabbit:binding>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.updateBdcdyZtByBdcdyh.queue}" key="${bdcdj.rabbitmq.bdc.updateBdcdyZtByBdcdyh.queue}"></rabbit:binding>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.getcqztbywiid.queue.send}" key="${bdcdj.rabbitmq.bdc.getcqztbywiid.queue.send}"></rabbit:binding>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidforback.queue.send}" key="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidforback.queue.send}"></rabbit:binding>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidfordelet.queue.send}" key="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidfordelet.queue.send}"></rabbit:binding>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.getgxlistbywiid.queue.send}" key="${bdcdj.rabbitmq.bdc.getgxlistbywiid.queue.send}"></rabbit:binding>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.synchronizationgdfield.queue}" key="${bdcdj.rabbitmq.bdc.synchronizationgdfield.queue}"></rabbit:binding>
+            <rabbit:binding queue="${bdcdj.rabbitmq.bdc.synchronizationbdcfield.queue}" key="${bdcdj.rabbitmq.bdc.synchronizationbdcfield.queue}"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <!-- 消息对象json转换类 -->
+    <bean id="jackson2JsonMessageConverter" class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter"/>
+
+    <!--定义rabbit template用于数据的接收和发送 -->
+    <!--
+        mandatory：当mandatory标志位设置为true时，如果exchange根据自身类型和消息routingKey无法找到一个合适的queue存储消息，那么broker会调用basic.return方法将消息返还给生产者;当mandatory设置为false时，出现上述情况broker会直接将消息丢弃;通俗的讲，mandatory标志告诉broker代理服务器至少将消息route到一个队列中，否则就将消息return给发送者。
+        confirm-callback：消息确认监听器。
+        return-callback：消息发送失败返回监听器。
+    -->
+    <rabbit:template id="bdcAmqpTemplate" connection-factory="connectionFactory" exchange="bdcExchange" message-converter="jackson2JsonMessageConverter"
+                     mandatory="true" confirm-callback="confirmCallBackListener" return-callback="returnCallBackListener"/>
+
+    <!-- 消息接收者 -->
+    <bean id="messageReceiver" class="cn.gtmap.estateplat.server.rabbitmq.service.impl.RabbitMqConsumerListener"></bean>
+    <rabbit:listener-container connection-factory="connectionFactory"  acknowledge="manual">
+        <rabbit:listener queues="${bdcdj.rabbitmq.bdc.getcqztbywiid.queue.return}" ref="messageReceiver"  method="onMessage"/>
+        <rabbit:listener queues="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidforback.queue.return}" ref="messageReceiver"  method="onMessage"/>
+        <rabbit:listener queues="${bdcdj.rabbitmq.bdc.getgxyproidsbywiidfordelet.queue.return}" ref="messageReceiver"  method="onMessage"/>
+        <rabbit:listener queues="${bdcdj.rabbitmq.bdc.getgxlistbywiid.queue.return}" ref="messageReceiver"  method="onMessage"/>
+    </rabbit:listener-container>
+</beans>

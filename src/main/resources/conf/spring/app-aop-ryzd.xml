@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+    <bean id="redundantField" class="cn.gtmap.estateplat.server.core.aop.RedundantField"/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <aop:config proxy-target-class="true">
+        <!--转发至缮证事件-->
+        <aop:pointcut id="turnProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.changeYqlZtEvent(..)))"/>
+        <!--缮证退回事件-->
+        <aop:pointcut id="backProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.workFlowBackZsBh(..)))"/>
+        <!--办结事件-->
+        <aop:pointcut id="endProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.endProjectEvent(..))"/>
+        <!--删除事件-->
+        <aop:pointcut id="delProjectEvent"
+                      expression="execution(* cn.gtmap.estateplat.server.web.main.WfProjectController.workFlowDel(..)))"/>
+
+        <aop:aspect ref="redundantField">
+            <aop:after-returning pointcut-ref="turnProjectEvent" method="synchronizationField"/>
+            <aop:before pointcut-ref="backProjectEvent" method="synchronizationField"/>
+            <aop:after-returning pointcut-ref="endProjectEvent" method="synchronizationField"/>
+            <aop:before pointcut-ref="delProjectEvent" method="synchronizationField"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

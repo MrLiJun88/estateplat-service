@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GdDyMapper">
+
+    <select id="getYtdxxByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t2.qlr qlr,t1.djh djh,t1.zl tdzl ,t1.yt yt,t3.tdzmj syqmj ,t3.bz bz ,t3.tdzh tdzh,t1.tdid
+        FROM GD_TD t1
+       	INNER JOIN GD_BDC_QL_REL t4 ON t4.bdcid=t1.tdid
+		INNER JOIN GD_TDSYQ t3 ON t3.qlid=t4.qlid
+		LEFT JOIN GD_QLR t2 ON t4.qlid=t2.qlid AND t2.qlrlx!='ywr'
+        <where>
+            t3.tdzh IS NOT NULL
+            <if test="dcxc != null and dcxc !=''">
+                AND (
+                    instr(t3.tdzh ,#{dcxc})>0  OR
+                   (instr(t2.qlr ,#{dcxc})>0 AND t2.qlrlx!='ywr') OR
+                   instr(t1.djh ,#{dcxc} ) >0
+                )
+            </if>
+            <if test="qlr != null and qlr !=''">
+                AND  instr(t2.qlr ,#{qlr})>0 AND t2.qlrlx!='ywr'
+            </if>
+            <if test="tdzh != null and tdzh !=''">
+                AND instr(t3.tdzh ,#{tdzh})>0
+            </if>
+            <if test="yt != null and yt !=''">
+                AND instr(t1.yt ,#{yt})>0
+            </if>
+            <if test="syqmj != null and syqmj !=''">
+                AND  instr(t3.tdzmj ,#{syqmj} ) >0
+            </if>
+              <if test="tdzl != null and tdzl !=''">
+                AND  instr(t1.zl ,#{tdzl} ) >0
+            </if>
+             <if test="djh != null and djh !=''">
+                AND  instr(t1.djh ,#{djh} ) >0
+            </if>
+        </where>
+    </select>
+<select id="getBdcqxxByTdzh" parameterType="map" resultType="map">
+	SELECT t2.qlr qlr,t1.djh djh,t1.zl tdzl ,t1.yt yt,t3.tdzmj syqmj ,t3.bz bz
+	FROM GD_TD t1
+  	INNER JOIN GD_BDC_QL_REL t4 ON t4.bdcid=t1.tdid
+  	INNER JOIN GD_TDSYQ t3 ON t3.qlid=t4.qlid
+  	LEFT JOIN GD_QLR t2 ON t4.qlid=t2.qlid AND t2.qlrlx!='ywr'
+	WHERE t1.tdid=#{tdid}
+	</select>
+</mapper>

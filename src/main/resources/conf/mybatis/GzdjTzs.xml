@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.GzdjTzsMapper">
+
+    <select id="getGzdjTzsByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.TZSID,t.TZDX,t.TZSJ,t.BH,t.GZNR,t.PROID
+        FROM BDC_GZDJ_TZS t
+        <where>
+            <if test="startTime != null and startTime !=''">
+                <![CDATA[   AND t.TZSJ >= #{startTime}]]>
+            </if>
+            <if test="endTime != null and endTime !=''">
+                <![CDATA[   AND t.TZSJ <= #{endTime} ]]>
+            </if>
+        </where>
+
+    </select>
+
+
+</mapper>

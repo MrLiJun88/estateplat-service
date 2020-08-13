@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+    <bean name="/BdcRequiredFieldsService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service">
+            <ref bean="bdcRequiredFieldsServiceImpl"/>
+        </property>
+        <property name="serviceInterface">
+            <value>com.gtis.plat.service.SysRequiredFieldsService</value>
+        </property>
+    </bean>
+    <!--创建项目受理编号-->
+    <bean name="/BdcSlbhService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service">
+            <ref bean="bdcSlbhServiceImpl"/>
+        </property>
+        <property name="serviceInterface">
+            <value>cn.gtmap.estateplat.service.server.BdcSlbhService</value>
+        </property>
+    </bean>
+    <bean name="/BdcXmxxService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service">
+            <ref bean="bdcXmServiceImpl"/>
+        </property>
+        <property name="serviceInterface">
+            <value>cn.gtmap.estateplat.service.server.BdcXmxxService</value>
+        </property>
+    </bean>
+    <bean name="/auditLogService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service">
+            <ref bean="auditLogService"/>
+        </property>
+        <property name="serviceInterface">
+            <value>cn.gtmap.estateplat.log.AuditLogService</value>
+        </property>
+    </bean>
+
+    <bean name="/projectManageService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service">
+            <ref bean="projectManageServiceImpl"/>
+        </property>
+        <property name="serviceInterface">
+            <value>cn.gtmap.estateplat.service.server.ProjectManageService</value>
+        </property>
+    </bean>
+
+    <!--使用Hessian协议对外提供调用接口-->
+    <!--<bean name="/sysBdcDoStateService" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service">
+            <ref bean="sysBdcDoStateServiceImpl"/>
+        </property>
+        <property name="serviceInterface">
+            <value>cn.gtmap.estateplat.service.pub.wechat.SysBdcDoStateService</value>
+        </property>
+    </bean>-->
+    <!--<bean name="/FcExchangeService" class="org.springframework.remoting.caucho.HessianServiceExporter">-->
+        <!--<property name="service">-->
+            <!--<ref bean="fcExchangeServiceImpl"/>-->
+        <!--</property>-->
+        <!--<property name="serviceInterface">-->
+            <!--<value>cn.gtmap.estateplat.server.core.service.FcExchangeService</value>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean name="/ArchiveReceiveSecivce" class="org.springframework.remoting.caucho.HessianServiceExporter">-->
+        <!--<property name="service">-->
+            <!--<ref bean="archiveReceiveSecivceImpl"/>-->
+        <!--</property>-->
+        <!--<property name="serviceInterface">-->
+            <!--<value>cn.gtmap.estateplat.server.core.service.ArchiveReceiveSecivce</value>-->
+        <!--</property>-->
+    <!--</bean>-->
+</beans>

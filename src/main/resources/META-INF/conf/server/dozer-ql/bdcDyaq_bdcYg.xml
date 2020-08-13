@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <!--抵押权-->
+    <mapping map-empty-string="false" map-null="false">
+        <class-a>cn.gtmap.estateplat.model.server.core.BdcYg</class-a>
+        <class-b>cn.gtmap.estateplat.model.server.core.BdcDyaq</class-b>
+        <!--被担保主债权数额-->
+        <field>
+            <a>qdjg</a>
+            <b>bdbzzqse</b>
+        </field>
+        <!--最高债权确定数额-->
+        <field>
+            <a>fwpgjg</a>
+            <b>zgzqqdse</b>
+        </field>
+        <!--债务履行开始期限-->
+        <field>
+            <a>zwlxksqx</a>
+            <b>zwlxksqx</b>
+        </field>
+        <!--债务履行结束期限-->
+        <field>
+            <a>zwlxjsqx</a>
+            <b>zwlxjsqx</b>
+        </field>
+        <!--注销时间-->
+        <field>
+            <a>qljssj</a>
+            <b>zxsj</b>
+        </field>
+        <!--附记-->
+        <field>
+            <a>fj</a>
+            <b>fj</b>
+        </field>
+    </mapping>
+
+</mappings>

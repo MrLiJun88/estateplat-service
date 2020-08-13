@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcBdcZsSdMapper">
+    <select id="getBdcZsSdList" parameterType="java.util.Map"
+            resultType="cn.gtmap.estateplat.model.server.core.BdcBdcZsSd">
+        SELECT * FROM bdc_bdczssd t WHERE 1=1
+        <if test="zsid != null and zsid !=''">
+            AND t.zsid = #{zsid}
+        </if>
+        <if test="zsids != null and zsids !=''">
+            AND
+            <foreach collection="zsids" item="item" open="(" separator=" or " close=")">
+                t.zsid = #{item}
+            </foreach>
+        </if>
+        <if test="cqzh != null and cqzh !=''">
+            AND instr(t.cqzh ,#{cqzh} )>0
+        </if>
+        <if test="xzzt != null and xzzt !=''">
+            AND nvl(t.xzzt,0) = #{xzzt}
+        </if>
+        <if test="sdlcgzlid != null and sdlcgzlid !=''">
+            AND t.sdlcgzlid = #{sdlcgzlid}
+        </if>
+        <if test="proid != null and proid !=''">
+            AND t.proid = #{proid}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--录入过渡信息时中英文对照文件-->
+
+<props>
+    <gd_fw>
+        <fwid>房屋id</fwid>
+        <dah>房屋编号</dah>
+        <gyqk>房屋共有情况</gyqk>
+        <jyjg>交易价格</jyjg>
+        <ghyt>规划用途</ghyt>
+        <fwxz>房屋性质</fwxz>
+        <fwjg>房屋结构</fwjg>
+        <szc>所在层</szc>
+        <zcs>总层数</zcs>
+        <tnjzmj>套内建筑面积</tnjzmj>
+        <jgsj>竣工时间</jgsj>
+        <fwzl>房屋坐落</fwzl>
+        <dw>房屋面积单位</dw>
+        <jzmj>建筑面积</jzmj>
+        <ftjzmj>分摊建筑面积</ftjzmj>
+        <cqly>产权来源</cqly>
+        <fwlx>房屋类型</fwlx>
+        <sjly>数据来源</sjly>
+        <ppzt>匹配状态</ppzt>
+    </gd_fw>
+
+    <gd_fwsyq>
+        <qild>权利编号</qild>
+        <fczh>房产证号</fczh>
+        <iszx>是否注销</iszx>
+        <djlx>登记类型</djlx>
+        <djyy>登记原因</djyy>
+        <bdcid>不动产id</bdcid>
+        <ppzt>匹配状态</ppzt>
+        <fj>附记</fj>
+    </gd_fwsyq>
+
+    <gd_qlr>
+        <qlrid>权利人id</qlrid>
+        <qlr>权利人</qlr>
+        <qlrsfzjzl>权利人证件类型</qlrsfzjzl>
+        <qlrzjh>权利人证件号</qlrzjh>
+        <qlrxz>权利人性质</qlrxz>
+        <qlrlx>权利人类型</qlrlx>
+        <qlbl>权利比例</qlbl>
+    </gd_qlr>
+
+    <gd_tdsyq>
+        <qlid>权利id</qlid>
+        <tdzh>土地证号</tdzh>
+        <tdid>土地id</tdid>
+        <iszs>是否注销</iszs>
+        <djlx>登记类型</djlx>
+        <djyy>登记原因</djyy>
+        <fwid>房屋id</fwid>
+        <dymj>独用面积</dymj>
+        <ftmj>分摊面积</ftmj>
+    </gd_tdsyq>
+
+    <gd_td>
+        <tdid>土地编号</tdid>
+        <djh>地籍号</djh>
+        <zl>土地坐落</zl>
+        <zdmj>宗地面积</zdmj>
+        <yt>用途</yt>
+        <qsxz>权属性质</qsxz>
+        <syqlx>使用权类型</syqlx>
+        <qlsdfs>权利设定方式</qlsdfs>
+        <dw>土地面积单位</dw>
+        <qsrq>起始日期</qsrq>
+        <zzrq>终止日期</zzrq>
+        <jzmj>建筑面积</jzmj>
+        <zdsz>宗地四至</zdsz>
+        <gyqk>土地共有情况</gyqk>
+        <qdjg>取得价格</qdjg>
+        <dwdm>单位代码</dwdm>
+        <tdjg>土地价格</tdjg>
+        <sjly>数据来源</sjly>
+    </gd_td>
+
+</props>

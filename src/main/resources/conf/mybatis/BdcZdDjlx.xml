@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--//房屋调查表-->
+<mapper namespace="cn.gtmap.estateplat.server.core.mapper.BdcZdDjlxMapper">
+
+    <select id="getBdcZdDjlx" parameterType="String" resultType="cn.gtmap.estateplat.model.server.core.BdcZdDjlx">
+       SELECT t.*
+       FROM bdc_zd_djlx t
+       WHERE t.mc=#{mc}
+    </select>
+
+    <select id="getJzbsbListByPage" parameterType="java.util.Map" resultType="map">
+        SELECT t.jzdh,decode(t.xzbz,0,'0.00',TRIM(to_char(t.xzbz,'999999999999.999'))) xzbz,
+        decode(t.yzbz,0,'0.00',TRIM(to_char(t.yzbz,'999999999999.999'))) yzbz FROM djsj_zd_jzbsb t
+        LEFT JOIN bdc_bdcdy a ON substr(a.bdcdyh,0,19)=t.djh
+         WHERE 1=1
+        <if test="bdcdyid != null and bdcdyid !=''">
+            AND a.bdcdyid = #{bdcdyid}
+        </if>
+        <if test="bdcdyh != null and bdcdyh !=''">
+            AND a.bdcdyh = #{bdcdyh}
+        </if>
+        ORDER BY to_number(t.jzdh)
+    </select>
+</mapper>
